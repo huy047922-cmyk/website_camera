@@ -337,7 +337,7 @@ function renderProductCardsToGrid(gridId, productsList) {
                 </div>
                 <div class="product-btn-group">
                     <button class="btn-card-buy" onclick="addToCart('${p.id}')">${btnBuyLabel}</button>
-                    <a href="https://zalo.me/0987654321" target="_blank" class="btn-card-zalo">Zalo</a>
+                    <a href="https://zalo.me/0797777071" target="_blank" class="btn-card-zalo">Zalo</a>
                 </div>
             </div>
         `;

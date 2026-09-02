@@ -11,7 +11,7 @@ const memoryStore = {
             username: "admin",
             password: "123",
             email: "admin@kbvision.vn",
-            phone: "0987654321",
+            phone: "0797777071",
             role: "admin",
             created_at: new Date().toISOString()
         },
