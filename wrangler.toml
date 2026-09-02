@@ -8,4 +8,4 @@ bucket = "./public"
 [[d1_databases]]
 binding = "DB"
 database_name = "cameramini_db"
-database_id = "xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" # Thay thế bằng D1 Database ID thực tế sau khi chạy 'npx wrangler d1 create cameramini_db'
+database_id = "68ba7ecf-b4ea-4f22-b893-32c0f0f13ef5" # Thay thế bằng D1 Database ID thực tế sau khi chạy 'npx wrangler d1 create cameramini_db'
