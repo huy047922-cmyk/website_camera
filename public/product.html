@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chi Tiết Sản Phẩm KBVISION | KBVISION.vn</title>
-    <meta name="description" content="Chi tiết sản phẩm camera giám sát an ninh KBVISION thương hiệu Mỹ chính hãng tại KBVISION.vn.">
-    <!-- Google Fonts & FontAwesome -->
+    <title>Chi Tiết Sản Phẩm | Tuấn Camera</title>
+    <meta name="description" content="Chi tiết sản phẩm camera giám sát an ninh chính hãng tại Tuấn Camera.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <style>
@@ -51,46 +50,60 @@
             line-height: 1.35;
             margin-bottom: 12px;
         }
-        .price-box-detail {
-            background: #f0f9ff;
-            border: 1px solid var(--border-highlight);
-            padding: 16px 20px;
+        .detail-price-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 18px 24px;
             border-radius: var(--radius-md);
+            margin: 20px 0;
             display: flex;
             align-items: baseline;
             gap: 15px;
-            margin-bottom: 20px;
+        }
+        .detail-price-current {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+        .detail-price-old {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+        .guarantee-badges {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .badge-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 12px 15px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
         }
         .specs-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
-            font-size: 0.9rem;
-        }
-        .specs-table td {
-            padding: 10px 14px;
-            border-bottom: 1px solid var(--border-color);
         }
         .specs-table tr:nth-child(even) {
             background: #f8fafc;
         }
+        .specs-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
         .specs-table td:first-child {
             font-weight: 700;
             color: var(--secondary-navy);
-            width: 35%;
-        }
-        .detail-tabs-section {
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: 30px;
-            box-shadow: var(--shadow-subtle);
-            margin-bottom: 40px;
-        }
-        @media (max-width: 768px) {
-            .product-detail-layout {
-                grid-template-columns: 1fr;
-            }
+            width: 38%;
         }
     </style>
 </head>
@@ -100,12 +113,11 @@
     <div class="top-announcement">
         <div class="container">
             <div class="top-contact-info">
-                <span><i class="fa-solid fa-phone-volume"></i> Hotline/Zalo KBVISION: <strong>0987.654.321</strong></span>
-                <span><i class="fa-solid fa-shield-halved"></i> Bảo Hành 24 Tháng Chính Hãng KBVISION USA</span>
-                <span><i class="fa-solid fa-truck-fast"></i> Giao Hàng & Lắp Đặt Tận Nơi</span>
+                <span>Hotline/Zalo: <strong>0987.654.321</strong></span>
+                <span>Tuấn Camera - Bảo Hành 24 Tháng 1 Đổi 1 Tận Nơi</span>
             </div>
             <div class="top-links">
-                <a href="admin.html"><i class="fa-solid fa-user-gear"></i> Trang Quản Trị Admin</a>
+                <a href="admin.html">Trang Quản Trị Admin</a>
             </div>
         </div>
     </div>
@@ -113,194 +125,128 @@
     <!-- Header Navbar -->
     <header class="site-header">
         <div class="container navbar-inner">
-            <a href="index.html" class="brand-logo">
-                <i class="fa-solid fa-shield-virus" style="color:var(--primary)"></i>
-                <span>KBVISION<span style="color:var(--primary)">.vn</span></span>
-                <span class="brand-tag">USA Brand</span>
+            <a href="index.html" class="brand-logo-text">
+                <span>Tuấn <span style="color:#0056b3">Camera</span></span>
+                <span class="sub-logo-tag">GIẢI PHÁP AN NINH UY TÍN TẬN TÂM</span>
             </a>
 
-            <div class="search-form">
-                <input type="text" id="searchInput" placeholder="Nhập mã sản phẩm KBVISION, mã camera KX-A2111N2...">
-                <button id="searchBtn" title="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button>
-            </div>
+            <nav>
+                <ul class="main-nav-menu">
+                    <li class="main-nav-item"><a href="index.html" class="main-nav-link">TRANG CHỦ</a></li>
+                    <li class="main-nav-item"><a href="gioithieu.html" class="main-nav-link">GIỚI THIỆU</a></li>
+                    <li class="main-nav-item active"><a href="index.html#section-camera-ip" class="main-nav-link">SẢN PHẨM</a></li>
+                    <li class="main-nav-item"><a href="huongdan.html" class="main-nav-link">HƯỚNG DẪN</a></li>
+                    <li class="main-nav-item"><a href="tintuc.html" class="main-nav-link">TIN TỨC</a></li>
+                    <li class="main-nav-item"><a href="index.html#custom-section" class="main-nav-link">LIÊN HỆ</a></li>
+                </ul>
+            </nav>
 
-            <div class="header-actions">
-                <div class="header-hotline">
-                    <i class="fa-solid fa-headset"></i>
-                    <div class="header-hotline-text">
-                        <span>Tư Vấn Khách Hàng</span>
-                        <strong>0987.654.321</strong>
-                    </div>
-                </div>
-
-                <button class="btn-icon-badge" id="openCartBtn">
+            <div class="header-right-wrap">
+                <button class="btn-header-cart" id="openCartBtn">
                     <i class="fa-solid fa-cart-shopping"></i>
-                    <span>Giỏ Hàng</span>
-                    <span class="badge-count" id="cartBadgeCount">0</span>
+                    <span class="cart-count-badge" id="cartBadgeCount">0</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Category Ribbon Navigation Bar -->
-    <div class="category-nav-ribbon">
-        <div class="container">
-            <nav class="category-nav">
-                <a href="index.html" class="category-pill active"><i class="fa-solid fa-house"></i> Trang Chủ KBVISION</a>
-                <a href="index.html#section-camera-ip" class="category-pill"><i class="fa-solid fa-video"></i> Camera IP KBVISION 4K</a>
-                <a href="index.html#section-camera-analog" class="category-pill"><i class="fa-solid fa-camera-retro"></i> Camera HD-CVI Analog</a>
-                <a href="index.html#section-dau-ghi" class="category-pill"><i class="fa-solid fa-hard-drive"></i> Đầu Ghi Hình KBVISION</a>
-                <a href="index.html#section-bo-tron-goi" class="category-pill"><i class="fa-solid fa-box-archive"></i> Bộ Camera Trọn Gói</a>
-            </nav>
-        </div>
-    </div>
-
-    <!-- Main Content Container -->
-    <main class="container">
-
+    <div class="container">
         <!-- Breadcrumbs -->
-        <div class="breadcrumbs" id="detailBreadcrumbs">
+        <div class="breadcrumbs">
             <a href="index.html">Trang Chủ</a>
             <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
-            <a href="index.html#section-camera-ip">Sản Phẩm KBVISION</a>
+            <span id="breadcrumbCategory">Sản Phẩm Tuấn Camera</span>
             <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
-            <span id="breadcrumbTitle" style="color:var(--text-primary); font-weight:600;">Chi Tiết Sản Phẩm KBVISION</span>
+            <span id="breadcrumbName" style="color:var(--text-main); font-weight:600;">Chi Tiết</span>
         </div>
 
-        <!-- Product Main Detail Layout -->
-        <section class="product-detail-layout" id="productDetailContainer">
-            <div style="grid-column: 1/-1; text-align:center; padding: 60px;">
-                <i class="fa-solid fa-spinner fa-spin" style="font-size:2.5rem; color:var(--primary); margin-bottom:15px;"></i>
-                <p>Đang tải thông tin chi tiết sản phẩm KBVISION...</p>
-            </div>
-        </section>
-
-        <!-- Product Detailed Description & Specifications Section -->
-        <section class="detail-tabs-section" id="detailTabsSection" style="display:none;">
-            <h3 style="font-size:1.3rem; font-weight:800; color:var(--secondary-navy); margin-bottom:15px; border-bottom:2px solid var(--primary); padding-bottom:8px;">
-                <i class="fa-solid fa-circle-info" style="color:var(--primary)"></i> Mô Tả Chi Tiết & Hướng Dẫn Sử Dụng KBVISION
-            </h3>
-            <div id="fullDescriptionContent" style="color:var(--text-secondary); line-height:1.7; font-size:0.95rem; margin-bottom:30px;">
-                <!-- Full description -->
+        <!-- Product Detail Section -->
+        <div class="product-detail-layout" id="productDetailContainer">
+            <div class="detail-img-wrap">
+                <img id="detailImage" src="" alt="Tuấn Camera">
             </div>
 
-            <h3 style="font-size:1.3rem; font-weight:800; color:var(--secondary-navy); margin-bottom:15px; border-bottom:2px solid var(--primary); padding-bottom:8px;">
-                <i class="fa-solid fa-sliders" style="color:var(--primary)"></i> Bảng Thông Số Kỹ Thuật KBVISION
-            </h3>
-            <table class="specs-table" id="fullSpecsTable">
-                <!-- Table specs -->
+            <div class="detail-info">
+                <h1 id="detailTitle">Đang tải sản phẩm...</h1>
+                
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:15px;">
+                    <div style="color:#f59e0b; font-size:0.9rem;">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <span style="color:var(--text-muted); font-size:0.85rem; font-weight:600; margin-left:4px;" id="detailRating">5.0 (45 đánh giá)</span>
+                    </div>
+                    <span style="color:var(--border-color);">|</span>
+                    <span style="font-size:0.85rem; color:var(--accent-green); font-weight:700;"><i class="fa-solid fa-circle-check"></i> Còn hàng trong kho</span>
+                </div>
+
+                <div class="detail-price-box">
+                    <span class="detail-price-current" id="detailPrice">0 đ</span>
+                    <span class="detail-price-old" id="detailOldPrice"></span>
+                </div>
+
+                <!-- Guarantee Badges -->
+                <div class="guarantee-badges">
+                    <div class="badge-item">
+                        <i class="fa-solid fa-shield-halved" style="color:var(--primary); font-size:1.3rem;"></i>
+                        <div>
+                            <div>Bảo Hành 24 Tháng</div>
+                            <div style="font-size:0.75rem; color:var(--text-muted);">1 Đổi 1 Tận Nơi</div>
+                        </div>
+                    </div>
+                    <div class="badge-item">
+                        <i class="fa-solid fa-truck-fast" style="color:var(--accent-blue); font-size:1.3rem;"></i>
+                        <div>
+                            <div>Giao Hàng COD</div>
+                            <div style="font-size:0.75rem; color:var(--text-muted);">Kiểm Hàng Thanh Toán</div>
+                        </div>
+                    </div>
+                    <div class="badge-item">
+                        <i class="fa-solid fa-user-gear" style="color:var(--accent-green); font-size:1.3rem;"></i>
+                        <div>
+                            <div>Hỗ Trợ Lắp Đặt</div>
+                            <div style="font-size:0.75rem; color:var(--text-muted);">Kỹ Thuật Hướng Dẫn</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display:flex; gap:15px; margin-top:30px;">
+                    <button class="btn-kb-primary" id="detailBuyBtn" style="flex:1; padding:15px; border:none; cursor:pointer; font-size:1rem;">
+                        MUA NGAY (GIAO HÀNG TẬN NƠI)
+                    </button>
+                    <a href="https://zalo.me/0987654321" target="_blank" class="btn-kb-secondary" style="padding:15px 25px; text-decoration:none;">
+                        TƯ VẤN ZALO
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Specs & Detailed Description Section -->
+        <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:30px; box-shadow:var(--shadow-card); margin-bottom:50px;">
+            <div style="display:flex; gap:20px; border-bottom:2px solid var(--border-color); margin-bottom:25px;">
+                <button class="tab-btn active" style="font-size:1.1rem; padding-bottom:12px; font-weight:800;">THÔNG SỐ KỸ THUẬT</button>
+            </div>
+
+            <table class="specs-table">
+                <tbody id="detailSpecsBody">
+                    <!-- Specs rows -->
+                </tbody>
             </table>
-        </section>
 
-        <!-- Recommended Related Products Grid -->
-        <section style="margin-bottom:50px;">
-            <div class="section-title">
-                <h2><i class="fa-solid fa-fire" style="color:var(--primary)"></i> Gợi Ý Sản Phẩm KBVISION Tương Tự</h2>
+            <div style="margin-top:35px; padding-top:25px; border-top:1px solid var(--border-color);">
+                <h3 style="font-size:1.2rem; font-weight:800; color:var(--secondary-navy); margin-bottom:12px;">Mô Tả Sản Phẩm Tuấn Camera</h3>
+                <p id="detailDescriptionText" style="color:var(--text-main); line-height:1.7; font-size:0.95rem;"></p>
             </div>
-            <div class="products-grid" id="relatedProductsGrid">
-                <!-- Related products list -->
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Cart Modal -->
-    <div class="modal" id="cartModal">
-        <div class="modal-content">
-            <button class="modal-close" id="closeCartBtn"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="font-size:1.3rem; font-weight:800; margin-bottom:20px; color:var(--secondary-navy);">
-                <i class="fa-solid fa-cart-shopping" style="color:var(--primary)"></i> Giỏ Hàng Của Bạn
-            </h2>
-            <div id="cartItemsList">
-                <!-- Cart items -->
-            </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; padding-top:15px; border-top:2px solid var(--border-color);">
-                <span style="font-weight:700; font-size:1.1rem;">Tổng Tiền:</span>
-                <span style="font-size:1.4rem; font-weight:900; color:var(--primary);" id="cartTotalAmount">0 đ</span>
-            </div>
-            <button class="btn-primary" id="proceedCheckoutBtn" style="width:100%; justify-content:center; margin-top:20px; padding:12px;">
-                <i class="fa-solid fa-credit-card"></i> Tiến Hành Đặt Hàng Ngay
-            </button>
         </div>
-    </div>
-
-    <!-- Checkout Modal -->
-    <div class="modal" id="checkoutModal">
-        <div class="modal-content">
-            <button class="modal-close" id="closeCheckoutBtn"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="font-size:1.3rem; font-weight:800; margin-bottom:20px; color:var(--secondary-navy);">
-                <i class="fa-solid fa-truck-ramp-box" style="color:var(--primary)"></i> Thông Tin Giao Hàng & Đặt Hàng KBVISION
-            </h2>
-            <form id="checkoutForm">
-                <div class="form-group">
-                    <label>Họ và Tên Người Nhận *</label>
-                    <input type="text" id="orderName" class="form-control" placeholder="Nguyễn Văn A" required>
-                </div>
-                <div class="form-group">
-                    <label>Số Điện Thoại Nhận Hàng *</label>
-                    <input type="tel" id="orderPhone" class="form-control" placeholder="0987654321" required>
-                </div>
-                <div class="form-group">
-                    <label>Địa Chỉ Nhận Hàng *</label>
-                    <input type="text" id="orderAddress" class="form-control" placeholder="Số 123 Đường ABC, Phường X, Quận Y, Hà Nội / TP.HCM" required>
-                </div>
-                <div class="form-group">
-                    <label>Ghi Chú Giao Hàng (Nếu có)</label>
-                    <textarea id="orderNote" class="form-control" rows="2" placeholder="Giao giờ hành chính, gọi trước khi giao..."></textarea>
-                </div>
-                <p style="font-size:0.8rem; color:var(--accent-green); margin-bottom:15px;">
-                    <i class="fa-solid fa-shield-halved"></i> Sản phẩm KBVISION chính hãng bảo hành 24 tháng 1 đổi 1.
-                </p>
-                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:12px;">
-                    <i class="fa-solid fa-check"></i> Xác Nhận Đặt Hàng COD (Thanh Toán Khi Nhận Hàng)
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Toast Notifications Container -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <!-- Floating Quick Contact Buttons -->
-    <div class="floating-contact">
-        <a href="https://zalo.me/0987654321" target="_blank" class="float-btn zalo" title="Chat Zalo Tư Vấn KBVISION">
-            <i class="fa-solid fa-comment-dots"></i>
-        </a>
-        <a href="tel:0987654321" class="float-btn phone" title="Gọi Hotline KBVISION">
-            <i class="fa-solid fa-phone"></i>
-        </a>
     </div>
 
     <!-- Site Footer -->
     <footer class="site-footer">
-        <div class="container footer-grid">
-            <div class="footer-col">
-                <h3>KBVISION.vn - Nhà Phân Phối Camera KBVISION Mỹ</h3>
-                <p style="margin-bottom:12px;">Hệ thống cung cấp camera an ninh & thiết bị giám sát KBVISION thương hiệu Mỹ hàng đầu Việt Nam. Cam kết hàng chính hãng 100%, bảo hành 24 tháng 1 đổi 1 tận nơi.</p>
-                <p><strong>Hotline/Zalo:</strong> 0987.654.321 (Tư vấn 24/7)</p>
-                <p><strong>Showroom:</strong> Hà Nội & TP. Hồ Chí Minh</p>
-            </div>
-            <div class="footer-col">
-                <h3>Danh Mục Sản Phẩm KBVISION</h3>
-                <ul>
-                    <li><a href="index.html#section-camera-ip">Camera IP KBVISION 4K</a></li>
-                    <li><a href="index.html#section-camera-analog">Camera HD-CVI Analog</a></li>
-                    <li><a href="index.html#section-dau-ghi">Đầu Ghi Hình KBVISION</a></li>
-                    <li><a href="index.html#section-bo-tron-goi">Bộ Kit Trọn Gói KBVISION</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h3>Chính Sách Bán Hàng</h3>
-                <ul>
-                    <li><a href="baohanh.html"><i class="fa-solid fa-award" style="color:var(--primary); margin-right:6px;"></i> Chính Sách Bảo Hành 24 Tháng</a></li>
-                    <li><a href="giaohang.html"><i class="fa-solid fa-truck-fast" style="color:var(--primary); margin-right:6px;"></i> Chính Sách Giao Hàng & Lắp Đặt COD</a></li>
-                    <li><a href="baomat.html"><i class="fa-solid fa-lock" style="color:var(--primary); margin-right:6px;"></i> Cam Kết Bảo Mật Thông Tin Khách</a></li>
-                    <li><a href="admin.html"><i class="fa-solid fa-user-gear" style="color:var(--primary); margin-right:6px;"></i> Trang Quản Trị Hệ Thống</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom container">
-            <p>© 2026 KBVISION.vn - Tất cả các quyền được bảo lưu. Vận hành trên nền tảng Cloudflare Workers & D1 Database.</p>
+        <div class="container footer-bottom" style="border:none;">
+            <p>© 2026 Tuấn Camera - Chi Tiết Sản Phẩm Chính Hãng.</p>
         </div>
     </footer>
 

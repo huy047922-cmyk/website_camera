@@ -1,10 +1,10 @@
 /* ==========================================================================
-   KBVISION.vn Storefront App Logic (Connected to Cloudflare Workers & D1)
+   Tuấn Camera Storefront App Logic (Connected to Cloudflare Workers & D1)
    ========================================================================== */
 
 let allProducts = [];
-let cart = JSON.parse(localStorage.getItem('kbvision_cart') || '[]');
-let currentLang = localStorage.getItem('kbvision_lang') || 'vi';
+let cart = JSON.parse(localStorage.getItem('tuancamera_cart') || '[]');
+let currentLang = localStorage.getItem('tuancamera_lang') || 'vi';
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchProducts();
@@ -21,44 +21,44 @@ document.addEventListener('DOMContentLoaded', () => {
 // i18n English / Vietnamese Translation Dictionary
 const translations = {
     vi: {
-        topWarranty: "Bảo Hành 24 Tháng Chính Hãng KBVISION USA",
+        topWarranty: "Tuấn Camera - Bảo Hành 24 Tháng 1 Đổi 1 Tận Nơi",
         navHome: "TRANG CHỦ",
         navAbout: "GIỚI THIỆU",
         navProducts: "SẢN PHẨM ",
         navSupport: "HỖ TRỢ KHÁCH HÀNG ",
         navNews: "TIN TỨC ",
         navContact: "LIÊN HỆ",
-        heroTitle: "GIẢI PHÁP An Ninh Tổng Thể",
-        heroSub: "Hệ thống giám sát an ninh KBVISION chuẩn thương hiệu Mỹ. Độ nét Ultra HD 4K, công nghệ Full-Color xem đêm có màu sắc nét, bảo hành 24 tháng 1 đổi 1 tận nơi.",
+        heroTitle: "TUẤN CAMERA Giải Pháp An Ninh",
+        heroSub: "Hệ thống giám sát an ninh Tuấn Camera chính hãng. Độ nét Ultra HD 4K, công nghệ Full-Color xem đêm có màu sắc nét, bảo hành 24 tháng 1 đổi 1 tận nơi.",
         heroBtnProducts: "Khám Phá Sản Phẩm",
         heroBtnContact: "Đăng Ký Lắp Đặt",
         tabProducts: "SẢN PHẨM",
         tabTech: "CÔNG NGHỆ",
-        secIp: "CAMERA IP KBVISION 4K & WI-FI",
-        secAnalog: "CAMERA HD-CVI ANALOG KBVISION",
-        secDauGhi: "ĐẦU GHI HÌNH KBVISION (DVR / NVR 4K)",
-        secKit: "BỘ KIT CAMERA TRỌN GÓI KBVISION",
+        secIp: "CAMERA IP TUẤN CAMERA 4K & WI-FI",
+        secAnalog: "CAMERA HD-CVI ANALOG TUẤN CAMERA",
+        secDauGhi: "ĐẦU GHI HÌNH TUẤN CAMERA (DVR / NVR 4K)",
+        secKit: "BỘ KIT CAMERA TRỌN GÓI TUẤN CAMERA",
         btnBuyNow: "Mua Ngay",
-        searchPlaceholder: "Tìm kiếm sản phẩm..."
+        searchPlaceholder: "Tìm kiếm sản phẩm Tuấn Camera..."
     },
     en: {
-        topWarranty: "Official KBVISION USA 24-Month Warranty",
+        topWarranty: "Official Tuấn Camera 24-Month Warranty 1-to-1",
         navHome: "HOME",
         navAbout: "ABOUT US",
         navProducts: "PRODUCTS ",
         navSupport: "SUPPORT ",
         navNews: "NEWS ",
         navContact: "CONTACT",
-        heroTitle: "TOTAL SECURITY SOLUTIONS",
-        heroSub: "KBVISION USA security surveillance system. Ultra HD 4K resolution, Full-Color 24/7 night vision, 24-month warranty.",
+        heroTitle: "TUẤN CAMERA Security Solutions",
+        heroSub: "Tuấn Camera security surveillance system. Ultra HD 4K resolution, Full-Color 24/7 night vision, 24-month warranty.",
         heroBtnProducts: "Explore Products",
         heroBtnContact: "Request Installation",
         tabProducts: "PRODUCTS",
         tabTech: "TECHNOLOGY",
-        secIp: "KBVISION 4K & WI-FI IP CAMERAS",
-        secAnalog: "KBVISION HD-CVI ANALOG CAMERAS",
-        secDauGhi: "KBVISION DVR / NVR RECORDERS",
-        secKit: "KBVISION COMPLETE CAMERA KITS",
+        secIp: "TUẤN CAMERA 4K & WI-FI IP CAMERAS",
+        secAnalog: "TUẤN CAMERA HD-CVI ANALOG CAMERAS",
+        secDauGhi: "TUẤN CAMERA DVR / NVR RECORDERS",
+        secKit: "TUẤN CAMERA COMPLETE KITS",
         btnBuyNow: "Buy Now",
         searchPlaceholder: "Search products..."
     }
@@ -67,14 +67,13 @@ const translations = {
 // Switch Language Selector
 function switchLanguage(lang) {
     currentLang = lang;
-    localStorage.setItem('kbvision_lang', lang);
+    localStorage.setItem('tuancamera_lang', lang);
     applyLanguage(lang);
 }
 
 function applyLanguage(lang) {
     const t = translations[lang] || translations.vi;
 
-    // Update Header Language Dropdown Label
     const label = document.getElementById('currentLangLabel');
     if (label) {
         label.innerHTML = lang === 'en' 
@@ -82,11 +81,9 @@ function applyLanguage(lang) {
             : 'TIẾNG VIỆT 🇻🇳 <i class="fa-solid fa-chevron-down nav-arrow"></i>';
     }
 
-    // Update Top Warranty Text
     const topW = document.getElementById('topWarrantyText');
     if (topW) topW.textContent = t.topWarranty;
 
-    // Update Nav Menu Links
     const navHome = document.querySelector('.main-nav-item:nth-child(1) .main-nav-link');
     const navAbout = document.querySelector('.main-nav-item:nth-child(2) .main-nav-link');
     const navProducts = document.querySelector('.main-nav-item:nth-child(3) .main-nav-link');
@@ -101,19 +98,16 @@ function applyLanguage(lang) {
     if (navNews) navNews.innerHTML = t.navNews + '<i class="fa-solid fa-chevron-down nav-arrow"></i>';
     if (navContact) navContact.textContent = t.navContact;
 
-    // Update Hero Banner Text
     const heroH1 = document.querySelector('.hero-kb-text h1');
     const heroP = document.querySelector('.hero-kb-text p');
-    if (heroH1) heroH1.innerHTML = lang === 'en' ? 'TOTAL <span>Security Solutions</span>' : 'GIẢI PHÁP <span>An Ninh Tổng Thể</span>';
+    if (heroH1) heroH1.innerHTML = lang === 'en' ? 'TUẤN CAMERA <span>Security Solutions</span>' : 'TUẤN CAMERA <span>Giải Pháp An Ninh</span>';
     if (heroP) heroP.textContent = t.heroSub;
 
-    // Update Tabs
     const tabP = document.getElementById('tabBtnProducts');
     const tabT = document.getElementById('tabBtnTech');
     if (tabP) tabP.textContent = t.tabProducts;
     if (tabT) tabT.textContent = t.tabTech;
 
-    // Update Section Headings
     const secIp = document.querySelector('#section-camera-ip h2');
     const secAnalog = document.querySelector('#section-camera-analog h2');
     const secDauGhi = document.querySelector('#section-dau-ghi h2');
@@ -124,14 +118,10 @@ function applyLanguage(lang) {
     if (secDauGhi) secDauGhi.textContent = t.secDauGhi;
     if (secKit) secKit.textContent = t.secKit;
 
-    // Update Search Input Placeholder
     const searchIn = document.getElementById('searchInput');
     if (searchIn) searchIn.placeholder = t.searchPlaceholder;
 
-    // Re-render product grid buttons
     renderCategorizedHomepage(allProducts);
-
-    showToast(lang === 'en' ? 'Switched interface to English' : 'Đã chuyển sang tiếng Việt');
 }
 
 // User Auth Modal Controls & State
@@ -159,7 +149,6 @@ function setupAuthModal() {
         formLogin.style.display = 'none';
     });
 
-    // Login Form Submission
     formLogin?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const username = document.getElementById('logUsername').value.trim();
@@ -174,7 +163,7 @@ function setupAuthModal() {
 
             const result = await res.json();
             if (result.success) {
-                localStorage.setItem('kbvision_user', JSON.stringify(result.user));
+                localStorage.setItem('tuancamera_user', JSON.stringify(result.user));
                 checkLoggedInUser();
                 modal?.classList.remove('active');
                 formLogin.reset();
@@ -187,7 +176,6 @@ function setupAuthModal() {
         }
     });
 
-    // Register Form Submission (Họ tên, Username, Password, Email, Phone)
     formReg?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const regData = {
@@ -207,11 +195,11 @@ function setupAuthModal() {
 
             const result = await res.json();
             if (result.success) {
-                localStorage.setItem('kbvision_user', JSON.stringify(result.user));
+                localStorage.setItem('tuancamera_user', JSON.stringify(result.user));
                 checkLoggedInUser();
                 modal?.classList.remove('active');
                 formReg.reset();
-                showToast(`Chúc mừng ${result.user.full_name}! Đã tạo tài khoản thành công.`, 'success');
+                showToast(`Chúc mừng ${result.user.full_name}! Đã tạo tài khoản Tuấn Camera thành công.`, 'success');
             } else {
                 throw new Error(result.error || 'Đăng ký thất bại');
             }
@@ -226,7 +214,7 @@ function openAuthModal() {
 }
 
 function checkLoggedInUser() {
-    const userStr = localStorage.getItem('kbvision_user');
+    const userStr = localStorage.getItem('tuancamera_user');
     const container = document.getElementById('userHeaderAuth');
     if (!container) return;
 
@@ -246,7 +234,7 @@ function checkLoggedInUser() {
 }
 
 function userLogout() {
-    localStorage.removeItem('kbvision_user');
+    localStorage.removeItem('tuancamera_user');
     checkLoggedInUser();
     showToast('Đã đăng xuất tài khoản thành công!');
 }
@@ -261,7 +249,7 @@ async function fetchProducts(category = 'all', search = '') {
         if (params.toString()) url += '?' + params.toString();
 
         const res = await fetch(url);
-        if (!res.ok) throw new Error('Không thể tải danh sách sản phẩm KBVISION');
+        if (!res.ok) throw new Error('Không thể tải danh sách sản phẩm Tuấn Camera');
         
         allProducts = await res.json();
 
@@ -298,14 +286,14 @@ function renderFilteredGrid(products, category, search) {
     const label = document.getElementById('filteredCountLabel');
     const gridId = 'filteredProductsGrid';
 
-    let catName = 'TẤT CẢ SẢN PHẨM KBVISION';
-    if (category === 'camera-ip') catName = 'CAMERA IP KBVISION 4K';
+    let catName = 'TẤT CẢ SẢN PHẨM TUẤN CAMERA';
+    if (category === 'camera-ip') catName = 'CAMERA IP TUẤN CAMERA 4K';
     if (category === 'camera-analog') catName = 'CAMERA HD-CVI ANALOG';
-    if (category === 'dau-ghi') catName = 'ĐẦU GHI HÌNH KBVISION';
+    if (category === 'dau-ghi') catName = 'ĐẦU GHI HÌNH TUẤN CAMERA';
     if (category === 'bo-tron-goi') catName = 'BỘ KIT CAMERA TRỌN GÓI';
 
     if (search) {
-        if (title) title.textContent = `KẾT QUẢ TÌM KIẾM KBVISION: "${search}"`;
+        if (title) title.textContent = `KẾT QUẢ TÌM KIẾM TUẤN CAMERA: "${search}"`;
     } else {
         if (title) title.textContent = `DANH MỤC: ${catName}`;
     }
@@ -443,7 +431,7 @@ function updateCartQuantity(productId, delta) {
 }
 
 function saveCart() {
-    localStorage.setItem('kbvision_cart', JSON.stringify(cart));
+    localStorage.setItem('tuancamera_cart', JSON.stringify(cart));
 }
 
 function updateCartUI() {
@@ -459,7 +447,7 @@ function updateCartUI() {
     if (cart.length === 0) {
         cartList.innerHTML = `
             <div style="text-align:center; padding: 30px; color: var(--text-muted);">
-                <p>Chưa có sản phẩm nào trong giỏ hàng KBVISION.</p>
+                <p>Chưa có sản phẩm nào trong giỏ hàng Tuấn Camera.</p>
             </div>
         `;
         if (totalLabel) totalLabel.textContent = '0 đ';
@@ -547,7 +535,7 @@ function setupCartControls() {
                 saveCart();
                 updateCartUI();
                 checkoutModal?.classList.remove('active');
-                showToast(`Đặt hàng thành công! Mã đơn hàng KBVISION: ${result.orderId}`, 'success');
+                showToast(`Đặt hàng thành công! Mã đơn hàng Tuấn Camera: ${result.orderId}`, 'success');
             } else {
                 throw new Error(result.error || 'Đặt hàng thất bại');
             }
@@ -584,7 +572,7 @@ function setupCustomBuildForm() {
             const result = await res.json();
             if (result.success) {
                 form.reset();
-                showToast('Đã gửi yêu cầu tư vấn khảo sát thành công! Nhân viên sẽ gọi lại tư vấn.', 'success');
+                showToast('Đã gửi yêu cầu tư vấn khảo sát thành công! Tuấn Camera sẽ gọi lại tư vấn.', 'success');
             } else {
                 throw new Error(result.error || 'Gửi thất bại');
             }
