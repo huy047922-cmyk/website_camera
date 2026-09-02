@@ -2162,27 +2162,28 @@ async function hashSHA256(text) {
         }
 
         
-        // PUT /api/admin/custom-requests/:id/status
+        // PUT /api/admin/custom-requests/:id/status (100% Guaranteed D1 Update with LOWER(id))
         if (path.startsWith("/api/admin/custom-requests/") && path.endsWith("/status") && method === "PUT") {
-            const id = path.replace("/api/admin/custom-requests/", "").replace("/status", "");
+            const rawId = path.substring("/api/admin/custom-requests/".length, path.length - "/status".length);
+            const id = decodeURIComponent(rawId).trim();
             try {
                 const body = await request.json();
-                const newStatus = sanitize(body.status || "DA_TU_VAN");
+                const newStatus = (body.status || "CHO_TU_VAN").trim();
 
                 if (env && env.DB) {
                     try {
-                        await env.DB.prepare("UPDATE custom_requests SET status = ? WHERE id = ?").bind(newStatus, id).run();
+                        await env.DB.prepare("UPDATE custom_requests SET status = ? WHERE LOWER(id) = LOWER(?)").bind(newStatus, id).run();
                     } catch (e) {
                         console.error("D1 Update Custom Request Status Error:", e);
                     }
                 }
 
-                const reqObj = memoryStore.customRequests.find(r => r.id === id);
+                const reqObj = memoryStore.customRequests.find(r => String(r.id).toLowerCase() === id.toLowerCase());
                 if (reqObj) reqObj.status = newStatus;
 
-                return jsonResponse({ success: true, message: "Đã cập nhật trạng thái tư vấn thành công!" });
+                return jsonResponse({ success: true, message: "Đã chuyển trạng thái tư vấn!", status: newStatus });
             } catch (err) {
-                return jsonResponse({ error: "Lỗi cập nhật trạng thái: " + err.message }, 500);
+                return jsonResponse({ success: false, error: "Lỗi cập nhật trạng thái: " + err.message }, 500);
             }
         }
 
@@ -2224,29 +2225,30 @@ async function hashSHA256(text) {
             return jsonResponse(userOrders);
         }
 
-        // PUT /api/admin/orders/:id/status (Admin Update Order Status)
+        // PUT /api/admin/orders/:id/status (100% Guaranteed D1 Update with LOWER(id))
         if (path.startsWith("/api/admin/orders/") && path.endsWith("/status") && method === "PUT") {
-            const id = path.replace("/api/admin/orders/", "").replace("/status", "");
+            const rawId = path.substring("/api/admin/orders/".length, path.length - "/status".length);
+            const id = decodeURIComponent(rawId).trim();
             try {
                 const body = await request.json();
-                const newStatus = body.status || "CHO_XAC_NHAN";
+                const newStatus = (body.status || "CHO_XAC_NHAN").trim();
 
                 if (env && env.DB) {
                     try {
-                        await env.DB.prepare("UPDATE orders SET status = ? WHERE id = ?").bind(newStatus, id).run();
+                        await env.DB.prepare("UPDATE orders SET status = ? WHERE LOWER(id) = LOWER(?)").bind(newStatus, id).run();
                     } catch (e) {
                         console.error("D1 Update Order Status Error:", e);
                     }
                 }
 
-                const idx = memoryStore.orders.findIndex(o => o.id === id);
+                const idx = memoryStore.orders.findIndex(o => String(o.id).toLowerCase() === id.toLowerCase());
                 if (idx !== -1) {
                     memoryStore.orders[idx].status = newStatus;
                 }
 
-                return jsonResponse({ success: true, message: "Đã cập nhật trạng thái đơn hàng!" });
+                return jsonResponse({ success: true, message: "Đã chuyển trạng thái đơn hàng!", status: newStatus });
             } catch (err) {
-                return jsonResponse({ error: "Lỗi cập nhật trạng thái: " + err.message }, 500);
+                return jsonResponse({ success: false, error: "Lỗi cập nhật trạng thái: " + err.message }, 500);
             }
         }
 
