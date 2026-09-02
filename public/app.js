@@ -16,9 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Fetch products from Cloudflare Workers API
 async function fetchProducts(category = 'all', search = '') {
-    const label = document.getElementById('productCountLabel');
-    if (label) label.textContent = 'Đang tải dữ liệu từ Cloudflare D1...';
-
     try {
         let url = '/api/products';
         const params = new URLSearchParams();
@@ -30,35 +27,78 @@ async function fetchProducts(category = 'all', search = '') {
         if (!res.ok) throw new Error('Không thể tải danh sách sản phẩm');
         
         allProducts = await res.json();
-        renderProducts(allProducts);
 
-        if (label) {
-            label.textContent = `Hiển thị ${allProducts.length} sản phẩm`;
+        if (category === 'all' && !search) {
+            // Show Categorized Homepage Sections
+            document.getElementById('categorized-sections-container').style.display = 'block';
+            document.getElementById('filtered-view-section').style.display = 'none';
+            renderCategorizedHomepage(allProducts);
+        } else {
+            // Show Filtered / Search View
+            document.getElementById('categorized-sections-container').style.display = 'none';
+            document.getElementById('filtered-view-section').style.display = 'block';
+            renderFilteredGrid(allProducts, category, search);
         }
     } catch (err) {
         console.error('API Error:', err);
         showToast('Lỗi tải sản phẩm: ' + err.message, 'error');
-        if (label) label.textContent = 'Lỗi kết nối cơ sở dữ liệu';
     }
 }
 
-// Render Product Cards
-function renderProducts(products) {
-    const grid = document.getElementById('productsGrid');
+// Render Categorized Homepage Sections
+function renderCategorizedHomepage(products) {
+    const featured = products.filter(p => p.featured === 1 || p.badge === 'BÁN CHẠY #1' || p.badge === 'BÁN CHẠY').slice(0, 8);
+    const sieuNho = products.filter(p => p.category_id === 'sieu-nho').slice(0, 8);
+    const nguyTrang = products.filter(p => p.category_id === 'nguy-trang').slice(0, 8);
+    const doChe = products.filter(p => p.category_id === 'do-che').slice(0, 8);
+    const dinhVi = products.filter(p => p.category_id === 'dinh-vi').slice(0, 8);
+
+    renderProductCardsToGrid('grid-featured', featured.length > 0 ? featured : products.slice(0, 8));
+    renderProductCardsToGrid('grid-sieu-nho', sieuNho);
+    renderProductCardsToGrid('grid-nguy-trang', nguyTrang);
+    renderProductCardsToGrid('grid-do-che', doChe);
+    renderProductCardsToGrid('grid-dinh-vi', dinhVi);
+}
+
+// Render Filtered / Search View Grid
+function renderFilteredGrid(products, category, search) {
+    const title = document.getElementById('filteredTitle');
+    const label = document.getElementById('filteredCountLabel');
+    const gridId = 'filteredProductsGrid';
+
+    let catName = 'Tất Cả Sản Phẩm';
+    if (category === 'sieu-nho') catName = 'Camera Siêu Nhỏ Wi-Fi';
+    if (category === 'nguy-trang') catName = 'Camera Ngụy Trang Đồ Vật';
+    if (category === 'do-che') catName = 'Camera Độ Chế Theo Yêu Cầu';
+    if (category === 'dinh-vi') catName = 'Máy Dò Sóng & Định Vị GPS';
+
+    if (search) {
+        if (title) title.innerHTML = `<i class="fa-solid fa-magnifying-glass" style="color:var(--primary)"></i> Kết Quả Tìm Kiếm: "${search}"`;
+    } else {
+        if (title) title.innerHTML = `<i class="fa-solid fa-list-check" style="color:var(--primary)"></i> Danh Mục: ${catName}`;
+    }
+
+    if (label) label.textContent = `${products.length} sản phẩm phù hợp`;
+
+    renderProductCardsToGrid(gridId, products);
+}
+
+// Generic Helper: Render Product Cards to target container ID
+function renderProductCardsToGrid(gridId, productsList) {
+    const grid = document.getElementById(gridId);
     if (!grid) return;
 
-    if (!products || products.length === 0) {
+    if (!productsList || productsList.length === 0) {
         grid.innerHTML = `
-            <div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">
-                <i class="fa-solid fa-box-open" style="font-size:3rem; margin-bottom:15px; display:block;"></i>
-                <p>Không tìm thấy sản phẩm nào phù hợp.</p>
+            <div style="grid-column: 1/-1; text-align:center; padding: 30px; color: var(--text-muted);">
+                <i class="fa-solid fa-box-open" style="font-size:2.5rem; margin-bottom:10px; display:block;"></i>
+                <p>Chưa có sản phẩm nào trong mục này.</p>
             </div>
         `;
         return;
     }
 
-    grid.innerHTML = products.map(p => {
-        const specs = typeof p.specs_json === 'string' ? JSON.parse(p.specs_json || '{}') : (p.specs_json || {});
+    grid.innerHTML = productsList.map(p => {
         const formattedPrice = new Intl.NumberFormat('vi-VN').format(p.price) + ' đ';
         const formattedOldPrice = p.original_price ? new Intl.NumberFormat('vi-VN').format(p.original_price) + ' đ' : '';
 
@@ -92,7 +132,23 @@ function renderProducts(products) {
     }).join('');
 }
 
-// Category Filter Tabs
+// Category Navigation Select
+function selectCategory(cat) {
+    const nav = document.getElementById('categoryNav');
+    if (nav) {
+        nav.querySelectorAll('.category-pill').forEach(b => {
+            if (b.dataset.category === cat) {
+                b.classList.add('active');
+            } else {
+                b.classList.remove('active');
+            }
+        });
+    }
+    fetchProducts(cat);
+    window.scrollTo({ top: 400, behavior: 'smooth' });
+}
+
+// Category Filter Tabs Event Setup
 function setupCategoryFilters() {
     const nav = document.getElementById('categoryNav');
     if (!nav) return;
@@ -109,7 +165,7 @@ function setupCategoryFilters() {
     });
 }
 
-// Live Search
+// Live Search Setup
 function setupSearch() {
     const input = document.getElementById('searchInput');
     const btn = document.getElementById('searchBtn');
@@ -131,6 +187,11 @@ function setupSearch() {
             fetchProducts(activeCat, input.value.trim());
         });
     }
+}
+
+// Open Standalone Product Detail Page
+function openProductDetail(productId) {
+    window.location.href = `product.html?id=${productId}`;
 }
 
 // Cart State Management
@@ -319,11 +380,6 @@ function setupCustomBuildForm() {
             showToast('Lỗi gửi yêu cầu: ' + err.message, 'error');
         }
     });
-}
-
-// Open Standalone Product Detail Page
-function openProductDetail(productId) {
-    window.location.href = `product.html?id=${productId}`;
 }
 
 // Toast System
