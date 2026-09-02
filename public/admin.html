@@ -129,6 +129,73 @@
             }
         }
 
+    
+        /* Mobile Responsive Admin Styles */
+        @media (max-width: 768px) {
+            .admin-layout {
+                display: block !important;
+            }
+            .admin-sidebar {
+                padding: 10px 8px !important;
+                display: flex !important;
+                flex-direction: row !important;
+                overflow-x: auto !important;
+                white-space: nowrap !important;
+                gap: 6px !important;
+                background: #0f172a !important;
+                border-bottom: 2px solid #0056b3;
+                align-items: center;
+            }
+            .admin-sidebar .brand-logo {
+                display: none !important;
+            }
+            .admin-menu-item {
+                display: inline-flex !important;
+                margin-bottom: 0 !important;
+                padding: 8px 10px !important;
+                font-size: 0.78rem !important;
+                border-radius: 6px;
+                flex-shrink: 0;
+            }
+            .admin-sidebar > div {
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+                display: flex !important;
+                gap: 6px !important;
+            }
+            .admin-main {
+                padding: 14px 10px !important;
+            }
+            .stats-cards {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 8px !important;
+                margin-bottom: 15px !important;
+            }
+            .stat-card {
+                padding: 10px !important;
+            }
+            .stat-card div:last-child {
+                font-size: 1.4rem !important;
+            }
+            .login-box {
+                margin: 20px auto !important;
+                padding: 20px 14px !important;
+                width: 94% !important;
+            }
+            .table-responsive {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+                margin-top: 10px;
+                border: 1px solid #cbd5e1;
+                border-radius: 8px;
+            }
+            .data-table th, .data-table td {
+                padding: 8px 10px !important;
+                font-size: 0.8rem !important;
+                white-space: nowrap;
+            }
+        }
+
     </style>
 
     <!-- PWA Application Tags -->

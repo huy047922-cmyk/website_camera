@@ -2,7 +2,7 @@
    CameraMini.vn Admin Panel Logic (Cloudflare Workers & D1 Integration)
    ========================================================================== */
 
-let adminToken = localStorage.getItem('cf_admin_token') || null;
+let adminToken = localStorage.getItem('cf_admin_token') || localStorage.getItem('tuancamera_token') || null;
 let adminProductsList = [];
 let adminUsersList = [];
 let adminNewsList = [];
@@ -103,7 +103,7 @@ async function checkAdminAuth() {
         const data = await res.json();
         if (data.success) {
             loginSec.style.display = 'none';
-            dashSec.style.display = 'grid';
+            dashSec.style.display = (window.innerWidth <= 768) ? 'block' : 'grid';
             loadDashboardData();
         } else {
             handleUnauthorized();
@@ -134,6 +134,7 @@ function setupAdminLogin() {
             if (result.success) {
                 adminToken = result.token;
                 localStorage.setItem('cf_admin_token', adminToken);
+                localStorage.setItem('tuancamera_token', adminToken);
                 showAdminToast('Đăng nhập thành công!', 'success');
                 checkAdminAuth();
             } else {
