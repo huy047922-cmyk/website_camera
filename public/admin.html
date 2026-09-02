@@ -260,7 +260,7 @@
                             <th>Ảnh</th>
                             <th>Tiêu Đề Bài Viết</th>
                             <th>Danh Mục</th>
-                            <th>Mô Tả Tóm Tắt</th>
+                            <th>Video YouTube</th>
                             <th>Hành Động</th>
                         </tr>
                     </thead>
@@ -387,7 +387,7 @@
 
     <!-- Modal Thêm Bài Viết Tin Tức -->
     <div class="modal" id="addNewsModal">
-        <div class="modal-content" style="max-width:550px;">
+        <div class="modal-content" style="max-width:600px;">
             <button class="modal-close" id="closeAddNewsBtn"><i class="fa-solid fa-xmark"></i></button>
             <h2 style="font-size:1.2rem; font-weight:800; margin-bottom:20px; color:var(--secondary-navy);">Thêm Bài Viết Tin Tức Mới</h2>
             <form id="addNewsForm">
@@ -409,14 +409,59 @@
                     <input type="url" id="newsImage" class="form-control" placeholder="https://images.unsplash.com/..." required>
                 </div>
                 <div class="form-group">
+                    <label>Link Video YouTube (Ví dụ: https://www.youtube.com/watch?v=...)</label>
+                    <input type="url" id="newsYoutubeUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=...">
+                </div>
+                <div class="form-group">
                     <label>Mô Tả Tóm Tắt (Summary) *</label>
                     <textarea id="newsSummary" class="form-control" rows="2" placeholder="Nội dung tóm tắt..." required></textarea>
                 </div>
                 <div class="form-group">
                     <label>Nội Dung Bài Viết Chi Tiết</label>
-                    <textarea id="newsContent" class="form-control" rows="4" placeholder="Nội dung bài viết đầy đủ..."></textarea>
+                    <textarea id="newsContent" class="form-control" rows="5" placeholder="Nội dung bài viết đầy đủ..."></textarea>
                 </div>
-                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:12px;">Đăng Bài Viết</button>
+                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:12px;">Đăng Bài Viết Mới</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Chỉnh Sửa Bài Viết Tin Tức -->
+    <div class="modal" id="editNewsModal">
+        <div class="modal-content" style="max-width:600px;">
+            <button class="modal-close" id="closeEditNewsBtn"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="font-size:1.2rem; font-weight:800; margin-bottom:20px; color:var(--secondary-navy);">Chỉnh Sửa Bài Viết Tin Tức</h2>
+            <form id="editNewsForm">
+                <input type="hidden" id="editNewsId">
+                <div class="form-group">
+                    <label>Tiêu Đề Bài Viết *</label>
+                    <input type="text" id="editNewsTitle" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Danh Mục Tin Tức</label>
+                    <select id="editNewsCategory" class="form-control">
+                        <option value="Tin Khuyến Mãi">Tin Khuyến Mãi</option>
+                        <option value="Tư Vấn Chọn Mua">Tư Vấn Chọn Mua</option>
+                        <option value="Công Nghệ AI">Công Nghệ AI</option>
+                        <option value="Ưu Đãi Lắp Đặt">Ưu Đãi Lắp Đặt</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Link Ảnh Minh Họa (URL Image) *</label>
+                    <input type="url" id="editNewsImage" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Link Video YouTube (Ví dụ: https://www.youtube.com/watch?v=...)</label>
+                    <input type="url" id="editNewsYoutubeUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=...">
+                </div>
+                <div class="form-group">
+                    <label>Mô Tả Tóm Tắt (Summary) *</label>
+                    <textarea id="editNewsSummary" class="form-control" rows="2" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Nội Dung Bài Viết Chi Tiết</label>
+                    <textarea id="editNewsContent" class="form-control" rows="5"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:12px;">Cập Nhật Bài Viết Về D1</button>
             </form>
         </div>
     </div>

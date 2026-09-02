@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS news;
+
 CREATE TABLE IF NOT EXISTS categories (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
@@ -66,13 +68,13 @@ CREATE TABLE IF NOT EXISTS news (
     content TEXT,
     image TEXT NOT NULL,
     category TEXT DEFAULT 'Tin Khuyến Mãi',
+    youtube_url TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 DELETE FROM products;
 DELETE FROM categories;
 DELETE FROM users;
-DELETE FROM news;
 
 INSERT INTO categories (id, name, description) VALUES
 ('camera-ip', 'Camera IP Tuấn Camera 4K', 'Các dòng Camera IP Tuấn Camera độ nét 2MP - 8MP 4K, Wi-Fi, Full-Color có màu đêm'),
@@ -182,5 +184,5 @@ INSERT INTO products (id, name, category_id, price, original_price, badge, badge
 INSERT INTO products (id, name, category_id, price, original_price, badge, badge_type, rating, reviews_count, image, description, specs_json, featured, created_at) VALUES ('kb-100', 'Trọn Gói Bộ 8 Camera Tuấn Camera 5.0MP Super HD + Ổ 4TB', 'bo-tron-goi', 13850000, 17500000, '8 CAM 5MP VIP', 'hot', 4.8, 314, 'https://images.unsplash.com/photo-1517420704952-d9f39e95b43e?auto=format&fit=crop&w=600&q=80', 'Thiết bị Trọn Gói Bộ 8 Camera Tuấn Camera 5.0MP Super HD + Ổ 4TB chính hãng Tuấn Camera thương hiệu Mỹ. Công nghệ ghi hình sắc nét 4K/Full HD, chuẩn nén H.265+ tiết kiệm dung lượng, vỏ kim loại chống nước IP67 bền bỉ. Đầy đủ tem bảo hành chính hãng Tuấn Camera 24 tháng.', '{"Thương Hiệu":"Trọn Gói Tuấn Camera USA Bán Chạy","Bộ Sản Phẩm Bao Gồm":"Camera Tuấn Camera + Đầu Ghi Hình + Ổ Cứng Chuyên Dụng + Nguồn 12V + Jack BNC","Miễn Phí Đóng Gói":"Tặng Kèm Dây Cáp Tín Hiệu & Nhân Viên Lắp Đặt Tận Nơi","Xem Từ Xa":"Tài Khoản Tên Miền Tuấn Camera Tốc Độ Cao Miễn Phí Trọn Đời","Bảo Hành Trọn Bộ":"24 Tháng Tận Nơi 1 Đổi 1"}', 0, '2026-08-29T05:46:36.919Z');
 INSERT INTO users (id, full_name, username, password, email, phone, role) VALUES ('usr-admin', 'Quản Trị Viên Tuấn Camera', 'admin', '123', 'admin@tuancamera.vn', '0797777071', 'admin');
 INSERT INTO users (id, full_name, username, password, email, phone, role) VALUES ('usr-demo1', 'Nguyễn Văn Hùng', 'hungnv', '123', 'hungnv@gmail.com', '0912345678', 'user');
-INSERT INTO news (id, title, summary, content, image, category) VALUES ('news-001', 'Tuấn Camera Ra Mắt Dòng Camera AI Full-Color Ban Đêm Có Màu Siêu Nét', 'Công nghệ thấu kính khẩu độ lớn F1.0 kết hợp trí tuệ nhân tạo AI phân biệt chính xác người và vật, hạn chế 99% báo động giả.', 'Nội dung chi tiết...', 'https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=600&q=80', 'Tin Khuyến Mãi');
-INSERT INTO news (id, title, summary, content, image, category) VALUES ('news-002', 'Hướng Dẫn Chọn Camera Giám Sát Phù Hợp Cho Gia Đình & Nhà Xưởng', 'Các tiêu chí quan trọng khi lắp đặt hệ thống camera: Độ phân giải 4K, tiêu chuẩn vỏ chống nước IP67 và thời gian lưu trữ ổ cứng.', 'Nội dung chi tiết...', 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80', 'Tư Vấn Chọn Mua');
+INSERT INTO news (id, title, summary, content, image, category, youtube_url) VALUES ('news-001', 'Tuấn Camera Ra Mắt Dòng Camera AI Full-Color Ban Đêm Có Màu Siêu Nét', 'Công nghệ thấu kính khẩu độ lớn F1.0 kết hợp trí tuệ nhân tạo AI phân biệt chính xác người và vật, hạn chế 99% báo động giả.', 'Tuấn Camera xin giới thiệu dòng camera an ninh thế hệ mới tích hợp trí tuệ nhân tạo AI. Sản phẩm giúp nhận diện chính xác người và phương tiện, xem đêm có màu chân thực 24/7.', 'https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=600&q=80', 'Tin Khuyến Mãi', 'https://www.youtube.com/watch?v=L_LUpnjgPso');
+INSERT INTO news (id, title, summary, content, image, category, youtube_url) VALUES ('news-002', 'Hướng Dẫn Chọn Camera Giám Sát Phù Hợp Cho Gia Đình & Nhà Xưởng', 'Các tiêu chí quan trọng khi lắp đặt hệ thống camera: Độ phân giải 4K, tiêu chuẩn vỏ chống nước IP67 và thời gian lưu trữ ổ cứng.', 'Khi lựa chọn hệ thống camera giám sát an ninh cho gia đình hay cửa hàng, bạn cần chú ý tới 4 tiêu chí cơ bản: độ phân giải, tính năng đàm thoại 2 chiều, tầm xa hồng ngoại xem đêm và tiêu chuẩn chống nước IP67.', 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80', 'Tư Vấn Chọn Mua', 'https://www.youtube.com/watch?v=L_LUpnjgPso');

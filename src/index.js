@@ -2312,6 +2312,20 @@ async function hashSHA256(text) {
         }
 
         // ==================== NEWS & ARTICLES ENDPOINTS ====================
+        // GET /api/news/:id (Get Single News Article)
+        if (path.startsWith("/api/news/") && method === "GET") {
+            const id = path.replace("/api/news/", "");
+            if (env && env.DB) {
+                try {
+                    const item = await env.DB.prepare("SELECT * FROM news WHERE id = ?").bind(id).first();
+                    if (item) return jsonResponse(item);
+                } catch (e) {}
+            }
+            const item = memoryStore.news.find(n => n.id === id);
+            if (item) return jsonResponse(item);
+            return jsonResponse({ error: "Không tìm thấy bài viết" }, 404);
+        }
+
         // GET /api/news (Public News List)
         if (path === "/api/news" && method === "GET") {
             if (env && env.DB) {
@@ -2368,15 +2382,16 @@ async function hashSHA256(text) {
                     content: body.content || "",
                     image: body.image || "https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=600&q=80",
                     category: body.category || "Tin Khuyến Mãi",
+                    youtube_url: body.youtube_url || "",
                     created_at: new Date().toISOString()
                 };
 
                 if (env && env.DB) {
                     try {
                         await env.DB.prepare(`
-                            INSERT INTO news (id, title, summary, content, image, category)
-                            VALUES (?, ?, ?, ?, ?, ?)
-                        `).bind(newArticle.id, newArticle.title, newArticle.summary, newArticle.content, newArticle.image, newArticle.category).run();
+                            INSERT INTO news (id, title, summary, content, image, category, youtube_url)
+                            VALUES (?, ?, ?, ?, ?, ?, ?)
+                        `).bind(newArticle.id, newArticle.title, newArticle.summary, newArticle.content, newArticle.image, newArticle.category, newArticle.youtube_url).run();
                     } catch (e) {}
                 }
                 memoryStore.news.unshift(newArticle);
@@ -2398,14 +2413,15 @@ async function hashSHA256(text) {
                     summary: body.summary,
                     content: body.content,
                     image: body.image,
-                    category: body.category
+                    category: body.category,
+                    youtube_url: body.youtube_url || ""
                 };
 
                 if (env && env.DB) {
                     try {
                         await env.DB.prepare(`
-                            UPDATE news SET title = ?, summary = ?, content = ?, image = ?, category = ? WHERE id = ?
-                        `).bind(updatedArticle.title, updatedArticle.summary, updatedArticle.content, updatedArticle.image, updatedArticle.category, id).run();
+                            UPDATE news SET title = ?, summary = ?, content = ?, image = ?, category = ?, youtube_url = ? WHERE id = ?
+                        `).bind(updatedArticle.title, updatedArticle.summary, updatedArticle.content, updatedArticle.image, updatedArticle.category, updatedArticle.youtube_url, id).run();
                     } catch (e) {}
                 }
 

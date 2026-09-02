@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Bài Viết | Tuấn Camera</title>
+    <meta name="description" content="Chi tiết bài viết tin tức công nghệ an ninh & giải pháp camera quan sát tại Tuấn Camera.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .article-container {
+            max-width: 900px;
+            margin: 35px auto;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        .article-category-badge {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0056b3;
+            font-size: 0.82rem;
+            font-weight: 800;
+            padding: 5px 14px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        .article-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #0f172a;
+            line-height: 1.35;
+            margin-bottom: 15px;
+        }
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 0.88rem;
+            color: #64748b;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        .article-lead {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #334155;
+            line-height: 1.7;
+            background: #f8fafc;
+            border-left: 4px solid #0056b3;
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 30px;
+        }
+        .article-main-image {
+            width: 100%;
+            max-height: 480px;
+            object-fit: cover;
+            border-radius: 14px;
+            margin-bottom: 30px;
+            border: 1px solid #e2e8f0;
+        }
+        .video-embed-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 14px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            background: #000;
+        }
+        .video-embed-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .article-body {
+            font-size: 1.02rem;
+            color: #334155;
+            line-height: 1.85;
+            margin-bottom: 40px;
+        }
+        .article-body p {
+            margin-bottom: 18px;
+        }
+        .cta-box {
+            background: linear-gradient(135deg, #0056b3 0%, #002b66 100%);
+            color: #ffffff;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        .cta-box h3 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .cta-box p {
+            color: #bae6fd;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Announcement Bar -->
+    <div class="top-announcement">
+        <div class="container">
+            <div class="top-contact-info">
+                <span>Hotline/Zalo: <strong>0797.777.071</strong></span>
+                <span>Tuấn Camera - Giải Pháp An Ninh Hàng Đầu</span>
+            </div>
+            <div class="top-links">
+                <a href="index.html">Trang Chủ</a>
+                <a href="tintuc.html" style="margin-left:10px;">Tin Tức</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Navbar -->
+    <header class="site-header">
+        <div class="container navbar-inner">
+            <a href="index.html" class="brand-logo-text">
+                <span>Tuấn <span style="color:#0056b3">Camera</span></span>
+                <span class="sub-logo-tag">GIẢI PHÁP AN NINH UY TÍN TẬN TÂM</span>
+            </a>
+
+            <nav>
+                <ul class="main-nav-menu">
+                    <li class="main-nav-item"><a href="index.html" class="main-nav-link">TRANG CHỦ</a></li>
+                    <li class="main-nav-item"><a href="gioithieu.html" class="main-nav-link">GIỚI THIỆU</a></li>
+                    <li class="main-nav-item"><a href="index.html#section-camera-ip" class="main-nav-link">SẢN PHẨM</a></li>
+                    <li class="main-nav-item"><a href="huongdan.html" class="main-nav-link">HƯỚNG DẪN</a></li>
+                    <li class="main-nav-item active"><a href="tintuc.html" class="main-nav-link">TIN TỨC</a></li>
+                    <li class="main-nav-item"><a href="index.html#custom-section" class="main-nav-link">LIÊN HỆ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Breadcrumbs -->
+        <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; color:#64748b; margin:20px 0;">
+            <a href="index.html">Trang Chủ</a>
+            <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
+            <a href="tintuc.html">Tin Tức & Bài Viết</a>
+            <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
+            <span id="breadcrumbTitle" style="color:#0f172a; font-weight:600;">Chi Tiết Bài Viết</span>
+        </div>
+
+        <div class="article-container" id="articleMainView">
+            <p style="text-align:center; color:#64748b; padding:40px;">Đang tải nội dung bài viết...</p>
+        </div>
+    </div>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+        <div class="container footer-bottom" style="border:none;">
+            <p>© 2026 Tuấn Camera - Tất cả các bài viết được bảo hộ bản quyền.</p>
+        </div>
+    </footer>
+
+    <!-- Floating Quick Contact Buttons -->
+    <div class="floating-contact">
+        <a href="https://zalo.me/0797777071" target="_blank" class="float-btn zalo" title="Chat Zalo Tư Vấn Tuấn Camera">
+            <i class="fa-solid fa-comment-dots"></i>
+        </a>
+        <a href="tel:0797777071" class="float-btn phone" title="Gọi Hotline Tuấn Camera">
+            <i class="fa-solid fa-phone"></i>
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const articleId = urlParams.get('id');
+            const mainView = document.getElementById('articleMainView');
+            const breadcrumbTitle = document.getElementById('breadcrumbTitle');
+
+            if (!articleId) {
+                mainView.innerHTML = '<div style="text-align:center; padding:40px;"><h2 style="color:#ef4444;">Không tìm thấy mã bài viết!</h2><a href="tintuc.html" class="btn-kb-primary" style="margin-top:15px; display:inline-block;">Quay Về Trang Tin Tức</a></div>';
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/news/${articleId}`);
+                if (!res.ok) throw new Error('Bài viết không tồn tại');
+                
+                const article = await res.json();
+                document.title = `${article.title} - Tuấn Camera`;
+                if (breadcrumbTitle) breadcrumbTitle.textContent = article.title;
+
+                const pubDate = new Date(article.created_at || Date.now()).toLocaleDateString('vi-VN');
+
+                // Parse YouTube Embed Link
+                let youtubeEmbedHtml = '';
+                if (article.youtube_url && article.youtube_url.trim() !== '') {
+                    const videoId = getYouTubeVideoId(article.youtube_url);
+                    if (videoId) {
+                        youtubeEmbedHtml = `
+                            <div style="margin: 30px 0;">
+                                <h3 style="font-size:1.15rem; font-weight:800; color:#0056b3; margin-bottom:12px;">
+                                    <i class="fa-brands fa-youtube" style="color:#ff0000;"></i> Video Minh Họa Thực Tế
+                                </h3>
+                                <div class="video-embed-container">
+                                    <iframe src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                mainView.innerHTML = `
+                    <span class="article-category-badge">${article.category || 'TIN TỨC'}</span>
+                    <h1 class="article-title">${article.title}</h1>
+                    
+                    <div class="article-meta">
+                        <span><i class="fa-solid fa-user-pen" style="color:#0056b3;"></i> Ban Biên Tập Tuấn Camera</span>
+                        <span><i class="fa-regular fa-calendar-check" style="color:#0056b3;"></i> ${pubDate}</span>
+                    </div>
+
+                    ${article.summary ? `<div class="article-lead">${article.summary}</div>` : ''}
+
+                    <img src="${article.image}" alt="${article.title}" class="article-main-image">
+
+                    ${youtubeEmbedHtml}
+
+                    <div class="article-body">
+                        ${article.content ? article.content.replace(/\n/g, '<br>') : '<p>Nội dung chi tiết đang được cập nhật...</p>'}
+                    </div>
+
+                    <div class="cta-box">
+                        <h3>Cần Tư Vấn & Khảo Sát Lắp Đặt Camera Tận Nơi?</h3>
+                        <p>Đội ngũ kỹ thuật viên Tuấn Camera luôn sẵn sàng hỗ trợ bạn qua Hotline/Zalo 24/7!</p>
+                        <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
+                            <a href="index.html#section-camera-ip" class="btn-kb-primary" style="background:#ffffff; color:#0056b3; text-decoration:none;">Xem Tất Cả Camera Tuấn Camera</a>
+                            <a href="https://zalo.me/0797777071" target="_blank" class="btn-kb-secondary" style="background:rgba(255,255,255,0.2); color:#ffffff; border:1px solid #ffffff; text-decoration:none;">Chat Zalo (0797.777.071)</a>
+                        </div>
+                    </div>
+                `;
+            } catch (err) {
+                mainView.innerHTML = `<div style="text-align:center; padding:40px;"><h2 style="color:#ef4444;">${err.message}</h2><a href="tintuc.html" class="btn-kb-primary" style="margin-top:15px; display:inline-block;">Quay Về Trang Tin Tức</a></div>`;
+            }
+        });
+
+        // Helper: Helper function to extract YouTube Video ID
+        function getYouTubeVideoId(url) {
+            if (!url) return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+    </script>
+</body>
+</html>

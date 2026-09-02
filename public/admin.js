@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEditProductModal();
     setupAdminProductSearch();
     setupAddNewsModal();
+    setupEditNewsModal();
 });
 
 // Helper: Convert Specs Object or JSON to Line-by-Line Text
@@ -473,10 +474,15 @@ async function loadAdminNews() {
         tbody.innerHTML = adminNewsList.map(n => `
             <tr>
                 <td><img src="${n.image}" alt="${n.title}" style="width:50px; height:35px; object-fit:cover; border-radius:4px;"></td>
-                <td style="font-weight:700; max-width:260px;">${n.title}</td>
+                <td style="font-weight:700; max-width:260px;">
+                    <a href="baiviet.html?id=${n.id}" target="_blank" style="color:#0f172a; text-decoration:none;" title="Xem trang độc lập">${n.title} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem; color:#0056b3;"></i></a>
+                </td>
                 <td><span style="background:#e0f2fe; color:#0056b3; padding:4px 8px; border-radius:10px; font-size:0.75rem; font-weight:700;">${n.category || 'Tin Tức'}</span></td>
-                <td style="font-size:0.8rem; color:#64748b; max-width:300px;">${n.summary}</td>
                 <td>
+                    ${n.youtube_url ? `<span style="color:#ef4444; font-weight:700; font-size:0.8rem;"><i class="fa-brands fa-youtube"></i> Có Video</span>` : `<span style="color:#94a3b8; font-size:0.8rem;">Không</span>`}
+                </td>
+                <td>
+                    <button onclick="openEditNewsModal('${n.id}')" style="background:#0284c7; color:#fff; border:none; padding:5px 10px; border-radius:6px; cursor:pointer; font-size:0.78rem; margin-right:4px;"><i class="fa-solid fa-pen-to-square"></i> Sửa</button>
                     <button onclick="deleteAdminNews('${n.id}')" style="background:#ef4444; color:#fff; border:none; padding:5px 10px; border-radius:6px; cursor:pointer; font-size:0.78rem;"><i class="fa-solid fa-trash"></i> Xoá</button>
                 </td>
             </tr>
@@ -501,6 +507,7 @@ function setupAddNewsModal() {
             title: document.getElementById('newsTitle').value.trim(),
             category: document.getElementById('newsCategory').value,
             image: document.getElementById('newsImage').value.trim(),
+            youtube_url: (document.getElementById('newsYoutubeUrl')?.value || '').trim(),
             summary: document.getElementById('newsSummary').value.trim(),
             content: document.getElementById('newsContent').value.trim()
         };
@@ -542,6 +549,63 @@ async function deleteAdminNews(id) {
     } catch (err) {
         showAdminToast('Lỗi xoá tin tức: ' + err.message, 'error');
     }
+}
+
+
+// Edit News Modal Handlers
+function openEditNewsModal(newsId) {
+    const article = adminNewsList.find(n => n.id === newsId);
+    if (!article) return;
+
+    document.getElementById('editNewsId').value = article.id;
+    document.getElementById('editNewsTitle').value = article.title || '';
+    document.getElementById('editNewsCategory').value = article.category || 'Tin Khuyến Mãi';
+    document.getElementById('editNewsImage').value = article.image || '';
+    document.getElementById('editNewsYoutubeUrl').value = article.youtube_url || '';
+    document.getElementById('editNewsSummary').value = article.summary || '';
+    document.getElementById('editNewsContent').value = article.content || '';
+
+    document.getElementById('editNewsModal')?.classList.add('active');
+}
+
+function setupEditNewsModal() {
+    const modal = document.getElementById('editNewsModal');
+    const closeBtn = document.getElementById('closeEditNewsBtn');
+    const form = document.getElementById('editNewsForm');
+
+    closeBtn?.addEventListener('click', () => modal?.classList.remove('active'));
+
+    form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('editNewsId').value;
+        const updatedData = {
+            title: document.getElementById('editNewsTitle').value.trim(),
+            category: document.getElementById('editNewsCategory').value,
+            image: document.getElementById('editNewsImage').value.trim(),
+            youtube_url: document.getElementById('editNewsYoutubeUrl').value.trim(),
+            summary: document.getElementById('editNewsSummary').value.trim(),
+            content: document.getElementById('editNewsContent').value.trim()
+        };
+
+        try {
+            const res = await fetchAdmin(`/api/admin/news/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedData)
+            });
+
+            const result = await res.json();
+            if (result.success) {
+                showAdminToast('Đã cập nhật bài viết tin tức thành công!', 'success');
+                modal?.classList.remove('active');
+                loadAdminNews();
+            } else {
+                throw new Error(result.error || 'Cập nhật tin tức thất bại');
+            }
+        } catch (err) {
+            showAdminToast('Lỗi cập nhật tin tức: ' + err.message, 'error');
+        }
+    });
 }
 
 // Load Custom Installation Requests Table
