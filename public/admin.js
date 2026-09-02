@@ -374,7 +374,7 @@ async function deleteProduct(id) {
     }
 }
 
-// Load Orders Table
+// Load Orders Table with Status Update Selector
 async function loadAdminOrders() {
     const tbody = document.getElementById('adminOrdersTable');
     if (!tbody) return;
@@ -390,18 +390,48 @@ async function loadAdminOrders() {
             return;
         }
 
-        tbody.innerHTML = orders.map(o => `
-            <tr>
-                <td style="font-weight:700;">${o.id}</td>
-                <td>${o.customer_name}</td>
-                <td>${o.customer_phone}</td>
-                <td>${o.customer_address}</td>
-                <td style="font-weight:800; color:var(--primary);">${new Intl.NumberFormat('vi-VN').format(o.total_amount)} đ</td>
-                <td><span style="background:#dcfce7; color:#15803d; padding:4px 8px; border-radius:12px; font-size:0.8rem; font-weight:700;">ĐÃ ĐẶT</span></td>
-            </tr>
-        `).join('');
+        tbody.innerHTML = orders.map(o => {
+            const st = o.status || 'CHO_XAC_NHAN';
+            return `
+                <tr>
+                    <td style="font-weight:700; font-size:0.85rem;">${o.id}</td>
+                    <td style="font-weight:700;">${o.customer_name}<br><small style="color:#64748b; font-weight:400;">User: ${o.customer_username || 'Khách Vô Danh'}</small></td>
+                    <td>${o.customer_phone}</td>
+                    <td style="max-width:200px; font-size:0.85rem;">${o.customer_address}</td>
+                    <td style="font-weight:800; color:var(--primary);">${new Intl.NumberFormat('vi-VN').format(o.total_amount)} đ</td>
+                    <td>
+                        <select onchange="updateOrderStatus('${o.id}', this.value)" style="padding:6px 10px; border-radius:8px; font-weight:700; font-size:0.82rem; cursor:pointer; border:1px solid #cbd5e1; background:#ffffff;">
+                            <option value="CHO_XAC_NHAN" ${st === 'CHO_XAC_NHAN' ? 'selected' : ''}>🟡 Chờ Xác Nhận</option>
+                            <option value="DA_XAC_NHAN" ${st === 'DA_XAC_NHAN' ? 'selected' : ''}>🔵 Đã Xác Nhận Đơn</option>
+                            <option value="DANG_GIAO_HANG" ${st === 'DANG_GIAO_HANG' ? 'selected' : ''}>🚚 Đang Giao & Thi Công</option>
+                            <option value="DA_THANH_TOAN" ${st === 'DA_THANH_TOAN' ? 'selected' : ''}>🟢 Đã Thanh Toán & Lắp Đặt</option>
+                            <option value="DA_HUY" ${st === 'DA_HUY' ? 'selected' : ''}>🔴 Đã Hủy Đơn</option>
+                        </select>
+                    </td>
+                </tr>
+            `;
+        }).join('');
     } catch (err) {
         tbody.innerHTML = '<tr><td colspan="6" style="color:var(--accent-red);">Lỗi tải danh sách đơn hàng</td></tr>';
+    }
+}
+
+async function updateOrderStatus(orderId, newStatus) {
+    try {
+        const res = await fetchAdmin(`/api/admin/orders/${orderId}/status`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus })
+        });
+        const result = await res.json();
+        if (result.success) {
+            showAdminToast('Đã cập nhật trạng thái đơn hàng thành công!', 'success');
+            loadAdminOrders();
+        } else {
+            throw new Error(result.error || 'Cập nhật thất bại');
+        }
+    } catch (err) {
+        showAdminToast('Lỗi: ' + err.message, 'error');
     }
 }
 

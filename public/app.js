@@ -247,6 +247,21 @@ function userLogout() {
     showToast('Đã đăng xuất tài khoản thành công!');
 }
 
+
+function getOrderStatusBadge(st) {
+    if (st === 'DA_THANH_TOAN') {
+        return '<span style="background:#dcfce7; color:#15803d; padding:4px 10px; border-radius:12px; font-size:0.78rem; font-weight:800;"><i class="fa-solid fa-circle-check"></i> Đã Thanh Toán & Lắp Đặt</span>';
+    } else if (st === 'DANG_GIAO_HANG') {
+        return '<span style="background:#e0f2fe; color:#0369a1; padding:4px 10px; border-radius:12px; font-size:0.78rem; font-weight:800;"><i class="fa-solid fa-truck"></i> Đang Giao & Thi Công</span>';
+    } else if (st === 'DA_XAC_NHAN') {
+        return '<span style="background:#fef3c7; color:#b45309; padding:4px 10px; border-radius:12px; font-size:0.78rem; font-weight:800;"><i class="fa-solid fa-clipboard-check"></i> Đã Xác Nhận Đơn</span>';
+    } else if (st === 'DA_HUY') {
+        return '<span style="background:#fee2e2; color:#b91c1c; padding:4px 10px; border-radius:12px; font-size:0.78rem; font-weight:800;"><i class="fa-solid fa-circle-xmark"></i> Đã Hủy Đơn</span>';
+    } else {
+        return '<span style="background:#fef9c3; color:#a16207; padding:4px 10px; border-radius:12px; font-size:0.78rem; font-weight:800;"><i class="fa-solid fa-clock"></i> Đã Đặt (Chờ Xác Nhận)</span>';
+    }
+}
+
 // User Order History Modal Logic
 function setupUserOrdersModal() {
     const modal = document.getElementById('userOrdersModal');
@@ -299,9 +314,7 @@ async function openUserOrdersModal() {
                             <span style="font-weight:800; color:#0f172a; font-size:0.95rem;">Mã Đơn: ${o.id}</span>
                             <span style="font-size:0.8rem; color:#64748b; margin-left:10px;">📅 ${orderDate}</span>
                         </div>
-                        <span style="background:#dcfce7; color:#15803d; padding:4px 10px; border-radius:12px; font-size:0.78rem; font-weight:700;">
-                            ${o.status === 'CHO_XAC_NHAN' ? 'Đã Tiếp Nhận' : (o.status || 'Đang Xử Lý')}
-                        </span>
+                        ${getOrderStatusBadge(o.status)}
                     </div>
 
                     <div style="margin-bottom:12px;">

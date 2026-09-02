@@ -2196,11 +2196,11 @@ async function hashSHA256(text) {
                     let query = "SELECT * FROM orders WHERE 1=1";
                     const params = [];
                     if (username && phone) {
-                        query += " AND (customer_username = ? OR customer_phone = ?)";
+                        query += " AND (LOWER(customer_username) = ? OR customer_phone = ?)";
                         params.push(username, phone);
                     } else if (username) {
-                        query += " AND customer_username = ?";
-                        params.push(username);
+                        query += " AND (LOWER(customer_username) = ? OR customer_phone = ?)";
+                        params.push(username, username);
                     } else if (phone) {
                         query += " AND customer_phone = ?";
                         params.push(phone);
@@ -2217,10 +2217,36 @@ async function hashSHA256(text) {
             }
 
             let userOrders = memoryStore.orders.filter(o => 
-                (username && (o.customer_username === username || o.customer_phone === phone)) ||
+                (username && ((o.customer_username && o.customer_username.toLowerCase() === username) || o.customer_phone === phone)) ||
                 (phone && o.customer_phone === phone)
             );
             return jsonResponse(userOrders);
+        }
+
+        // PUT /api/admin/orders/:id/status (Admin Update Order Status)
+        if (path.startsWith("/api/admin/orders/") && path.endsWith("/status") && method === "PUT") {
+            const id = path.replace("/api/admin/orders/", "").replace("/status", "");
+            try {
+                const body = await request.json();
+                const newStatus = body.status || "CHO_XAC_NHAN";
+
+                if (env && env.DB) {
+                    try {
+                        await env.DB.prepare("UPDATE orders SET status = ? WHERE id = ?").bind(newStatus, id).run();
+                    } catch (e) {
+                        console.error("D1 Update Order Status Error:", e);
+                    }
+                }
+
+                const idx = memoryStore.orders.findIndex(o => o.id === id);
+                if (idx !== -1) {
+                    memoryStore.orders[idx].status = newStatus;
+                }
+
+                return jsonResponse({ success: true, message: "Đã cập nhật trạng thái đơn hàng!" });
+            } catch (err) {
+                return jsonResponse({ error: "Lỗi cập nhật trạng thái: " + err.message }, 500);
+            }
         }
 
         // ==================== USER AUTHENTICATION ENDPOINTS ====================
