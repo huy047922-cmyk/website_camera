@@ -1718,16 +1718,6 @@ function getSecret(env) {
     }
     return "tuancamera_admin_jwt_secret_key_2026_fixed_safe";
 }
-                }
-
-                const reqObj = memoryStore.customRequests.find(r => r.id === id);
-                if (reqObj) reqObj.status = newStatus;
-
-                return jsonResponse({ success: true, message: "Đã cập nhật trạng thái tư vấn thành công!" });
-            } catch (err) {
-                return jsonResponse({ error: "Lỗi cập nhật trạng thái: " + err.message }, 500);
-            }
-        }
 
         // GET /api/user/orders (Fetch customer's past orders)
         if (path === "/api/user/orders" && method === "GET") {
