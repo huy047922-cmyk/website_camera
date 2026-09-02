@@ -1,0 +1,24 @@
+{
+  "name": "Tuấn Camera - Giải Pháp An Ninh & Giám Sát",
+  "short_name": "Tuấn Camera",
+  "description": "Hệ thống phân phối camera an ninh 4K, camera Wi-Fi, đầu ghi hình chính hãng bảo hành 24 tháng 1 đổi 1.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#0056b3",
+  "icons": [
+    {
+      "src": "/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

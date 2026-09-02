@@ -644,3 +644,12 @@ function showToast(message, type = 'info') {
         toast.remove();
     }, 4000);
 }
+
+// Register PWA Service Worker
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('Tuấn Camera PWA Service Worker Registered!'))
+            .catch(err => console.log('SW Registration Error:', err));
+    });
+}
