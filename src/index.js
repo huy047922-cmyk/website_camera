@@ -5,11 +5,27 @@
 // In-Memory Fallback Store (for quick preview/local testing before D1 deployment)
 const memoryStore = {
     categories: [
-        { id: 'sieu-nho', name: 'Camera Siêu Nhỏ', description: 'Các dòng camera kích thước cực nhỏ kết nối Wi-Fi xem từ xa' },
-        { id: 'nguy-trang', name: 'Camera Ngụy Trang', description: 'Camera giấu kín dạng đồ vật: ổ điện, sạc dự phòng, đồng hồ, bút...' },
-        { id: 'do-che', name: 'Camera Độ Chế', description: 'Thiết bị camera độ chế theo kích thước và vật dụng tùy chọn' },
-        { id: 'dinh-vi', name: 'Máy Dò & Định Vị', description: 'Máy phát hiện camera giấu kín và máy dò sóng GSM/GPS' }
-    ],
+        {
+                "id": "camera-ip",
+                "name": "Camera IP KBVISION 4K",
+                "description": "Các dòng Camera IP KBVISION độ nét 2MP - 8MP 4K, Wi-Fi, Full-Color có màu đêm"
+        },
+        {
+                "id": "camera-analog",
+                "name": "Camera HD-CVI KBVISION",
+                "description": "Camera Analog HD-CVI KBVISION vỏ kim loại ngoài trời chống nước IP67"
+        },
+        {
+                "id": "dau-ghi",
+                "name": "Đầu Ghi Hình KBVISION",
+                "description": "Đầu ghi hình DVR / NVR KBVISION 4/8/16/32 Kênh chuẩn nén H.265+"
+        },
+        {
+                "id": "bo-tron-goi",
+                "name": "Bộ Kit Trọn Gói KBVISION",
+                "description": "Bộ Kit 2/4/8 Camera KBVISION kèm đầu ghi hình + ổ cứng + công lắp đặt"
+        }
+],
     products: [
     {
         "id": "cam-p001",

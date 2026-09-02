@@ -1,9 +1,9 @@
 /* ==========================================================================
-   CameraMini.vn Storefront App Logic (Connected to Cloudflare Workers & D1)
+   KBVISION.vn Storefront App Logic (Connected to Cloudflare Workers & D1)
    ========================================================================== */
 
 let allProducts = [];
-let cart = JSON.parse(localStorage.getItem('cameramini_cart') || '[]');
+let cart = JSON.parse(localStorage.getItem('kbvision_cart') || '[]');
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchProducts();
@@ -24,7 +24,7 @@ async function fetchProducts(category = 'all', search = '') {
         if (params.toString()) url += '?' + params.toString();
 
         const res = await fetch(url);
-        if (!res.ok) throw new Error('Không thể tải danh sách sản phẩm');
+        if (!res.ok) throw new Error('Không thể tải danh sách sản phẩm KBVISION');
         
         allProducts = await res.json();
 
@@ -47,17 +47,17 @@ async function fetchProducts(category = 'all', search = '') {
 
 // Render Categorized Homepage Sections
 function renderCategorizedHomepage(products) {
-    const featured = products.filter(p => p.featured === 1 || p.badge === 'BÁN CHẠY #1' || p.badge === 'BÁN CHẠY').slice(0, 8);
-    const sieuNho = products.filter(p => p.category_id === 'sieu-nho').slice(0, 8);
-    const nguyTrang = products.filter(p => p.category_id === 'nguy-trang').slice(0, 8);
-    const doChe = products.filter(p => p.category_id === 'do-che').slice(0, 8);
-    const dinhVi = products.filter(p => p.category_id === 'dinh-vi').slice(0, 8);
+    const featured = products.filter(p => p.featured === 1 || p.badge === 'BEST SELLER' || p.badge === 'CHÍNH HÃNG USA' || p.badge === 'BÁN CHẠY #1').slice(0, 8);
+    const cameraIp = products.filter(p => p.category_id === 'camera-ip').slice(0, 8);
+    const cameraAnalog = products.filter(p => p.category_id === 'camera-analog').slice(0, 8);
+    const dauGhi = products.filter(p => p.category_id === 'dau-ghi').slice(0, 8);
+    const boTronGoi = products.filter(p => p.category_id === 'bo-tron-goi').slice(0, 8);
 
     renderProductCardsToGrid('grid-featured', featured.length > 0 ? featured : products.slice(0, 8));
-    renderProductCardsToGrid('grid-sieu-nho', sieuNho);
-    renderProductCardsToGrid('grid-nguy-trang', nguyTrang);
-    renderProductCardsToGrid('grid-do-che', doChe);
-    renderProductCardsToGrid('grid-dinh-vi', dinhVi);
+    renderProductCardsToGrid('grid-camera-ip', cameraIp);
+    renderProductCardsToGrid('grid-camera-analog', cameraAnalog);
+    renderProductCardsToGrid('grid-dau-ghi', dauGhi);
+    renderProductCardsToGrid('grid-bo-tron-goi', boTronGoi);
 }
 
 // Render Filtered / Search View Grid
@@ -66,14 +66,14 @@ function renderFilteredGrid(products, category, search) {
     const label = document.getElementById('filteredCountLabel');
     const gridId = 'filteredProductsGrid';
 
-    let catName = 'Tất Cả Sản Phẩm';
-    if (category === 'sieu-nho') catName = 'Camera Siêu Nhỏ Wi-Fi';
-    if (category === 'nguy-trang') catName = 'Camera Ngụy Trang Đồ Vật';
-    if (category === 'do-che') catName = 'Camera Độ Chế Theo Yêu Cầu';
-    if (category === 'dinh-vi') catName = 'Máy Dò Sóng & Định Vị GPS';
+    let catName = 'Tất Cả Sản Phẩm KBVISION';
+    if (category === 'camera-ip') catName = 'Camera IP KBVISION 4K';
+    if (category === 'camera-analog') catName = 'Camera HD-CVI Analog KBVISION';
+    if (category === 'dau-ghi') catName = 'Đầu Ghi Hình KBVISION (NVR/DVR)';
+    if (category === 'bo-tron-goi') catName = 'Bộ Kit Camera Trọn Gói KBVISION';
 
     if (search) {
-        if (title) title.innerHTML = `<i class="fa-solid fa-magnifying-glass" style="color:var(--primary)"></i> Kết Quả Tìm Kiếm: "${search}"`;
+        if (title) title.innerHTML = `<i class="fa-solid fa-magnifying-glass" style="color:var(--primary)"></i> Kết Quả Tìm Kiếm KBVISION: "${search}"`;
     } else {
         if (title) title.innerHTML = `<i class="fa-solid fa-list-check" style="color:var(--primary)"></i> Danh Mục: ${catName}`;
     }
@@ -230,7 +230,7 @@ function updateCartQuantity(productId, delta) {
 }
 
 function saveCart() {
-    localStorage.setItem('cameramini_cart', JSON.stringify(cart));
+    localStorage.setItem('kbvision_cart', JSON.stringify(cart));
 }
 
 function updateCartUI() {
@@ -247,7 +247,7 @@ function updateCartUI() {
         cartList.innerHTML = `
             <div style="text-align:center; padding: 30px; color: var(--text-muted);">
                 <i class="fa-solid fa-cart-arrow-down" style="font-size:2.5rem; margin-bottom:10px;"></i>
-                <p>Chưa có sản phẩm nào trong giỏ hàng.</p>
+                <p>Chưa có sản phẩm nào trong giỏ hàng KBVISION.</p>
             </div>
         `;
         if (totalLabel) totalLabel.textContent = '0 đ';
@@ -335,7 +335,7 @@ function setupCartControls() {
                 saveCart();
                 updateCartUI();
                 checkoutModal?.classList.remove('active');
-                showToast(`Đặt hàng thành công! Mã đơn hàng: ${result.orderId}`, 'success');
+                showToast(`Đặt hàng thành công! Mã đơn hàng KBVISION: ${result.orderId}`, 'success');
             } else {
                 throw new Error(result.error || 'Đặt hàng thất bại');
             }
@@ -345,7 +345,7 @@ function setupCartControls() {
     });
 }
 
-// Custom Camera Form Submit
+// Custom Camera Installation Quote Form Submit
 function setupCustomBuildForm() {
     const form = document.getElementById('customBuildForm');
     if (!form) return;
@@ -359,7 +359,7 @@ function setupCustomBuildForm() {
             resolution: document.getElementById('customResSelect').value,
             battery_type: document.getElementById('customBatterySelect').value,
             note: document.getElementById('customNote').value.trim(),
-            estimated_price: 2200000
+            estimated_price: 3500000
         };
 
         try {
@@ -372,7 +372,7 @@ function setupCustomBuildForm() {
             const result = await res.json();
             if (result.success) {
                 form.reset();
-                showToast('Đã gửi yêu cầu độ chế camera thành công! Nhân viên sẽ gọi Zalo báo giá cụ thể.', 'success');
+                showToast('Đã gửi yêu cầu tư vấn khảo sát KBVISION thành công! Nhân viên sẽ gọi Zalo báo giá cụ thể.', 'success');
             } else {
                 throw new Error(result.error || 'Gửi thất bại');
             }

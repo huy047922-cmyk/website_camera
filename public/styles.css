@@ -9,9 +9,9 @@
     --bg-card: #ffffff;
     --bg-card-hover: #ffffff;
     
-    --primary: #d70018; /* Signature E-Commerce Crimson Red */
-    --primary-dark: #b90014;
-    --primary-light: #fff1f2;
+    --primary: #0066cc; /* KBVision Ocean Blue */
+    --primary-dark: #004499;
+    --primary-light: #e0f2fe;
     
     --secondary-navy: #0f172a;
     --secondary-dark: #1e293b;
@@ -24,11 +24,11 @@
     --text-secondary: #475569;
     --text-muted: #64748b;
     --border-color: #e2e8f0;
-    --border-highlight: #fecdd3;
+    --border-highlight: #bae6fd;
     
     --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.06);
     --shadow-card: 0 4px 14px rgba(0, 0, 0, 0.08);
-    --shadow-hover: 0 10px 25px rgba(215, 0, 24, 0.15);
+    --shadow-hover: 0 10px 25px rgba(0, 102, 204, 0.18);
     
     --radius-sm: 6px;
     --radius-md: 10px;
