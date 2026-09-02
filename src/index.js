@@ -491,8 +491,11 @@ async function hashSHA256(text) {
             return jsonResponse(memoryStore.customRequests);
         }
 
-        // Fallback static site serving / 404
+        // Fallback static site serving (Cloudflare Workers Static Assets)
         if (env && env.ASSETS) {
+            if (path === "/" || path === "") {
+                return env.ASSETS.fetch(new URL("/index.html", request.url));
+            }
             return env.ASSETS.fetch(request);
         }
 
