@@ -422,7 +422,7 @@ async function loadAdminOrders() {
                     <td style="max-width:200px; font-size:0.85rem;">${o.customer_address}</td>
                     <td style="font-weight:800; color:var(--primary);">${new Intl.NumberFormat('vi-VN').format(o.total_amount)} đ</td>
                     <td>
-                        <select onchange="updateOrderStatus('${o.id}', this.value)" style="padding:6px 10px; border-radius:8px; font-weight:700; font-size:0.82rem; cursor:pointer; border:1px solid #cbd5e1; background:${bg}; color:${color};">
+                        <select onchange="updateOrderStatus('${o.id}', this.value, this)" style="padding:6px 10px; border-radius:8px; font-weight:700; font-size:0.82rem; cursor:pointer; border:1px solid #cbd5e1; background:${bg}; color:${color};">
                             <option value="CHO_XAC_NHAN" ${st === 'CHO_XAC_NHAN' ? 'selected' : ''}>🟡 Chờ Xác Nhận</option>
                             <option value="DA_XAC_NHAN" ${st === 'DA_XAC_NHAN' ? 'selected' : ''}>🔵 Đã Xác Nhận Đơn</option>
                             <option value="DANG_GIAO_HANG" ${st === 'DANG_GIAO_HANG' ? 'selected' : ''}>🚚 Đang Giao & Thi Công</option>
@@ -438,16 +438,23 @@ async function loadAdminOrders() {
     }
 }
 
-async function updateOrderStatus(orderId, newStatus) {
+async function updateOrderStatus(orderId, newStatus, selectElem) {
+    if (selectElem) {
+        if (newStatus === 'DA_XAC_NHAN') { selectElem.style.background = '#eff6ff'; selectElem.style.color = '#1d4ed8'; }
+        else if (newStatus === 'DANG_GIAO_HANG') { selectElem.style.background = '#fefce8'; selectElem.style.color = '#a16207'; }
+        else if (newStatus === 'DA_THANH_TOAN') { selectElem.style.background = '#f0fdf4'; selectElem.style.color = '#166534'; }
+        else if (newStatus === 'DA_HUY') { selectElem.style.background = '#fef2f2'; selectElem.style.color = '#991b1b'; }
+        else { selectElem.style.background = '#fffbeb'; selectElem.style.color = '#b45309'; }
+    }
     try {
-        const res = await fetchAdmin(`/api/admin/orders/${orderId}/status`, {
+        const res = await fetchAdmin(`/api/admin/orders/${encodeURIComponent(orderId)}/status`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: newStatus })
         });
         const result = await res.json();
         if (result.success) {
-            showAdminToast('Đã cập nhật trạng thái đơn hàng!', 'success');
+            showAdminToast('Đã chuyển trạng thái đơn hàng!', 'success');
             await loadAdminOrders();
         } else {
             showAdminToast('Cập nhật thất bại: ' + (result.error || ''), 'error');
@@ -691,7 +698,7 @@ async function loadAdminCustomRequests() {
                     <td style="font-size:0.85rem;">${c.target_item || 'Khảo sát camera'}</td>
                     <td style="font-size:0.85rem;">${c.resolution || 'Gói tư vấn'}</td>
                     <td>
-                        <select onchange="updateCustomRequestStatus('${c.id}', this.value)" style="padding:6px 10px; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; border:1px solid #cbd5e1; background:${isDone ? '#f0fdf4' : '#fffbeb'}; color:${isDone ? '#166534' : '#b45309'};">
+                        <select onchange="updateCustomRequestStatus('${c.id}', this.value, this)" style="padding:6px 10px; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; border:1px solid #cbd5e1; background:${isDone ? '#f0fdf4' : '#fffbeb'}; color:${isDone ? '#166534' : '#b45309'};">
                             <option value="CHO_TU_VAN" ${isPending ? 'selected' : ''}>🟡 Chờ Tư Vấn</option>
                             <option value="DA_TU_VAN" ${isDone ? 'selected' : ''}>🟢 Đã Tư Vấn Xong</option>
                         </select>
@@ -704,16 +711,21 @@ async function loadAdminCustomRequests() {
     }
 }
 
-async function updateCustomRequestStatus(requestId, newStatus) {
+async function updateCustomRequestStatus(requestId, newStatus, selectElem) {
+    if (selectElem) {
+        const isDone = (newStatus === 'DA_TU_VAN');
+        selectElem.style.background = isDone ? '#f0fdf4' : '#fffbeb';
+        selectElem.style.color = isDone ? '#166534' : '#b45309';
+    }
     try {
-        const res = await fetchAdmin(`/api/admin/custom-requests/${requestId}/status`, {
+        const res = await fetchAdmin(`/api/admin/custom-requests/${encodeURIComponent(requestId)}/status`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: newStatus })
         });
         const result = await res.json();
         if (result.success) {
-            showAdminToast('Đã cập nhật trạng thái tư vấn!', 'success');
+            showAdminToast('Đã chuyển trạng thái tư vấn!', 'success');
             await loadAdminCustomRequests();
         } else {
             showAdminToast('Cập nhật thất bại: ' + (result.error || ''), 'error');
