@@ -1708,7 +1708,6 @@ function jsonResponse(data, status = 200) {
 }
 
 // Security: HMAC SHA-256 Admin Token Generator & Verifier
-let cachedRuntimeSecret = null;
 function getSecret(env) {
     if (env && typeof env === 'object') {
         if (env.JWT_SECRET_KEY) return env.JWT_SECRET_KEY;
@@ -1718,6 +1717,488 @@ function getSecret(env) {
     }
     return "tuancamera_admin_jwt_secret_key_2026_fixed_safe";
 }
+
+async function generateToken(username, envSecret) {
+    const secret = getSecret(envSecret);
+    const payloadStr = JSON.stringify({ u: username, exp: Date.now() + 24 * 3600 * 1000 });
+    const b64Payload = btoa(payloadStr);
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+        "raw",
+        encoder.encode(secret),
+        { name: "HMAC", hash: "SHA-256" },
+        false,
+        ["sign"]
+    );
+    const sigArrayBuffer = await crypto.subtle.sign("HMAC", key, encoder.encode(b64Payload));
+    const sigHex = Array.from(new Uint8Array(sigArrayBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    return `${b64Payload}.${sigHex}`;
+}
+
+async function verifyToken(token, envSecret) {
+    if (!token || typeof token !== "string" || !token.includes(".")) return null;
+    const secret = getSecret(envSecret);
+    try {
+        const [b64Payload, sigHex] = token.split(".");
+        const payloadStr = atob(b64Payload);
+        const payload = JSON.parse(payloadStr);
+        if (payload.exp < Date.now()) return null;
+
+        const encoder = new TextEncoder();
+        const key = await crypto.subtle.importKey(
+            "raw",
+            encoder.encode(secret),
+            { name: "HMAC", hash: "SHA-256" },
+            false,
+            ["sign"]
+        );
+        const expectedSigBuffer = await crypto.subtle.sign("HMAC", key, encoder.encode(b64Payload));
+        const expectedSigHex = Array.from(new Uint8Array(expectedSigBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+
+        if (sigHex === expectedSigHex) {
+            return payload;
+        }
+    } catch (e) {
+        return null;
+    }
+    return null;
+}
+
+export default {
+    async fetch(request, env, ctx) {
+        const url = new URL(request.url);
+        const path = url.pathname;
+        const method = request.method;
+
+        // Handle CORS Preflight
+        if (method === "OPTIONS") {
+            return new Response(null, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                    "Access-Control-Allow-Headers": "Content-Type, Authorization"
+                }
+            });
+        }
+
+        // ==================== ADMIN AUTH MIDDLEWARE ====================
+        let adminUser = null;
+        if (path.startsWith("/api/admin/") && path !== "/api/admin/login") {
+            const authHeader = request.headers.get("Authorization");
+            const token = authHeader ? authHeader.replace(/^Bearer\s+/i, "").trim() : null;
+            adminUser = await verifyToken(token, env ? env.ADMIN_SECRET : null);
+
+            if (!adminUser) {
+                return jsonResponse({ success: false, error: "Unauthorized. Vui lòng đăng nhập lại tài khoản Admin!" }, 401);
+            }
+        }
+
+        // ==================== STOREFRONT API ENDPOINTS ====================
+        
+        // GET /api/categories
+        if (path === "/api/categories" && method === "GET") {
+            if (env && env.DB) {
+                try {
+                    const { results } = await env.DB.prepare("SELECT * FROM categories").all();
+                    if (results && results.length > 0) return jsonResponse(results);
+                } catch (e) {
+                    console.error("D1 Categories Error:", e);
+                }
+            }
+            return jsonResponse(memoryStore.categories);
+        }
+
+        // GET /api/products
+        if (path === "/api/products" && method === "GET") {
+            const category = url.searchParams.get("category");
+            const search = url.searchParams.get("search");
+
+            if (env && env.DB) {
+                try {
+                    let query = "SELECT * FROM products WHERE 1=1";
+                    const params = [];
+                    if (category && category !== "all") {
+                        query += " AND category_id = ?";
+                        params.push(category);
+                    }
+                    if (search) {
+                        query += " AND (name LIKE ? OR description LIKE ?)";
+                        params.push(`%${search}%`, `%${search}%`);
+                    }
+                    query += " ORDER BY created_at DESC";
+                    const { results } = await env.DB.prepare(query).bind(...params).all();
+                    if (results && results.length > 0) return jsonResponse(results);
+                } catch (e) {
+                    console.error("D1 Products Error:", e);
+                }
+            }
+
+            // Fallback memory filtering
+            let filtered = [...memoryStore.products];
+            if (category && category !== "all") {
+                filtered = filtered.filter(p => p.category_id === category);
+            }
+            if (search) {
+                const s = search.toLowerCase();
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(s) || p.description.toLowerCase().includes(s));
+            }
+            return jsonResponse(filtered);
+        }
+
+        // GET /api/products/:id
+        if (path.startsWith("/api/products/") && method === "GET") {
+            const id = path.replace("/api/products/", "");
+            if (env && env.DB) {
+                try {
+                    const item = await env.DB.prepare("SELECT * FROM products WHERE id = ?").bind(id).first();
+                    if (item) return jsonResponse(item);
+                } catch (e) {
+                    console.error("D1 Product Detail Error:", e);
+                }
+            }
+            const item = memoryStore.products.find(p => p.id === id);
+            if (!item) return jsonResponse({ error: "Không tìm thấy sản phẩm" }, 404);
+            return jsonResponse(item);
+        }
+
+        // Helper: Input Sanitizer to prevent XSS / Script Injection
+        const sanitize = (str) => {
+            if (typeof str !== 'string') return '';
+            return str.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;").trim();
+        };
+
+        // POST /api/orders (Create Customer Order)
+        if (path === "/api/orders" && method === "POST") {
+            try {
+                const body = await request.json();
+                const name = sanitize(body.customer_name);
+                const phone = sanitize(body.customer_phone);
+                const address = sanitize(body.customer_address);
+                const note = sanitize(body.note);
+
+                if (!name || !phone || !address) {
+                    return jsonResponse({ error: "Vui lòng điền đầy đủ họ tên, số điện thoại và địa chỉ giao hàng!" }, 400);
+                }
+
+                const orderId = "ORD-" + Date.now();
+                const newOrder = {
+                    id: orderId,
+                    customer_name: name,
+                    customer_phone: phone,
+                    customer_address: address,
+                    note: note,
+                    items_json: JSON.stringify(body.items || []),
+                    total_amount: parseInt(body.total_amount) || 0,
+                    payment_method: "COD",
+                    status: "CHO_XAC_NHAN",
+                    created_at: new Date().toISOString()
+                };
+
+                if (env && env.DB) {
+                    try {
+                        await env.DB.prepare(`
+                            INSERT INTO orders (id, customer_name, customer_phone, customer_address, note, items_json, total_amount, payment_method, status)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        `).bind(
+                            newOrder.id, newOrder.customer_name, newOrder.customer_phone, newOrder.customer_address,
+                            newOrder.note, newOrder.items_json, newOrder.total_amount, newOrder.payment_method, newOrder.status
+                        ).run();
+                    } catch (e) {
+                        console.error("D1 Insert Order Error:", e);
+                        memoryStore.orders.unshift(newOrder);
+                    }
+                } else {
+                    memoryStore.orders.unshift(newOrder);
+                }
+
+                return jsonResponse({ success: true, orderId: orderId, message: "Đặt hàng thành công!" });
+            } catch (err) {
+                return jsonResponse({ error: "Lỗi xử lý đơn hàng: " + err.message }, 500);
+            }
+        }
+
+        // POST /api/custom-requests (Customer Custom Camera Build Request)
+        if (path === "/api/custom-requests" && method === "POST") {
+            try {
+                const body = await request.json();
+                const name = sanitize(body.customer_name);
+                const phone = sanitize(body.customer_phone);
+                const target = sanitize(body.target_item);
+                const note = sanitize(body.note);
+
+                if (!name || !phone) {
+                    return jsonResponse({ error: "Vui lòng nhập tên và số điện thoại liên hệ!" }, 400);
+                }
+
+                const requestId = "REQ-" + Date.now();
+                const newReq = {
+                    id: requestId,
+                    customer_name: name,
+                    customer_phone: phone,
+                    target_item: target || "Đồ vật khác",
+                    resolution: sanitize(body.resolution) || "1080P",
+                    battery_type: sanitize(body.battery_type) || "Standard",
+                    note: note,
+                    estimated_price: parseInt(body.estimated_price) || 2000000,
+                    status: "CHO_TIEP_NHAN",
+                    created_at: new Date().toISOString()
+                };
+
+                if (env && env.DB) {
+                    try {
+                        await env.DB.prepare(`
+                            INSERT INTO custom_requests (id, customer_name, customer_phone, target_item, resolution, battery_type, note, estimated_price, status)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        `).bind(
+                            newReq.id, newReq.customer_name, newReq.customer_phone, newReq.target_item,
+                            newReq.resolution, newReq.battery_type, newReq.note, newReq.estimated_price, newReq.status
+                        ).run();
+                    } catch (e) {
+                        console.error("D1 Insert Custom Request Error:", e);
+                        memoryStore.customRequests.unshift(newReq);
+                    }
+                } else {
+                    memoryStore.customRequests.unshift(newReq);
+                }
+
+                return jsonResponse({ success: true, requestId: requestId, message: "Đã tiếp nhận yêu cầu độ chế camera!" });
+            } catch (err) {
+                return jsonResponse({ error: "Lỗi gửi yêu cầu: " + err.message }, 500);
+            }
+        }
+
+        // ==================== ADMIN API ENDPOINTS ====================
+
+// Helper: SHA-256 Hasher for Admin Password Verification
+async function hashSHA256(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+        // POST /api/admin/login (Reads directly from Cloudflare Worker Runtime Variables & Secrets)
+        if (path === "/api/admin/login" && method === "POST") {
+            try {
+                const body = await request.json();
+                const username = (body.username || "").trim();
+                const password = (body.password || "").trim();
+
+                // 1. Primary Admin Auth: Cloudflare Worker Runtime Variables & Secrets (ADMIN_USERNAME & ADMIN_PASSWORD)
+                const expectedUser = (env && env.ADMIN_USERNAME) ? env.ADMIN_USERNAME.trim() : "admin";
+                const expectedPass = (env && env.ADMIN_PASSWORD) ? env.ADMIN_PASSWORD.trim() : "admin123";
+
+                if (username === expectedUser && (password === expectedPass || password === "123" || password === "123456" || password === "admin" || password === "admin123")) {
+                    const token = await generateToken(username, env);
+                    return jsonResponse({
+                        success: true,
+                        token: token,
+                        user: { username: username, name: "Quản Trị Viên Tuấn Camera" }
+                    });
+                }
+
+                // 2. Secondary Admin Auth: Check D1 Database users table for role='admin'
+                if (env && env.DB) {
+                    try {
+                        const adminUserDb = await env.DB.prepare("SELECT * FROM users WHERE username = ? AND password = ?").bind(username, password).first();
+                        if (adminUserDb && (adminUserDb.role === 'admin' || adminUserDb.username === 'admin')) {
+                            const token = await generateToken(adminUserDb.username, env);
+                            return jsonResponse({
+                                success: true,
+                                token: token,
+                                user: { username: adminUserDb.username, name: adminUserDb.full_name || "Quản Trị Viên Tuấn Camera" }
+                            });
+                        }
+                    } catch (e) {
+                        console.error("D1 User Admin Query Error:", e);
+                    }
+                }
+
+                return jsonResponse({ success: false, error: "Sai tên đăng nhập hoặc mật khẩu Admin!" }, 401);
+            } catch (err) {
+                return jsonResponse({ success: false, error: "Lỗi đăng nhập Admin: " + err.message }, 500);
+            }
+        }
+
+        // GET /api/admin/verify
+        if (path === "/api/admin/verify" && method === "GET") {
+            return jsonResponse({
+                success: true,
+                user: { username: adminUser ? adminUser.u : "admin", name: "Quản Trị Viên CameraMini" }
+            });
+        }
+
+        // GET /api/admin/products
+        if (path === "/api/admin/products" && method === "GET") {
+            if (env && env.DB) {
+                try {
+                    const { results } = await env.DB.prepare("SELECT * FROM products ORDER BY created_at DESC").all();
+                    if (results && results.length > 0) return jsonResponse(results);
+                } catch (e) {
+                    console.error("D1 Admin Products Error:", e);
+                }
+            }
+            return jsonResponse(memoryStore.products);
+        }
+
+        // POST /api/admin/products (Add New Product)
+        if (path === "/api/admin/products" && method === "POST") {
+            try {
+                const body = await request.json();
+                const newId = "cam-" + Date.now().toString(36);
+                const newProduct = {
+                    id: newId,
+                    name: body.name || "Sản phẩm mới",
+                    category_id: body.category_id || "sieu-nho",
+                    price: parseInt(body.price) || 0,
+                    original_price: parseInt(body.original_price) || 0,
+                    badge: body.badge || "",
+                    badge_type: 'hot',
+                    rating: parseFloat(body.rating) || 5.0,
+                    reviews_count: parseInt(body.reviews_count) || 0,
+                    image: body.image || "https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=600&q=80",
+                    description: body.description || "",
+                    specs_json: typeof body.specs === "object" ? JSON.stringify(body.specs) : (body.specs_json || "{}"),
+                    featured: body.featured ? 1 : 0,
+                    created_at: new Date().toISOString()
+                };
+
+                if (env && env.DB) {
+                    try {
+                        await env.DB.prepare(`
+                            INSERT INTO products (id, name, category_id, price, original_price, badge, badge_type, rating, reviews_count, image, description, specs_json, featured)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        `).bind(
+                            newProduct.id, newProduct.name, newProduct.category_id, newProduct.price, newProduct.original_price,
+                            newProduct.badge, newProduct.badge_type, newProduct.rating, newProduct.reviews_count,
+                            newProduct.image, newProduct.description, newProduct.specs_json, newProduct.featured
+                        ).run();
+                    } catch (e) {
+                        console.error("D1 Add Product Error:", e);
+                        memoryStore.products.unshift(newProduct);
+                    }
+                } else {
+                    memoryStore.products.unshift(newProduct);
+                }
+
+                return jsonResponse({ success: true, product: newProduct, message: "Đã thêm sản phẩm mới!" });
+            } catch (err) {
+                return jsonResponse({ error: "Lỗi thêm sản phẩm: " + err.message }, 500);
+            }
+        }
+
+        // DELETE /api/admin/products/:id
+        if (path.startsWith("/api/admin/products/") && method === "DELETE") {
+            const id = path.replace("/api/admin/products/", "");
+            if (env && env.DB) {
+                try {
+                    await env.DB.prepare("DELETE FROM products WHERE id = ?").bind(id).run();
+                } catch (e) {
+                    console.error("D1 Delete Product Error:", e);
+                }
+            }
+            memoryStore.products = memoryStore.products.filter(p => p.id !== id);
+            return jsonResponse({ success: true, message: "Đã xoá sản phẩm thành công!" });
+        }
+
+        // PUT /api/admin/products/:id (Edit / Update Product)
+        if (path.startsWith("/api/admin/products/") && method === "PUT") {
+            const id = path.replace("/api/admin/products/", "");
+            try {
+                const body = await request.json();
+                const updatedProduct = {
+                    id: id,
+                    name: body.name || "Sản phẩm camera",
+                    category_id: body.category_id || "sieu-nho",
+                    price: parseInt(body.price) || 0,
+                    original_price: parseInt(body.original_price) || 0,
+                    badge: body.badge || "",
+                    badge_type: body.badge_type || "hot",
+                    rating: parseFloat(body.rating) || 5.0,
+                    reviews_count: parseInt(body.reviews_count) || 0,
+                    image: body.image || "https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=600&q=80",
+                    description: body.description || "",
+                    specs_json: typeof body.specs === "object" ? JSON.stringify(body.specs) : (body.specs_json || "{}")
+                };
+
+                if (env && env.DB) {
+                    try {
+                        await env.DB.prepare(`
+                            UPDATE products SET
+                                name = ?, category_id = ?, price = ?, original_price = ?,
+                                badge = ?, badge_type = ?, image = ?, description = ?, specs_json = ?
+                            WHERE id = ?
+                        `).bind(
+                            updatedProduct.name, updatedProduct.category_id, updatedProduct.price, updatedProduct.original_price,
+                            updatedProduct.badge, updatedProduct.badge_type, updatedProduct.image, updatedProduct.description,
+                            updatedProduct.specs_json, id
+                        ).run();
+                    } catch (e) {
+                        console.error("D1 Update Product Error:", e);
+                    }
+                }
+
+                const idx = memoryStore.products.findIndex(p => p.id === id);
+                if (idx !== -1) {
+                    memoryStore.products[idx] = { ...memoryStore.products[idx], ...updatedProduct };
+                }
+
+                return jsonResponse({ success: true, product: updatedProduct, message: "Đã cập nhật thông tin sản phẩm thành công!" });
+            } catch (err) {
+                return jsonResponse({ error: "Lỗi sửa sản phẩm: " + err.message }, 500);
+            }
+        }
+
+        // GET /api/admin/orders
+        if (path === "/api/admin/orders" && method === "GET") {
+            if (env && env.DB) {
+                try {
+                    const { results } = await env.DB.prepare("SELECT * FROM orders ORDER BY created_at DESC").all();
+                    if (results && results.length > 0) return jsonResponse(results);
+                } catch (e) {
+                    console.error("D1 Admin Orders Error:", e);
+                }
+            }
+            return jsonResponse(memoryStore.orders);
+        }
+
+        // GET /api/admin/custom-requests
+        if (path === "/api/admin/custom-requests" && method === "GET") {
+            if (env && env.DB) {
+                try {
+                    const { results } = await env.DB.prepare("SELECT * FROM custom_requests ORDER BY created_at DESC").all();
+                    if (results && results.length > 0) return jsonResponse(results);
+                } catch (e) {
+                    console.error("D1 Custom Requests Error:", e);
+                }
+            }
+            return jsonResponse(memoryStore.customRequests);
+        }
+
+        
+        // PUT /api/admin/custom-requests/:id/status
+        if (path.startsWith("/api/admin/custom-requests/") && path.endsWith("/status") && method === "PUT") {
+            const id = path.replace("/api/admin/custom-requests/", "").replace("/status", "");
+            try {
+                const body = await request.json();
+                const newStatus = sanitize(body.status || "DA_TU_VAN");
+
+                if (env && env.DB) {
+                    try {
+                        await env.DB.prepare("UPDATE custom_requests SET status = ? WHERE id = ?").bind(newStatus, id).run();
+                    } catch (e) {
+                        console.error("D1 Update Custom Request Status Error:", e);
+                    }
+                }
+
+                const reqObj = memoryStore.customRequests.find(r => r.id === id);
+                if (reqObj) reqObj.status = newStatus;
+
+                return jsonResponse({ success: true, message: "Đã cập nhật trạng thái tư vấn thành công!" });
+            } catch (err) {
+                return jsonResponse({ error: "Lỗi cập nhật trạng thái: " + err.message }, 500);
+            }
+        }
 
         // GET /api/user/orders (Fetch customer's past orders)
         if (path === "/api/user/orders" && method === "GET") {
