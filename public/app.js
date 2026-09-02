@@ -592,69 +592,6 @@ function setupCartControls() {
     });
 }
 
-    document.getElementById('closeCartBtn')?.addEventListener('click', () => {
-        cartModal?.classList.remove('active');
-    });
-
-    document.getElementById('proceedCheckoutBtn')?.addEventListener('click', () => {
-        if (cart.length === 0) {
-            showToast('Giỏ hàng đang trống!', 'warning');
-            return;
-        }
-        cartModal?.classList.remove('active');
-        checkoutModal?.classList.add('active');
-    });
-
-    document.getElementById('closeCheckoutBtn')?.addEventListener('click', () => {
-        checkoutModal?.classList.remove('active');
-    });
-
-    // Checkout Form Submit (associates order with logged in username)
-    document.getElementById('checkoutForm')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        let loggedInUsername = '';
-        const userStr = localStorage.getItem('tuancamera_user');
-        if (userStr) {
-            try {
-                loggedInUsername = JSON.parse(userStr).username || '';
-            } catch (err) {}
-        }
-
-        const orderData = {
-            customer_username: loggedInUsername,
-            customer_name: document.getElementById('orderName').value.trim(),
-            customer_phone: document.getElementById('orderPhone').value.trim(),
-            customer_address: document.getElementById('orderAddress').value.trim(),
-            note: document.getElementById('orderNote').value.trim(),
-            items: cart,
-            total_amount: cart.reduce((sum, i) => sum + (i.price * i.quantity), 0),
-            payment_method: 'COD'
-        };
-
-        try {
-            const res = await fetch('/api/orders', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(orderData)
-            });
-
-            const result = await res.json();
-            if (result.success) {
-                cart = [];
-                saveCart();
-                updateCartUI();
-                checkoutModal?.classList.remove('active');
-                showToast(`Đặt hàng thành công! Mã đơn hàng Tuấn Camera: ${result.orderId}`, 'success');
-            } else {
-                throw new Error(result.error || 'Đặt hàng thất bại');
-            }
-        } catch (err) {
-            showToast('Lỗi đặt hàng: ' + err.message, 'error');
-        }
-    });
-}
-
 // Custom Request Form Submit
 function setupCustomBuildForm() {
     const form = document.getElementById('customBuildForm');
