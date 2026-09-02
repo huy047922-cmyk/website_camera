@@ -1977,38 +1977,21 @@ async function hashSHA256(text) {
     return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-        // POST /api/admin/login (Supports Cloudflare Worker Runtime Variables & Secrets + flexible matching)
+        // POST /api/admin/login (Strictly 100% Cloudflare Worker Runtime Variables & Secrets Auth)
         if (path === "/api/admin/login" && method === "POST") {
             try {
                 const body = await request.json();
                 const username = (body.username || "").trim();
                 const password = (body.password || "").trim();
 
-                const expectedUser = (env && env.ADMIN_USERNAME) ? env.ADMIN_USERNAME.trim() : "admin";
+                const expectedUser = (env && env.ADMIN_USERNAME) ? env.ADMIN_USERNAME.trim() : null;
                 const expectedPass = (env && env.ADMIN_PASSWORD) ? env.ADMIN_PASSWORD.trim() : null;
 
-                let isMatch = false;
-
-                if (username.toLowerCase() === expectedUser.toLowerCase() || username.toLowerCase() === "admin") {
-                    if (expectedPass && password === expectedPass) {
-                        isMatch = true;
-                    } else if (password === "123" || password === "123456" || password === "admin123" || password === "admin" || password === "hihi" || password === "hihi123") {
-                        isMatch = true;
-                    }
+                if (!expectedUser || !expectedPass) {
+                    return jsonResponse({ success: false, error: "Chưa thiết lập ADMIN_USERNAME hoặc ADMIN_PASSWORD trong Cloudflare Runtime Variables & Secrets!" }, 500);
                 }
 
-                if (!isMatch && env && env.DB) {
-                    try {
-                        const adminUserDb = await env.DB.prepare("SELECT * FROM users WHERE username = ? AND password = ?").bind(username, password).first();
-                        if (adminUserDb && (adminUserDb.role === 'admin' || adminUserDb.username === 'admin')) {
-                            isMatch = true;
-                        }
-                    } catch (e) {
-                        console.error("D1 User Admin Query Error:", e);
-                    }
-                }
-
-                if (isMatch) {
+                if (username === expectedUser && password === expectedPass) {
                     const token = await generateToken(username, env);
                     return jsonResponse({
                         success: true,
@@ -2017,7 +2000,7 @@ async function hashSHA256(text) {
                     });
                 }
 
-                return jsonResponse({ success: false, error: "Sai tên đăng nhập hoặc mật khẩu Admin!" }, 401);
+                return jsonResponse({ success: false, error: "Tên đăng nhập hoặc mật khẩu Admin không chính xác!" }, 401);
             } catch (err) {
                 return jsonResponse({ success: false, error: "Lỗi đăng nhập Admin: " + err.message }, 500);
             }
