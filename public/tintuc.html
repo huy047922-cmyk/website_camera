@@ -180,7 +180,7 @@
                 grid.innerHTML = newsList.map(n => `
                     <div class="news-card" onclick="location.href='baiviet.html?id=${n.id}'">
                         <div class="news-thumb">
-                            <img src="${n.image}" alt="${n.title}">
+                            ${n.image ? `<img src="${n.image}" alt="${n.title}">` : `<div style="display:flex; align-items:center; justify-content:center; background:#f1f5f9; height:100%; color:#cbd5e1; font-size:2.5rem;"><i class="fa-solid fa-newspaper"></i></div>`}
                             ${n.youtube_url ? '<span class="video-tag"><i class="fa-brands fa-youtube"></i> Video</span>' : ''}
                         </div>
                         <div class="news-body">

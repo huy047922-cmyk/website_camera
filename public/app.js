@@ -428,7 +428,7 @@ function renderProductCardsToGrid(gridId, productsList) {
         return `
             <div class="product-card">
                 <div class="product-thumb" onclick="openProductDetail('${p.id}')" style="cursor:pointer;">
-                    <img src="${p.image}" alt="${p.name}" loading="lazy">
+                    ${p.image ? `<img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.outerHTML='<div class=\\\"product-thumb-placeholder\\\"><i class=\\\"fa-solid fa-camera\\\"></i></div>'">` : `<div class="product-thumb-placeholder"><i class="fa-solid fa-camera"></i></div>`}
                 </div>
                 <div>
                     <h3 class="product-title" onclick="openProductDetail('${p.id}')" style="cursor:pointer;" title="${p.name}">${p.name}</h3>

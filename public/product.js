@@ -66,8 +66,15 @@ function renderProductDetails(p) {
     const buyBtn = document.getElementById('detailBuyBtn');
 
     if (imgEl) {
-        imgEl.src = p.image;
-        imgEl.alt = p.name;
+        if (p.image) {
+            imgEl.src = p.image;
+            imgEl.alt = p.name;
+        } else {
+            imgEl.style.display = 'none';
+            if (imgEl.parentElement) {
+                imgEl.parentElement.innerHTML = '<div class="product-thumb-placeholder" style="height:320px; font-size:4rem;"><i class="fa-solid fa-camera"></i></div>';
+            }
+        }
     }
     if (titleEl) titleEl.textContent = p.name;
     if (priceEl) priceEl.textContent = new Intl.NumberFormat('vi-VN').format(p.price) + ' đ';

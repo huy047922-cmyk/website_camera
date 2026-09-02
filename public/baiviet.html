@@ -231,7 +231,7 @@
 
                     ${article.summary ? `<div class="article-lead">${article.summary}</div>` : ''}
 
-                    <img src="${article.image}" alt="${article.title}" class="article-main-image">
+                    ${article.image ? `<img src="${article.image}" alt="${article.title}" class="article-main-image">` : ''}
 
                     ${youtubeEmbedHtml}
 
