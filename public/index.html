@@ -11,15 +11,16 @@
 </head>
 <body>
 
-    <!-- Announcement Bar -->
+    <!-- Top Announcement Bar -->
     <div class="top-announcement">
         <div class="container">
             <div class="top-contact-info">
-                <span><i class="fa-solid fa-phone"></i> Hotline/Zalo: <strong>0987.654.321</strong></span>
-                <span><i class="fa-solid fa-truck-fast"></i> Giao Hàng Hỏa Tốc Toàn Quốc (Kiểm Tra Hàng Mới Thanh Toán)</span>
+                <span><i class="fa-solid fa-phone-volume"></i> Hotline/Zalo: <strong>0987.654.321</strong></span>
+                <span><i class="fa-solid fa-truck-fast"></i> Giao Hàng Hỏa Tốc (Kiểm Tra Hàng Mới Thanh Toán)</span>
+                <span><i class="fa-solid fa-user-shield"></i> Đóng Gói Bảo Mật Kín Đáo</span>
             </div>
             <div class="top-links">
-                <a href="admin.html" class="btn-admin"><i class="fa-solid fa-user-gear"></i> Trang Quản Trị Admin</a>
+                <a href="admin.html"><i class="fa-solid fa-user-gear"></i> Trang Quản Trị Admin</a>
             </div>
         </div>
     </div>
@@ -30,15 +31,23 @@
             <a href="index.html" class="brand-logo">
                 <i class="fa-solid fa-video"></i>
                 <span>CameraMini<span style="color:var(--primary)">.vn</span></span>
-                <span class="brand-tag">Cloudflare D1</span>
+                <span class="brand-tag">D1 Store</span>
             </a>
 
             <div class="search-form">
-                <input type="text" id="searchInput" placeholder="Tìm camera siêu nhỏ, ngụy trang sạc, ổ điện...">
-                <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <input type="text" id="searchInput" placeholder="Nhập tên camera siêu nhỏ, ngụy trang sạc dự phòng, ổ điện...">
+                <button id="searchBtn" title="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
 
             <div class="header-actions">
+                <div class="header-hotline">
+                    <i class="fa-solid fa-headset"></i>
+                    <div class="header-hotline-text">
+                        <span>Tư Vấn Khách Hàng</span>
+                        <strong>0987.654.321</strong>
+                    </div>
+                </div>
+
                 <button class="btn-icon-badge" id="openCartBtn">
                     <i class="fa-solid fa-cart-shopping"></i>
                     <span>Giỏ Hàng</span>
@@ -48,35 +57,29 @@
         </div>
     </header>
 
+    <!-- Category Ribbon Navigation Bar -->
+    <div class="category-nav-ribbon">
+        <div class="container">
+            <nav class="category-nav" id="categoryNav">
+                <button class="category-pill active" data-category="all"><i class="fa-solid fa-border-all"></i> Tất Cả Sản Phẩm</button>
+                <button class="category-pill" data-category="sieu-nho"><i class="fa-solid fa-eye"></i> Camera Siêu Nhỏ Wi-Fi</button>
+                <button class="category-pill" data-category="nguy-trang"><i class="fa-solid fa-mask"></i> Camera Ngụy Trang</button>
+                <button class="category-pill" data-category="do-che"><i class="fa-solid fa-screwdriver-wrench"></i> Camera Độ Chế Theo Yêu Cầu</button>
+                <button class="category-pill" data-category="dinh-vi"><i class="fa-solid fa-radar"></i> Máy Dò & Định Vị</button>
+            </nav>
+        </div>
+    </div>
+
     <!-- Hero Banner -->
     <section class="hero-banner">
         <div class="container hero-grid">
             <div class="hero-text">
-                <h1>Camera Siêu Nhỏ Giấu Kín & Độ Chế Theo Yêu Cầu</h1>
-                <p>Giải pháp quan sát giấu kín đỉnh cao. Kết nối Wi-Fi xem từ xa 4K sắc nét qua điện thoại, góc nhìn rộng, pin trâu và không phát ánh sáng đỏ.</p>
-                
-                <div class="hero-features">
-                    <div class="feature-item">
-                        <i class="fa-solid fa-shield-halved"></i>
-                        <span>Bảo Hành 1 Đổi 1 Trong 12 Tháng</span>
-                    </div>
-                    <div class="feature-item">
-                        <i class="fa-solid fa-microchip"></i>
-                        <span>Độ Chế Vào Bất Kỳ Vật Dụng Nào</span>
-                    </div>
-                    <div class="feature-item">
-                        <i class="fa-solid fa-wifi"></i>
-                        <span>Kết Nối Xem Từ Xa 4G / Wi-Fi</span>
-                    </div>
-                    <div class="feature-item">
-                        <i class="fa-solid fa-user-secret"></i>
-                        <span>Đóng Gói Bảo Mật Tên Sản Phẩm</span>
-                    </div>
-                </div>
+                <h1>Chuyên Camera Siêu Nhỏ Giấu Kín & Độ Chế Theo Yêu Cầu</h1>
+                <p>Giải pháp quan sát giấu kín đỉnh cao. Kết nối Wi-Fi 4G xem từ xa 4K sắc nét qua điện thoại, góc quay rộng, pin trâu và quay đêm không phát ánh sáng đỏ.</p>
 
                 <div class="hero-cta">
-                    <a href="#products-section" class="btn-primary"><i class="fa-solid fa-bag-shopping"></i> Khám Phá Sản Phẩm</a>
-                    <a href="#custom-section" class="btn-secondary"><i class="fa-solid fa-screwdriver-wrench"></i> Đăng Ký Độ Chế Camera</a>
+                    <a href="#products-section" class="btn-primary"><i class="fa-solid fa-bag-shopping"></i> Xem Danh Sách Sản Phẩm</a>
+                    <a href="#custom-section" class="btn-secondary"><i class="fa-solid fa-comments"></i> Tư Vấn Độ Chế Zalo</a>
                 </div>
             </div>
 
@@ -89,46 +92,67 @@
     <!-- Main Content Container -->
     <main class="container">
 
-        <!-- Category Nav Filters -->
-        <nav class="category-nav" id="categoryNav">
-            <button class="category-pill active" data-category="all"><i class="fa-solid fa-border-all"></i> Tất Cả Sản Phẩm</button>
-            <button class="category-pill" data-category="sieu-nho"><i class="fa-solid fa-eye"></i> Camera Siêu Nhỏ Wi-Fi</button>
-            <button class="category-pill" data-category="nguy-trang"><i class="fa-solid fa-mask"></i> Camera Ngụy Trang</button>
-            <button class="category-pill" data-category="do-che"><i class="fa-solid fa-gear"></i> Camera Độ Chế Theo Yêu Cầu</button>
-            <button class="category-pill" data-category="dinh-vi"><i class="fa-solid fa-radar"></i> Máy Dò & Định Vị</button>
-        </nav>
+        <!-- Trust Commitments Grid -->
+        <div class="trust-grid">
+            <div class="trust-card">
+                <i class="fa-solid fa-user-secret"></i>
+                <div>
+                    <h4>BẢO MẬT THÔNG TIN 100%</h4>
+                    <p>Đóng gói kín đáo, che tên sản phẩm khi giao hàng</p>
+                </div>
+            </div>
+            <div class="trust-card">
+                <i class="fa-solid fa-box-open"></i>
+                <div>
+                    <h4>KIỂM TRA HÀNG MỚI TRẢ TIỀN</h4>
+                    <p>Thử mở xem camera ok mới thanh toán tiền</p>
+                </div>
+            </div>
+            <div class="trust-card">
+                <i class="fa-solid fa-award"></i>
+                <div>
+                    <h4>BẢO HÀNH 12 THÁNG</h4>
+                    <p>Lỗi 1 đổi 1 nhanh chóng, hỗ trợ Zalo trọn đời</p>
+                </div>
+            </div>
+            <div class="trust-card">
+                <i class="fa-solid fa-wifi"></i>
+                <div>
+                    <h4>XEM TỪ XA XA 4G/WI-FI</h4>
+                    <p>Mắt kính 4K siêu nét, xem từ xa mượt mà</p>
+                </div>
+            </div>
+        </div>
 
         <!-- Product Catalog Section -->
         <section id="products-section">
             <div class="section-title">
                 <h2><i class="fa-solid fa-fire" style="color:var(--primary)"></i> Danh Sách Sản Phẩm Nổi Bật</h2>
-                <span style="font-size:0.9rem; color:var(--text-muted); font-weight:normal;" id="productCountLabel">Đang tải sản phẩm từ Cloudflare D1...</span>
+                <span style="font-size:0.85rem; color:var(--text-muted); font-weight:600;" id="productCountLabel">Đang tải sản phẩm...</span>
             </div>
 
             <div class="products-grid" id="productsGrid">
-                <!-- Dynamic product cards will be rendered here via JS -->
+                <!-- Dynamic product cards rendered via JS -->
             </div>
         </section>
 
         <!-- Custom Camera Interactive Request Section -->
-        <section id="custom-section" style="margin-top: 40px;">
+        <section id="custom-section">
             <div class="custom-builder-box">
-                <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:10px; color:#fff;">
-                    <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--primary)"></i> Đăng Ký Độ Chế Camera Theo Yêu Cầu
-                </h2>
-                <p style="color:var(--text-secondary); margin-bottom: 25px;">
-                    Bạn muốn giấu thấu kính camera vào vật dụng cá nhân riêng (Cục sạc, Bình nước, Mũ, Loa bluetooth, Đồng hồ...)? Điền thông tin bên dưới để nhận báo giá dự kiến ngay lập tức.
-                </p>
+                <div class="builder-header">
+                    <h2><i class="fa-solid fa-screwdriver-wrench" style="color:var(--primary)"></i> Đặt Làm Camera Độ Chế Theo Yêu Cầu (Giấu Kín 100%)</h2>
+                    <p>Bạn muốn giấu mắt camera siêu nhỏ vào đồ vật cá nhân riêng (Cục sạc, Bình nước, Mũ nón, Loa bluetooth, Đồng hồ...)? Điền thông tin dưới đây để nhận báo giá & video test qua Zalo ngay lập tức.</p>
+                </div>
 
                 <form id="customBuildForm" class="builder-grid">
                     <div>
                         <div class="form-group">
                             <label>Họ và Tên của Bạn *</label>
-                            <input type="text" id="customName" class="form-control" placeholder="Nguyễn Văn A" required>
+                            <input type="text" id="customName" class="form-control" placeholder="Ví dụ: Nguyễn Văn A" required>
                         </div>
                         <div class="form-group">
                             <label>Số Điện Thoại (Zalo) Liên Hệ *</label>
-                            <input type="tel" id="customPhone" class="form-control" placeholder="0901234567" required>
+                            <input type="tel" id="customPhone" class="form-control" placeholder="Ví dụ: 0987654321" required>
                         </div>
                         <div class="form-group">
                             <label>Loại Vật Dụng Muốn Độ Chế *</label>
@@ -147,24 +171,26 @@
                         <div class="form-group">
                             <label>Độ Nét Camera Mong Muốn</label>
                             <select id="customResSelect" class="form-control">
-                                <option value="Full HD 1080P">Full HD 1080P (Giá tiết kiệm)</option>
-                                <option value="Ultra HD 4K">Ultra HD 4K (Nét cao cấp - Khuyên dùng)</option>
+                                <option value="Full HD 1080P">Full HD 1080P (Tiết kiệm chi phí)</option>
+                                <option value="Ultra HD 4K">Ultra HD 4K (Xem từ xa cực nét)</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Dung Lượng Pin / Nguồn Điện</label>
                             <select id="customBatterySelect" class="form-control">
-                                <option value="Cắm Điện 220V Trực Tiếp">Cắm Điện 220V Trực Tiếp (Quay 24/7)</option>
-                                <option value="Pin 8-10 Tiếng">Pin Sạc Tích Hợp (Quay 8-10 tiếng)</option>
-                                <option value="Pin 15-20 Tiếng">Pin Sạc Khủng (Quay 15-20 tiếng)</option>
+                                <option value="Cắm Nguồn Trực Tiếp 220V">Cắm Nguồn Trực Tiếp 220V (Quay 24/7 không lo hết pin)</option>
+                                <option value="Pin Trâu (8 - 15 tiếng)">Pin Dung Lượng Cao (Dùng 8 - 15 tiếng)</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Ghi Chú Yêu Cầu Thêm</label>
-                            <textarea id="customNote" class="form-control" rows="2" placeholder="Ví dụ: Cần quay ban đêm có hồng ngoại ẩn..."></textarea>
+                            <label>Ghi Chú Yêu Cầu Riêng (Nếu có)</label>
+                            <input type="text" id="customNote" class="form-control" placeholder="Ví dụ: Giấu mắt camera vào góc dưới củ sạc Lioa">
                         </div>
-                        <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">
-                            <i class="fa-solid fa-paper-plane"></i> Gửi Yêu Cầu Độ Chế & Nhận Báo Giá
+                    </div>
+
+                    <div style="grid-column: 1/-1;">
+                        <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:14px;">
+                            <i class="fa-solid fa-paper-plane"></i> Gửi Yêu Cầu Độ Chế & Báo Giá Nhanh Qua Zalo
                         </button>
                     </div>
                 </form>
@@ -173,38 +199,33 @@
 
     </main>
 
-    <!-- Shopping Cart Modal -->
-    <div class="modal-overlay" id="cartModal">
-        <div class="modal-box">
+    <!-- Cart Modal -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
             <button class="modal-close" id="closeCartBtn"><i class="fa-solid fa-xmark"></i></button>
-            <h3 style="font-size:1.4rem; font-weight:700; margin-bottom:20px;">
+            <h2 style="font-size:1.3rem; font-weight:800; margin-bottom:20px; color:var(--secondary-navy);">
                 <i class="fa-solid fa-cart-shopping" style="color:var(--primary)"></i> Giỏ Hàng Của Bạn
-            </h3>
-            
+            </h2>
             <div id="cartItemsList">
-                <!-- Cart items rendered dynamically -->
+                <!-- Cart item rows -->
             </div>
-
-            <div style="margin-top:20px; border-top:1px solid var(--border-color); padding-top:15px;">
-                <div style="display:flex; justify-content:space-between; font-size:1.2rem; font-weight:800; margin-bottom:20px;">
-                    <span>Tổng Tiền:</span>
-                    <span style="color:var(--primary)" id="cartTotalAmount">0 đ</span>
-                </div>
-                <button class="btn-primary" id="proceedCheckoutBtn" style="width:100%; justify-content:center;">
-                    <i class="fa-solid fa-credit-card"></i> Tiến Hành Đặt Hàng Ngay
-                </button>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; padding-top:15px; border-top:2px solid var(--border-color);">
+                <span style="font-weight:700; font-size:1.1rem;">Tổng Tiền:</span>
+                <span style="font-size:1.4rem; font-weight:900; color:var(--primary);" id="cartTotalAmount">0 đ</span>
             </div>
+            <button class="btn-primary" id="proceedCheckoutBtn" style="width:100%; justify-content:center; margin-top:20px; padding:12px;">
+                <i class="fa-solid fa-credit-card"></i> Tiến Hành Đặt Hàng Ngay
+            </button>
         </div>
     </div>
 
-    <!-- Checkout Form Modal -->
-    <div class="modal-overlay" id="checkoutModal">
-        <div class="modal-box">
+    <!-- Checkout Modal -->
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content">
             <button class="modal-close" id="closeCheckoutBtn"><i class="fa-solid fa-xmark"></i></button>
-            <h3 style="font-size:1.4rem; font-weight:700; margin-bottom:15px;">
-                <i class="fa-solid fa-truck-ramp-box" style="color:var(--primary)"></i> Thông Tin Giao Hàng (COD)
-            </h3>
-            
+            <h2 style="font-size:1.3rem; font-weight:800; margin-bottom:20px; color:var(--secondary-navy);">
+                <i class="fa-solid fa-truck-ramp-box" style="color:var(--primary)"></i> Thông Tin Giao Hàng & Đặt Hàng
+            </h2>
             <form id="checkoutForm">
                 <div class="form-group">
                     <label>Họ và Tên Người Nhận *</label>
@@ -215,67 +236,76 @@
                     <input type="tel" id="orderPhone" class="form-control" placeholder="0987654321" required>
                 </div>
                 <div class="form-group">
-                    <label>Địa Chỉ Giao Hàng Chi Tiết *</label>
-                    <textarea id="orderAddress" class="form-control" rows="2" placeholder="Số nhà, Tên đường, Phường/Xã, Quận/Huyện, Tỉnh/TP" required></textarea>
+                    <label>Địa Chỉ Nhận Hàng *</label>
+                    <input type="text" id="orderAddress" class="form-control" placeholder="Số 123 Đường ABC, Phường X, Quận Y, Hà Nội / TP.HCM" required>
                 </div>
                 <div class="form-group">
-                    <label>Ghi Chú Đơn Hàng / Đóng Gói Bảo Mật</label>
-                    <input type="text" id="orderNote" class="form-control" placeholder="Ví dụ: Giao giờ hành chính, Đổi tên sản phẩm khi giao...">
+                    <label>Ghi Chú Giao Hàng (Nếu có)</label>
+                    <textarea id="orderNote" class="form-control" rows="2" placeholder="Giao giờ hành chính, gọi trước khi giao..."></textarea>
                 </div>
-
-                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:10px;">
-                    <i class="fa-solid fa-check-circle"></i> Xác Nhận Đặt Hàng Thành Công
+                <p style="font-size:0.8rem; color:var(--accent-green); margin-bottom:15px;">
+                    <i class="fa-solid fa-shield-halved"></i> Sản phẩm sẽ được đóng gói bảo mật (không ghi chữ 'Camera' ngoài bưu phẩm).
+                </p>
+                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:12px;">
+                    <i class="fa-solid fa-check"></i> Xác Nhận Đặt Hàng COD (Thanh Toán Khi Nhận Hàng)
                 </button>
             </form>
         </div>
     </div>
 
     <!-- Product Detail Modal -->
-    <div class="modal-overlay" id="productDetailModal">
-        <div class="modal-box" id="productDetailContent">
-            <!-- Dynamic product detail view -->
+    <div class="modal" id="productDetailModal">
+        <div class="modal-content" style="max-width:700px;" id="productDetailContent">
+            <!-- Product detail dynamically injected -->
         </div>
     </div>
 
     <!-- Toast Notifications Container -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- Footer -->
-    <footer>
+    <!-- Floating Quick Contact Buttons -->
+    <div class="floating-contact">
+        <a href="https://zalo.me/0987654321" target="_blank" class="float-btn zalo" title="Chat Zalo Tư Vấn">
+            <i class="fa-solid fa-comment-dots"></i>
+        </a>
+        <a href="tel:0987654321" class="float-btn phone" title="Gọi Hotline Ngay">
+            <i class="fa-solid fa-phone"></i>
+        </a>
+    </div>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
         <div class="container footer-grid">
-            <div>
-                <h4 style="display:flex; align-items:center; gap:8px;">
-                    <i class="fa-solid fa-video" style="color:var(--primary)"></i> CameraMini.vn
-                </h4>
-                <p style="margin-bottom:15px;">Chuyên giải pháp camera siêu nhỏ, ngụy trang giấu kín kết nối Wi-Fi 4K hàng đầu Việt Nam.</p>
-                <p><i class="fa-solid fa-location-dot"></i> Trụ sở chính: Hà Nội & TP. Hồ Chí Minh</p>
-                <p><i class="fa-solid fa-envelope"></i> Support@cameramini.vn</p>
+            <div class="footer-col">
+                <h3>CameraMini.vn - Chuyên Camera Siêu Nhỏ & Độ Chế</h3>
+                <p style="margin-bottom:12px;">Hệ thống cung cấp thiết bị quan sát giấu kín hàng đầu Việt Nam. Cam kết hàng chính hãng 100%, bảo hành 12 tháng, giao hàng bảo mật che tên sản phẩm toàn quốc.</p>
+                <p><strong>Hotline/Zalo:</strong> 0987.654.321 (Tư vấn 24/7)</p>
+                <p><strong>Địa chỉ:</strong> Hà Nội & TP. Hồ Chí Minh</p>
             </div>
-            <div>
-                <h4>Danh Mục Sản Phẩm</h4>
+            <div class="footer-col">
+                <h3>Danh Mục Sản Phẩm</h3>
                 <ul>
-                    <li><a href="#products-section">Camera V99 / NV99 Siêu Nhỏ</a></li>
-                    <li><a href="#products-section">Camera Ngụy Trang Sạc Dự Phòng</a></li>
-                    <li><a href="#products-section">Camera Ngụy Trang Ổ Cắm Điện</a></li>
-                    <li><a href="#products-section">Máy Dò Sóng & Đinh Vị K18</a></li>
+                    <li><a href="#products-section">Camera Siêu Nhỏ Wi-Fi</a></li>
+                    <li><a href="#products-section">Camera Ngụy Trang Sạc / Ổ Điện</a></li>
+                    <li><a href="#custom-section">Camera Độ Chế Theo Yêu Cầu</a></li>
+                    <li><a href="#products-section">Máy Dò Sóng & Phát Hiện Định Vị</a></li>
                 </ul>
             </div>
-            <div>
-                <h4>Chính Sách & Hỗ Trợ</h4>
+            <div class="footer-col">
+                <h3>Chính Sách Bán Hàng</h3>
                 <ul>
-                    <li><a href="#">Chính sách bảo hành 12 tháng</a></li>
-                    <li><a href="#">Hướng dẫn cài đặt App LookCam</a></li>
-                    <li><a href="#">Quy định bảo mật thông tin</a></li>
-                    <li><a href="#">Giao hàng & Kiểm hàng (COD)</a></li>
+                    <li><a href="#">Chính Sách Bảo Hành 12 Tháng</a></li>
+                    <li><a href="#">Chính Sách Giao Hàng Bưu Điện COD</a></li>
+                    <li><a href="#">Cam Kết Bảo Mật Thông Tin Khách</a></li>
+                    <li><a href="admin.html">Trang Quản Trị Hệ Thống</a></li>
                 </ul>
             </div>
         </div>
-        <div style="text-align:center; border-top:1px solid var(--border-color); padding-top:20px; font-size:0.85rem;">
-            © 2026 CameraMini.vn - Cloudflare Workers & Cloudflare D1 Serverless Technology.
+        <div class="footer-bottom container">
+            <p>© 2026 CameraMini.vn - Tất cả các quyền được bảo lưu. Vận hành trên nền tảng Cloudflare Workers & D1 Database.</p>
         </div>
     </footer>
 
-    <!-- Frontend JS logic -->
     <script src="app.js"></script>
 </body>
 </html>

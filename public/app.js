@@ -80,11 +80,11 @@ function renderProducts(products) {
                     </div>
                     <div class="product-actions">
                         <button class="btn-add-cart" onclick="addToCart('${p.id}')">
-                            <i class="fa-solid fa-cart-plus"></i> Thêm Giỏ
+                            <i class="fa-solid fa-cart-plus"></i> Mua Ngay
                         </button>
-                        <button class="btn-quick-view" onclick="openProductDetail('${p.id}')" title="Xem chi tiết">
-                            <i class="fa-solid fa-eye"></i>
-                        </button>
+                        <a href="https://zalo.me/0987654321" target="_blank" class="btn-zalo-consult">
+                            <i class="fa-solid fa-comment-dots"></i> Zalo
+                        </a>
                     </div>
                 </div>
             </div>

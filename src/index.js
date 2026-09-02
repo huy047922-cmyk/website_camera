@@ -209,8 +209,12 @@ export default {
         // GET /api/categories
         if (path === "/api/categories" && method === "GET") {
             if (env && env.DB) {
-                const { results } = await env.DB.prepare("SELECT * FROM categories").all();
-                return jsonResponse(results);
+                try {
+                    const { results } = await env.DB.prepare("SELECT * FROM categories").all();
+                    if (results && results.length > 0) return jsonResponse(results);
+                } catch (e) {
+                    console.error("D1 Categories Error:", e);
+                }
             }
             return jsonResponse(memoryStore.categories);
         }
@@ -221,19 +225,23 @@ export default {
             const search = url.searchParams.get("search");
 
             if (env && env.DB) {
-                let query = "SELECT * FROM products WHERE 1=1";
-                const params = [];
-                if (category && category !== "all") {
-                    query += " AND category_id = ?";
-                    params.push(category);
+                try {
+                    let query = "SELECT * FROM products WHERE 1=1";
+                    const params = [];
+                    if (category && category !== "all") {
+                        query += " AND category_id = ?";
+                        params.push(category);
+                    }
+                    if (search) {
+                        query += " AND (name LIKE ? OR description LIKE ?)";
+                        params.push(`%${search}%`, `%${search}%`);
+                    }
+                    query += " ORDER BY created_at DESC";
+                    const { results } = await env.DB.prepare(query).bind(...params).all();
+                    if (results && results.length > 0) return jsonResponse(results);
+                } catch (e) {
+                    console.error("D1 Products Error:", e);
                 }
-                if (search) {
-                    query += " AND (name LIKE ? OR description LIKE ?)";
-                    params.push(`%${search}%`, `%${search}%`);
-                }
-                query += " ORDER BY created_at DESC";
-                const { results } = await env.DB.prepare(query).bind(...params).all();
-                return jsonResponse(results);
             }
 
             // Fallback memory filtering
@@ -252,9 +260,12 @@ export default {
         if (path.startsWith("/api/products/") && method === "GET") {
             const id = path.replace("/api/products/", "");
             if (env && env.DB) {
-                const item = await env.DB.prepare("SELECT * FROM products WHERE id = ?").bind(id).first();
-                if (!item) return jsonResponse({ error: "Không tìm thấy sản phẩm" }, 404);
-                return jsonResponse(item);
+                try {
+                    const item = await env.DB.prepare("SELECT * FROM products WHERE id = ?").bind(id).first();
+                    if (item) return jsonResponse(item);
+                } catch (e) {
+                    console.error("D1 Product Detail Error:", e);
+                }
             }
             const item = memoryStore.products.find(p => p.id === id);
             if (!item) return jsonResponse({ error: "Không tìm thấy sản phẩm" }, 404);
