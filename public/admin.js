@@ -387,7 +387,7 @@ async function deleteProduct(id) {
     }
 }
 
-// Load Orders Table with Status Update Selector
+// Load Orders Table with Status Update Selector (Dynamic badge styling + 2-way toggle)
 async function loadAdminOrders() {
     const tbody = document.getElementById('adminOrdersTable');
     if (!tbody) return;
@@ -406,6 +406,14 @@ async function loadAdminOrders() {
 
         tbody.innerHTML = orders.map(o => {
             const st = o.status || 'CHO_XAC_NHAN';
+            let bg = '#fffbeb';
+            let color = '#b45309';
+
+            if (st === 'DA_XAC_NHAN') { bg = '#eff6ff'; color = '#1d4ed8'; }
+            else if (st === 'DANG_GIAO_HANG') { bg = '#fefce8'; color = '#a16207'; }
+            else if (st === 'DA_THANH_TOAN') { bg = '#f0fdf4'; color = '#166534'; }
+            else if (st === 'DA_HUY') { bg = '#fef2f2'; color = '#991b1b'; }
+
             return `
                 <tr>
                     <td style="font-weight:700; font-size:0.85rem;">${o.id}</td>
@@ -414,7 +422,7 @@ async function loadAdminOrders() {
                     <td style="max-width:200px; font-size:0.85rem;">${o.customer_address}</td>
                     <td style="font-weight:800; color:var(--primary);">${new Intl.NumberFormat('vi-VN').format(o.total_amount)} đ</td>
                     <td>
-                        <select onchange="updateOrderStatus('${o.id}', this.value)" style="padding:6px 10px; border-radius:8px; font-weight:700; font-size:0.82rem; cursor:pointer; border:1px solid #cbd5e1; background:#ffffff;">
+                        <select onchange="updateOrderStatus('${o.id}', this.value)" style="padding:6px 10px; border-radius:8px; font-weight:700; font-size:0.82rem; cursor:pointer; border:1px solid #cbd5e1; background:${bg}; color:${color};">
                             <option value="CHO_XAC_NHAN" ${st === 'CHO_XAC_NHAN' ? 'selected' : ''}>🟡 Chờ Xác Nhận</option>
                             <option value="DA_XAC_NHAN" ${st === 'DA_XAC_NHAN' ? 'selected' : ''}>🔵 Đã Xác Nhận Đơn</option>
                             <option value="DANG_GIAO_HANG" ${st === 'DANG_GIAO_HANG' ? 'selected' : ''}>🚚 Đang Giao & Thi Công</option>
@@ -439,13 +447,15 @@ async function updateOrderStatus(orderId, newStatus) {
         });
         const result = await res.json();
         if (result.success) {
-            showAdminToast('Đã cập nhật trạng thái đơn hàng thành công!', 'success');
-            loadAdminOrders();
+            showAdminToast('Đã cập nhật trạng thái đơn hàng!', 'success');
+            await loadAdminOrders();
         } else {
-            throw new Error(result.error || 'Cập nhật thất bại');
+            showAdminToast('Cập nhật thất bại: ' + (result.error || ''), 'error');
+            await loadAdminOrders();
         }
     } catch (err) {
         showAdminToast('Lỗi: ' + err.message, 'error');
+        await loadAdminOrders();
     }
 }
 
