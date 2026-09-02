@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Sản Phẩm | CameraMini.vn</title>
+    <meta name="description" content="Chi tiết sản phẩm camera siêu nhỏ ngụy trang giấu kín kết nối Wi-Fi 4K chất lượng cao tại CameraMini.vn.">
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 20px 0;
+        }
+        .breadcrumbs a:hover {
+            color: var(--primary);
+        }
+        .product-detail-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 35px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-card);
+            margin-bottom: 40px;
+        }
+        .detail-img-wrap {
+            position: relative;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .detail-img-wrap img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            display: block;
+        }
+        .detail-info h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--secondary-navy);
+            line-height: 1.35;
+            margin-bottom: 12px;
+        }
+        .price-box-detail {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: baseline;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        .specs-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .specs-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        .specs-table td:first-child {
+            font-weight: 700;
+            color: var(--secondary-navy);
+            width: 35%;
+        }
+        .detail-tabs-section {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-subtle);
+            margin-bottom: 40px;
+        }
+        @media (max-width: 768px) {
+            .product-detail-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Announcement Bar -->
+    <div class="top-announcement">
+        <div class="container">
+            <div class="top-contact-info">
+                <span><i class="fa-solid fa-phone-volume"></i> Hotline/Zalo: <strong>0987.654.321</strong></span>
+                <span><i class="fa-solid fa-truck-fast"></i> Giao Hàng Hỏa Tốc (Kiểm Tra Hàng Mới Thanh Toán)</span>
+                <span><i class="fa-solid fa-user-shield"></i> Đóng Gói Bảo Mật Kín Đáo</span>
+            </div>
+            <div class="top-links">
+                <a href="admin.html"><i class="fa-solid fa-user-gear"></i> Trang Quản Trị Admin</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Navbar -->
+    <header class="site-header">
+        <div class="container navbar-inner">
+            <a href="index.html" class="brand-logo">
+                <i class="fa-solid fa-video"></i>
+                <span>CameraMini<span style="color:var(--primary)">.vn</span></span>
+                <span class="brand-tag">D1 Store</span>
+            </a>
+
+            <div class="search-form">
+                <input type="text" id="searchInput" placeholder="Nhập tên camera siêu nhỏ, ngụy trang sạc dự phòng, ổ điện...">
+                <button id="searchBtn" title="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+
+            <div class="header-actions">
+                <div class="header-hotline">
+                    <i class="fa-solid fa-headset"></i>
+                    <div class="header-hotline-text">
+                        <span>Tư Vấn Khách Hàng</span>
+                        <strong>0987.654.321</strong>
+                    </div>
+                </div>
+
+                <button class="btn-icon-badge" id="openCartBtn">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Giỏ Hàng</span>
+                    <span class="badge-count" id="cartBadgeCount">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Category Ribbon Navigation Bar -->
+    <div class="category-nav-ribbon">
+        <div class="container">
+            <nav class="category-nav">
+                <a href="index.html" class="category-pill active"><i class="fa-solid fa-house"></i> Trang Chủ Web</a>
+                <a href="index.html#products-section" class="category-pill"><i class="fa-solid fa-eye"></i> Camera Siêu Nhỏ Wi-Fi</a>
+                <a href="index.html#products-section" class="category-pill"><i class="fa-solid fa-mask"></i> Camera Ngụy Trang</a>
+                <a href="index.html#custom-section" class="category-pill"><i class="fa-solid fa-screwdriver-wrench"></i> Camera Độ Chế Theo Yêu Cầu</a>
+                <a href="index.html#products-section" class="category-pill"><i class="fa-solid fa-radar"></i> Máy Dò & Định Vị</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="container">
+
+        <!-- Breadcrumbs -->
+        <div class="breadcrumbs" id="detailBreadcrumbs">
+            <a href="index.html">Trang Chủ</a>
+            <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
+            <a href="index.html#products-section">Sản Phẩm</a>
+            <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
+            <span id="breadcrumbTitle" style="color:var(--text-primary); font-weight:600;">Chi Tiết Sản Phẩm</span>
+        </div>
+
+        <!-- Product Main Detail Layout -->
+        <section class="product-detail-layout" id="productDetailContainer">
+            <!-- Dynamic product detail populated via product.js -->
+            <div style="grid-column: 1/-1; text-align:center; padding: 60px;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size:2.5rem; color:var(--primary); margin-bottom:15px;"></i>
+                <p>Đang tải thông tin chi tiết sản phẩm...</p>
+            </div>
+        </section>
+
+        <!-- Product Detailed Description & Specifications Section -->
+        <section class="detail-tabs-section" id="detailTabsSection" style="display:none;">
+            <h3 style="font-size:1.3rem; font-weight:800; color:var(--secondary-navy); margin-bottom:15px; border-bottom:2px solid var(--primary); padding-bottom:8px;">
+                <i class="fa-solid fa-circle-info" style="color:var(--primary)"></i> Mô Tả Chi Tiết & Hướng Dẫn Sử Dụng
+            </h3>
+            <div id="fullDescriptionContent" style="color:var(--text-secondary); line-height:1.7; font-size:0.95rem; margin-bottom:30px;">
+                <!-- Full description populated via JS -->
+            </div>
+
+            <h3 style="font-size:1.3rem; font-weight:800; color:var(--secondary-navy); margin-bottom:15px; border-bottom:2px solid var(--primary); padding-bottom:8px;">
+                <i class="fa-solid fa-sliders" style="color:var(--primary)"></i> Bảng Thông Số Kỹ Thuật
+            </h3>
+            <table class="specs-table" id="fullSpecsTable">
+                <!-- Table specs -->
+            </table>
+        </section>
+
+        <!-- Recommended Related Products Grid -->
+        <section style="margin-bottom:50px;">
+            <div class="section-title">
+                <h2><i class="fa-solid fa-fire" style="color:var(--primary)"></i> Gợi Ý Sản Phẩm Tương Tự Dành Cho Bạn</h2>
+            </div>
+            <div class="products-grid" id="relatedProductsGrid">
+                <!-- Related products list -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Cart Modal -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeCartBtn"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="font-size:1.3rem; font-weight:800; margin-bottom:20px; color:var(--secondary-navy);">
+                <i class="fa-solid fa-cart-shopping" style="color:var(--primary)"></i> Giỏ Hàng Của Bạn
+            </h2>
+            <div id="cartItemsList">
+                <!-- Cart items -->
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; padding-top:15px; border-top:2px solid var(--border-color);">
+                <span style="font-weight:700; font-size:1.1rem;">Tổng Tiền:</span>
+                <span style="font-size:1.4rem; font-weight:900; color:var(--primary);" id="cartTotalAmount">0 đ</span>
+            </div>
+            <button class="btn-primary" id="proceedCheckoutBtn" style="width:100%; justify-content:center; margin-top:20px; padding:12px;">
+                <i class="fa-solid fa-credit-card"></i> Tiến Hành Đặt Hàng Ngay
+            </button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeCheckoutBtn"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="font-size:1.3rem; font-weight:800; margin-bottom:20px; color:var(--secondary-navy);">
+                <i class="fa-solid fa-truck-ramp-box" style="color:var(--primary)"></i> Thông Tin Giao Hàng & Đặt Hàng
+            </h2>
+            <form id="checkoutForm">
+                <div class="form-group">
+                    <label>Họ và Tên Người Nhận *</label>
+                    <input type="text" id="orderName" class="form-control" placeholder="Nguyễn Văn A" required>
+                </div>
+                <div class="form-group">
+                    <label>Số Điện Thoại Nhận Hàng *</label>
+                    <input type="tel" id="orderPhone" class="form-control" placeholder="0987654321" required>
+                </div>
+                <div class="form-group">
+                    <label>Địa Chỉ Nhận Hàng *</label>
+                    <input type="text" id="orderAddress" class="form-control" placeholder="Số 123 Đường ABC, Phường X, Quận Y, Hà Nội / TP.HCM" required>
+                </div>
+                <div class="form-group">
+                    <label>Ghi Chú Giao Hàng (Nếu có)</label>
+                    <textarea id="orderNote" class="form-control" rows="2" placeholder="Giao giờ hành chính, gọi trước khi giao..."></textarea>
+                </div>
+                <p style="font-size:0.8rem; color:var(--accent-green); margin-bottom:15px;">
+                    <i class="fa-solid fa-shield-halved"></i> Sản phẩm sẽ được đóng gói bảo mật (không ghi chữ 'Camera' ngoài bưu phẩm).
+                </p>
+                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:12px;">
+                    <i class="fa-solid fa-check"></i> Xác Nhận Đặt Hàng COD (Thanh Toán Khi Nhận Hàng)
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Floating Quick Contact Buttons -->
+    <div class="floating-contact">
+        <a href="https://zalo.me/0987654321" target="_blank" class="float-btn zalo" title="Chat Zalo Tư Vấn">
+            <i class="fa-solid fa-comment-dots"></i>
+        </a>
+        <a href="tel:0987654321" class="float-btn phone" title="Gọi Hotline Ngay">
+            <i class="fa-solid fa-phone"></i>
+        </a>
+    </div>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-col">
+                <h3>CameraMini.vn - Chuyên Camera Siêu Nhỏ & Độ Chế</h3>
+                <p style="margin-bottom:12px;">Hệ thống cung cấp thiết bị quan sát giấu kín hàng đầu Việt Nam. Cam kết hàng chính hãng 100%, bảo hành 12 tháng, giao hàng bảo mật che tên sản phẩm toàn quốc.</p>
+                <p><strong>Hotline/Zalo:</strong> 0987.654.321 (Tư vấn 24/7)</p>
+                <p><strong>Địa chỉ:</strong> Hà Nội & TP. Hồ Chí Minh</p>
+            </div>
+            <div class="footer-col">
+                <h3>Danh Mục Sản Phẩm</h3>
+                <ul>
+                    <li><a href="index.html#products-section">Camera Siêu Nhỏ Wi-Fi</a></li>
+                    <li><a href="index.html#products-section">Camera Ngụy Trang Sạc / Ổ Điện</a></li>
+                    <li><a href="index.html#custom-section">Camera Độ Chế Theo Yêu Cầu</a></li>
+                    <li><a href="index.html#products-section">Máy Dò Sóng & Phát Hiện Định Vị</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Chính Sách Bán Hàng</h3>
+                <ul>
+                    <li><a href="#">Chính Sách Bảo Hành 12 Tháng</a></li>
+                    <li><a href="#">Chính Sách Giao Hàng Bưu Điện COD</a></li>
+                    <li><a href="#">Cam Kết Bảo Mật Thông Tin Khách</a></li>
+                    <li><a href="admin.html">Trang Quản Trị Hệ Thống</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom container">
+            <p>© 2026 CameraMini.vn - Tất cả các quyền được bảo lưu. Vận hành trên nền tảng Cloudflare Workers & D1 Database.</p>
+        </div>
+    </footer>
+
+    <script src="product.js"></script>
+</body>
+</html>
