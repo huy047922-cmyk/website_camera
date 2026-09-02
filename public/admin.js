@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupAdminNavigation();
     setupAddProductModal();
     setupEditProductModal();
+    setupAdminProductSearch();
 });
 
 // Helper: Convert Specs Object or JSON to Line-by-Line Text
@@ -160,37 +161,86 @@ async function loadAdminProducts() {
         adminProductsList = await res.json();
 
         document.getElementById('statProductCount').textContent = adminProductsList.length;
+        filterAndRenderAdminProducts();
 
-        if (adminProductsList.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">Chưa có sản phẩm nào trong D1.</td></tr>';
-            return;
-        }
-
-        tbody.innerHTML = adminProductsList.map(p => {
-            const formattedPrice = new Intl.NumberFormat('vi-VN').format(p.price) + ' đ';
-            return `
-                <tr>
-                    <td><img src="${p.image}" alt="" style="width:40px; height:40px; border-radius:6px; object-fit:cover;"></td>
-                    <td><strong>${p.name}</strong></td>
-                    <td><span class="brand-tag">${p.category_id}</span></td>
-                    <td style="color:var(--primary); font-weight:700;">${formattedPrice}</td>
-                    <td>
-                        <div style="display:flex; gap:6px;">
-                            <button class="btn-primary" onclick="openEditProductModal('${p.id}')" style="padding:5px 12px; font-size:0.78rem; background:var(--secondary-navy);">
-                                <i class="fa-solid fa-pen-to-square"></i> Sửa
-                            </button>
-                            <button class="btn-secondary" onclick="deleteProduct('${p.id}')" style="padding:5px 12px; font-size:0.78rem; color:var(--accent-red); border-color:#fca5a5;">
-                                <i class="fa-solid fa-trash"></i> Xoá
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `;
-        }).join('');
     } catch (err) {
         console.error(err);
         tbody.innerHTML = '<tr><td colspan="5" style="color:var(--accent-red);">Lỗi tải sản phẩm từ D1</td></tr>';
     }
+}
+
+// Setup Admin Product Live Search & Filter Bar
+function setupAdminProductSearch() {
+    const searchInput = document.getElementById('adminProductSearchInput');
+    const catSelect = document.getElementById('adminProductCategoryFilter');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            filterAndRenderAdminProducts();
+        });
+    }
+
+    if (catSelect) {
+        catSelect.addEventListener('change', () => {
+            filterAndRenderAdminProducts();
+        });
+    }
+}
+
+// Filter and Render Admin Products
+function filterAndRenderAdminProducts() {
+    const keyword = (document.getElementById('adminProductSearchInput')?.value || '').toLowerCase().trim();
+    const category = document.getElementById('adminProductCategoryFilter')?.value || 'all';
+
+    const filtered = adminProductsList.filter(p => {
+        const matchCat = category === 'all' || p.category_id === category;
+        const matchKey = !keyword || 
+            p.name.toLowerCase().includes(keyword) || 
+            p.id.toLowerCase().includes(keyword) || 
+            (p.description || '').toLowerCase().includes(keyword);
+        return matchCat && matchKey;
+    });
+
+    const label = document.getElementById('adminSearchResultLabel');
+    if (label) label.textContent = `Hiển thị ${filtered.length} / ${adminProductsList.length} sản phẩm`;
+
+    renderAdminProductsRows(filtered);
+}
+
+// Render Product Table Rows
+function renderAdminProductsRows(products) {
+    const tbody = document.getElementById('adminProductsTable');
+    if (!tbody) return;
+
+    if (!products || products.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:25px; color:var(--text-muted);">Không tìm thấy sản phẩm nào phù hợp với từ khóa/danh mục đã chọn.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = products.map(p => {
+        const formattedPrice = new Intl.NumberFormat('vi-VN').format(p.price) + ' đ';
+        return `
+            <tr>
+                <td><img src="${p.image}" alt="" style="width:40px; height:40px; border-radius:6px; object-fit:cover;"></td>
+                <td>
+                    <strong>${p.name}</strong>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">Mã: ${p.id}</div>
+                </td>
+                <td><span class="brand-tag">${p.category_id}</span></td>
+                <td style="color:var(--primary); font-weight:700;">${formattedPrice}</td>
+                <td>
+                    <div style="display:flex; gap:6px;">
+                        <button class="btn-primary" onclick="openEditProductModal('${p.id}')" style="padding:5px 12px; font-size:0.78rem; background:var(--secondary-navy);">
+                            <i class="fa-solid fa-pen-to-square"></i> Sửa
+                        </button>
+                        <button class="btn-secondary" onclick="deleteProduct('${p.id}')" style="padding:5px 12px; font-size:0.78rem; color:var(--accent-red); border-color:#fca5a5;">
+                            <i class="fa-solid fa-trash"></i> Xoá
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
 }
 
 // Delete Product

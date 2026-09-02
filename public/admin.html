@@ -162,9 +162,28 @@
 
             <!-- Products Tab -->
             <section id="productsTab" class="tab-content">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:15px;">
                     <h2 style="font-size:1.3rem; font-weight:800; color:var(--secondary-navy);"><i class="fa-solid fa-boxes-stacked" style="color:var(--primary)"></i> Quản Lý Danh Sách Sản Phẩm</h2>
                     <button class="btn-primary" id="openAddProductBtn"><i class="fa-solid fa-plus"></i> Thêm Sản Phẩm Mới</button>
+                </div>
+
+                <!-- Admin Product Live Search & Filter Bar -->
+                <div style="background:#ffffff; border:1px solid var(--border-color); padding:15px; border-radius:var(--radius-md); margin-bottom:20px; display:flex; gap:15px; align-items:center; flex-wrap:wrap; box-shadow:var(--shadow-subtle);">
+                    <div style="flex:1; min-width:250px;">
+                        <input type="text" id="adminProductSearchInput" class="form-control" placeholder="🔍 Nhập tên camera hoặc mã ID (ví dụ: cam-p001, V99, sạc dự phòng...)" style="padding-left:12px;">
+                    </div>
+                    <div style="width:200px;">
+                        <select id="adminProductCategoryFilter" class="form-control">
+                            <option value="all">Tất Cả Danh Mục</option>
+                            <option value="sieu-nho">Camera Siêu Nhỏ</option>
+                            <option value="nguy-trang">Camera Ngụy Trang</option>
+                            <option value="do-che">Camera Độ Chế</option>
+                            <option value="dinh-vi">Máy Dò & Định Vị</option>
+                        </select>
+                    </div>
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-muted);" id="adminSearchResultLabel">
+                        Đang tải...
+                    </div>
                 </div>
 
                 <table class="data-table">
