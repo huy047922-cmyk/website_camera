@@ -126,6 +126,9 @@ function setupAdminLogin() {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        const errorAlert = document.getElementById('loginErrorAlert');
+        if (errorAlert) { errorAlert.style.display = 'none'; errorAlert.textContent = ''; }
+
         const username = document.getElementById('adminUser').value.trim();
         const password = document.getElementById('adminPass').value.trim();
 
@@ -150,10 +153,20 @@ function setupAdminLogin() {
                 
                 checkAdminAuth();
             } else {
-                showAdminToast(result.error || 'Đăng nhập thất bại', 'error');
+                const errMsg = result.error || 'Tên đăng nhập hoặc mật khẩu Admin không đúng!';
+                if (errorAlert) {
+                    errorAlert.textContent = '⚠️ ' + errMsg;
+                    errorAlert.style.display = 'block';
+                }
+                showAdminToast(errMsg, 'error');
             }
         } catch (err) {
-            showAdminToast('Lỗi kết nối server: ' + err.message, 'error');
+            const errMsg = 'Lỗi kết nối server: ' + err.message;
+            if (errorAlert) {
+                errorAlert.textContent = '⚠️ ' + errMsg;
+                errorAlert.style.display = 'block';
+            }
+            showAdminToast(errMsg, 'error');
         }
     });
 
