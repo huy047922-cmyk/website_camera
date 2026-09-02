@@ -13,6 +13,41 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEditProductModal();
 });
 
+// Helper: Convert Specs Object or JSON to Line-by-Line Text
+function specsToText(specsJson) {
+    if (!specsJson) return '';
+    let specsObj = {};
+    if (typeof specsJson === 'string') {
+        try {
+            specsObj = JSON.parse(specsJson);
+        } catch (e) {
+            return specsJson;
+        }
+    } else {
+        specsObj = specsJson;
+    }
+    return Object.entries(specsObj).map(([k, v]) => `${k}: ${v}`).join('\n');
+}
+
+// Helper: Convert Line-by-Line Text to Specs Object
+function textToSpecsObj(text) {
+    if (!text || typeof text !== 'string') return {};
+    const lines = text.split('\n');
+    const specsObj = {};
+    lines.forEach(line => {
+        const trimmed = line.trim();
+        if (trimmed.includes(':')) {
+            const idx = trimmed.indexOf(':');
+            const key = trimmed.substring(0, idx).trim();
+            const val = trimmed.substring(idx + 1).trim();
+            if (key && val) specsObj[key] = val;
+        } else if (trimmed) {
+            specsObj[`Thông số ${Object.keys(specsObj).length + 1}`] = trimmed;
+        }
+    });
+    return specsObj;
+}
+
 // Secure API Fetch Wrapper with Token Authorization & 401 handling
 async function fetchAdmin(url, options = {}) {
     options.headers = options.headers || {};
@@ -199,7 +234,7 @@ function setupAddProductModal() {
             badge_type: 'hot',
             image: document.getElementById('newProdImg').value.trim(),
             description: document.getElementById('newProdDesc').value.trim(),
-            specs: { resolution: "Full HD / 4K", battery: "Pin sạc", connection: "Wi-Fi Xem từ xa" }
+            specs: textToSpecsObj(document.getElementById('newProdSpecsText').value)
         };
 
         try {
@@ -242,7 +277,8 @@ function setupEditProductModal() {
             original_price: parseInt(document.getElementById('editProdOldPrice').value) || 0,
             badge: document.getElementById('editProdBadge').value.trim(),
             image: document.getElementById('editProdImg').value.trim(),
-            description: document.getElementById('editProdDesc').value.trim()
+            description: document.getElementById('editProdDesc').value.trim(),
+            specs: textToSpecsObj(document.getElementById('editProdSpecsText').value)
         };
 
         try {
@@ -279,6 +315,7 @@ function openEditProductModal(productId) {
     document.getElementById('editProdBadge').value = p.badge || '';
     document.getElementById('editProdImg').value = p.image;
     document.getElementById('editProdDesc').value = p.description;
+    document.getElementById('editProdSpecsText').value = specsToText(p.specs_json);
 
     const modal = document.getElementById('editProductModal');
     modal?.classList.add('active');
