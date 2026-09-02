@@ -282,6 +282,64 @@
         </div>
     </div>
 
+    <!-- Modal Edit Product -->
+    <div class="modal" id="editProductModal">
+        <div class="modal-content" style="max-width:650px;">
+            <button class="modal-close" id="closeEditProductBtn"><i class="fa-solid fa-xmark"></i></button>
+            <h3 style="font-size:1.3rem; font-weight:800; margin-bottom:20px; color:var(--secondary-navy);">
+                <i class="fa-solid fa-pen-to-square" style="color:var(--primary)"></i> Chỉnh Sửa Thông Tin Sản Phẩm D1
+            </h3>
+            
+            <form id="editProductForm">
+                <input type="hidden" id="editProdId">
+                <div class="form-group">
+                    <label>Tên Sản Phẩm *</label>
+                    <input type="text" id="editProdName" class="form-control" required>
+                </div>
+                <div class="builder-grid" style="grid-template-columns:1fr 1fr;">
+                    <div class="form-group">
+                        <label>Danh Mục *</label>
+                        <select id="editProdCat" class="form-control">
+                            <option value="sieu-nho">Camera Siêu Nhỏ</option>
+                            <option value="nguy-trang">Camera Ngụy Trang</option>
+                            <option value="do-che">Camera Độ Chế</option>
+                            <option value="dinh-vi">Máy Dò & Định Vị</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Giá Bán (VNĐ) *</label>
+                        <input type="number" id="editProdPrice" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="builder-grid" style="grid-template-columns:1fr 1fr;">
+                    <div class="form-group">
+                        <label>Giá Gốc Chưa Giảm (VNĐ)</label>
+                        <input type="number" id="editProdOldPrice" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Nhãn Thẻ (Badge)</label>
+                        <input type="text" id="editProdBadge" class="form-control" placeholder="BÁN CHẠY / MỚI">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>URL Hình Ảnh Sản Phẩm *</label>
+                    <input type="url" id="editProdImg" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Mô Tả Sản Phẩm *</label>
+                    <textarea id="editProdDesc" class="form-control" rows="3" required></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:12px;">
+                    <i class="fa-solid fa-floppy-disk"></i> Lưu Cập Nhật Thay Đổi Vào Cloudflare D1
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Toast Notifications -->
     <div class="toast-container" id="adminToastContainer"></div>
 

@@ -2033,6 +2033,54 @@ async function hashSHA256(text) {
             return jsonResponse({ success: true, message: "Đã xoá sản phẩm thành công!" });
         }
 
+        // PUT /api/admin/products/:id (Edit / Update Product)
+        if (path.startsWith("/api/admin/products/") && method === "PUT") {
+            const id = path.replace("/api/admin/products/", "");
+            try {
+                const body = await request.json();
+                const updatedProduct = {
+                    id: id,
+                    name: body.name || "Sản phẩm camera",
+                    category_id: body.category_id || "sieu-nho",
+                    price: parseInt(body.price) || 0,
+                    original_price: parseInt(body.original_price) || 0,
+                    badge: body.badge || "",
+                    badge_type: body.badge_type || "hot",
+                    rating: parseFloat(body.rating) || 5.0,
+                    reviews_count: parseInt(body.reviews_count) || 0,
+                    image: body.image || "https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=600&q=80",
+                    description: body.description || "",
+                    specs_json: typeof body.specs === "object" ? JSON.stringify(body.specs) : (body.specs_json || "{}")
+                };
+
+                if (env && env.DB) {
+                    try {
+                        await env.DB.prepare(`
+                            UPDATE products SET
+                                name = ?, category_id = ?, price = ?, original_price = ?,
+                                badge = ?, badge_type = ?, image = ?, description = ?, specs_json = ?
+                            WHERE id = ?
+                        `).bind(
+                            updatedProduct.name, updatedProduct.category_id, updatedProduct.price, updatedProduct.original_price,
+                            updatedProduct.badge, updatedProduct.badge_type, updatedProduct.image, updatedProduct.description,
+                            updatedProduct.specs_json, id
+                        ).run();
+                    } catch (e) {
+                        console.error("D1 Update Product Error:", e);
+                    }
+                }
+
+                const idx = memoryStore.products.findIndex(p => p.id === id);
+                if (idx !== -1) {
+                    memoryStore.products[idx] = { ...memoryStore.products[idx], ...updatedProduct };
+                }
+
+                return jsonResponse({ success: true, product: updatedProduct, message: "Đã cập nhật thông tin sản phẩm thành công!" });
+            } catch (err) {
+                return jsonResponse({ error: "Lỗi sửa sản phẩm: " + err.message }, 500);
+            }
+        }
+
         // GET /api/admin/orders
         if (path === "/api/admin/orders" && method === "GET") {
             if (env && env.DB) {

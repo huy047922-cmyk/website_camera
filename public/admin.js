@@ -3,12 +3,14 @@
    ========================================================================== */
 
 let adminToken = localStorage.getItem('cf_admin_token') || null;
+let adminProductsList = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     checkAdminAuth();
     setupAdminLogin();
     setupAdminNavigation();
     setupAddProductModal();
+    setupEditProductModal();
 });
 
 // Secure API Fetch Wrapper with Token Authorization & 401 handling
@@ -120,16 +122,16 @@ async function loadAdminProducts() {
 
     try {
         const res = await fetchAdmin('/api/admin/products');
-        const products = await res.json();
+        adminProductsList = await res.json();
 
-        document.getElementById('statProductCount').textContent = products.length;
+        document.getElementById('statProductCount').textContent = adminProductsList.length;
 
-        if (products.length === 0) {
+        if (adminProductsList.length === 0) {
             tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">Chưa có sản phẩm nào trong D1.</td></tr>';
             return;
         }
 
-        tbody.innerHTML = products.map(p => {
+        tbody.innerHTML = adminProductsList.map(p => {
             const formattedPrice = new Intl.NumberFormat('vi-VN').format(p.price) + ' đ';
             return `
                 <tr>
@@ -138,9 +140,14 @@ async function loadAdminProducts() {
                     <td><span class="brand-tag">${p.category_id}</span></td>
                     <td style="color:var(--primary); font-weight:700;">${formattedPrice}</td>
                     <td>
-                        <button class="btn-secondary" onclick="deleteProduct('${p.id}')" style="padding:4px 10px; font-size:0.75rem; color:var(--accent-red);">
-                            <i class="fa-solid fa-trash"></i> Xoá
-                        </button>
+                        <div style="display:flex; gap:6px;">
+                            <button class="btn-primary" onclick="openEditProductModal('${p.id}')" style="padding:5px 12px; font-size:0.78rem; background:var(--secondary-navy);">
+                                <i class="fa-solid fa-pen-to-square"></i> Sửa
+                            </button>
+                            <button class="btn-secondary" onclick="deleteProduct('${p.id}')" style="padding:5px 12px; font-size:0.78rem; color:var(--accent-red); border-color:#fca5a5;">
+                                <i class="fa-solid fa-trash"></i> Xoá
+                            </button>
+                        </div>
                     </td>
                 </tr>
             `;
@@ -206,15 +213,75 @@ function setupAddProductModal() {
             if (result.success) {
                 form.reset();
                 modal?.classList.remove('active');
-                showAdminToast('Thêm sản phẩm mới vào D1 thành công!', 'success');
+                showAdminToast('Đã thêm sản phẩm mới vào Cloudflare D1!', 'success');
                 loadAdminProducts();
             } else {
-                throw new Error(result.error || 'Thêm thất bại');
+                showAdminToast(result.error || 'Thêm sản phẩm thất bại', 'error');
             }
         } catch (err) {
-            showAdminToast('Lỗi thêm sản phẩm: ' + err.message, 'error');
+            showAdminToast('Lỗi gửi sản phẩm: ' + err.message, 'error');
         }
     });
+}
+
+// Edit Product Modal & Submit
+function setupEditProductModal() {
+    const modal = document.getElementById('editProductModal');
+    const closeBtn = document.getElementById('closeEditProductBtn');
+    const form = document.getElementById('editProductForm');
+
+    closeBtn?.addEventListener('click', () => modal?.classList.remove('active'));
+
+    form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('editProdId').value;
+        const prodData = {
+            name: document.getElementById('editProdName').value.trim(),
+            category_id: document.getElementById('editProdCat').value,
+            price: parseInt(document.getElementById('editProdPrice').value) || 0,
+            original_price: parseInt(document.getElementById('editProdOldPrice').value) || 0,
+            badge: document.getElementById('editProdBadge').value.trim(),
+            image: document.getElementById('editProdImg').value.trim(),
+            description: document.getElementById('editProdDesc').value.trim()
+        };
+
+        try {
+            const res = await fetchAdmin(`/api/admin/products/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(prodData)
+            });
+
+            const result = await res.json();
+            if (result.success) {
+                modal?.classList.remove('active');
+                showAdminToast('Đã cập nhật thông tin sản phẩm thành công!', 'success');
+                loadAdminProducts();
+            } else {
+                showAdminToast(result.error || 'Cập nhật thất bại', 'error');
+            }
+        } catch (err) {
+            showAdminToast('Lỗi cập nhật sản phẩm: ' + err.message, 'error');
+        }
+    });
+}
+
+// Open Edit Product Modal with prefilled values
+function openEditProductModal(productId) {
+    const p = adminProductsList.find(item => item.id === productId);
+    if (!p) return;
+
+    document.getElementById('editProdId').value = p.id;
+    document.getElementById('editProdName').value = p.name;
+    document.getElementById('editProdCat').value = p.category_id;
+    document.getElementById('editProdPrice').value = p.price;
+    document.getElementById('editProdOldPrice').value = p.original_price || '';
+    document.getElementById('editProdBadge').value = p.badge || '';
+    document.getElementById('editProdImg').value = p.image;
+    document.getElementById('editProdDesc').value = p.description;
+
+    const modal = document.getElementById('editProductModal');
+    modal?.classList.add('active');
 }
 
 // Load Orders Table
@@ -229,7 +296,7 @@ async function loadAdminOrders() {
         document.getElementById('statOrderCount').textContent = orders.length;
 
         if (orders.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">Chưa có đơn hàng mới nào.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">Chưa có đơn hàng nào.</td></tr>';
             return;
         }
 
@@ -237,17 +304,18 @@ async function loadAdminOrders() {
             const formattedTotal = new Intl.NumberFormat('vi-VN').format(o.total_amount) + ' đ';
             return `
                 <tr>
-                    <td><strong>${o.id}</strong></td>
+                    <td><strong style="color:var(--primary);">${o.id}</strong></td>
                     <td>${o.customer_name}</td>
-                    <td>${o.customer_phone}</td>
+                    <td><a href="tel:${o.customer_phone}">${o.customer_phone}</a></td>
                     <td>${o.customer_address}</td>
-                    <td style="color:var(--primary); font-weight:700;">${formattedTotal}</td>
-                    <td><span class="product-badge sale">${o.status}</span></td>
+                    <td style="font-weight:700;">${formattedTotal}</td>
+                    <td><span class="product-badge hot">${o.status}</span></td>
                 </tr>
             `;
         }).join('');
     } catch (err) {
         console.error(err);
+        tbody.innerHTML = '<tr><td colspan="6" style="color:var(--accent-red);">Lỗi tải đơn hàng</td></tr>';
     }
 }
 
@@ -267,49 +335,58 @@ async function loadAdminCustomRequests() {
             return;
         }
 
-        tbody.innerHTML = reqs.map(r => {
-            return `
-                <tr>
-                    <td><strong>${r.id}</strong></td>
-                    <td>${r.customer_name}</td>
-                    <td style="color:var(--accent-cyan); font-weight:700;">${r.customer_phone}</td>
-                    <td>${r.target_item}</td>
-                    <td>${r.resolution} (${r.battery_type})</td>
-                    <td><span class="product-badge new">${r.status}</span></td>
-                </tr>
-            `;
-        }).join('');
+        tbody.innerHTML = reqs.map(r => `
+            <tr>
+                <td><strong style="color:var(--accent-green);">${r.id}</strong></td>
+                <td>${r.customer_name}</td>
+                <td><a href="https://zalo.me/${r.customer_phone}" target="_blank" style="color:#0284c7; font-weight:700;"><i class="fa-solid fa-comment-dots"></i> ${r.customer_phone}</a></td>
+                <td><strong>${r.target_item}</strong></td>
+                <td>${r.resolution} / ${r.battery_type}</td>
+                <td><span class="product-badge new">${r.status}</span></td>
+            </tr>
+        `).join('');
     } catch (err) {
         console.error(err);
+        tbody.innerHTML = '<tr><td colspan="6" style="color:var(--accent-red);">Lỗi tải yêu cầu độ chế</td></tr>';
     }
 }
 
 // Admin Navigation Tabs
 function setupAdminNavigation() {
-    const items = document.querySelectorAll('.admin-menu-item[data-tab]');
-    items.forEach(item => {
+    const menuItems = document.querySelectorAll('.admin-menu-item[data-tab]');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    menuItems.forEach(item => {
         item.addEventListener('click', () => {
-            items.forEach(i => i.classList.remove('active'));
+            const targetTab = item.dataset.tab;
+            menuItems.forEach(m => m.classList.remove('active'));
             item.classList.add('active');
 
-            const targetTab = item.dataset.tab;
-            document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
-            const el = document.getElementById(targetTab);
-            if (el) el.style.display = 'block';
+            tabContents.forEach(tab => {
+                if (tab.id === targetTab) {
+                    tab.style.display = 'block';
+                } else {
+                    tab.style.display = 'none';
+                }
+            });
         });
     });
 }
 
-// Admin Toast System
+// Admin Toast Notifications
 function showAdminToast(message, type = 'info') {
     const container = document.getElementById('adminToastContainer');
     if (!container) return;
 
     const toast = document.createElement('div');
     toast.className = 'toast';
-    toast.innerHTML = `<i class="fa-solid fa-bell" style="color:var(--primary)"></i> <span>${message}</span>`;
+    let icon = 'fa-circle-check';
+    if (type === 'error') icon = 'fa-circle-xmark';
+
+    toast.innerHTML = `<i class="fa-solid ${icon}" style="color:var(--primary)"></i> <span>${message}</span>`;
     container.appendChild(toast);
 
-    setTimeout(() => toast.remove(), 4000);
+    setTimeout(() => {
+        toast.remove();
+    }, 4000);
 }
-
