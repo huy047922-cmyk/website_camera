@@ -3,88 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KBVISION.vn - Camera Giám Sát & Thiết Bị An Ninh KBVISION Chính Hãng (Mỹ)</title>
-    <meta name="description" content="Chuyên cung cấp camera IP 4K, camera HD-CVI, đầu ghi hình và bộ camera trọn gói KBVISION chính hãng thương hiệu Mỹ. Bảo hành 24 tháng 1 đổi 1.">
-    <!-- Google Fonts & FontAwesome -->
+    <title>KBVISION.vn - Thiết Bị An Ninh & Camera Giám Sát KBVISION Chính Hãng USA</title>
+    <meta name="description" content="KabeVision - Nhà phân phối camera IP 4K, camera HD-CVI, đầu ghi hình và bộ camera trọn gói KBVISION thương hiệu Mỹ chính hãng.">
+    <!-- FontAwesome icons for functional controls -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <!-- Top Announcement Bar -->
+    <!-- Top Bar -->
     <div class="top-announcement">
         <div class="container">
             <div class="top-contact-info">
-                <span><i class="fa-solid fa-phone-volume"></i> Hotline/Zalo Tư Vấn: <strong>0987.654.321</strong></span>
-                <span><i class="fa-solid fa-shield-halved"></i> Bảo Hành 24 Tháng Chính Hãng KBVISION USA</span>
-                <span><i class="fa-solid fa-truck-fast"></i> Giao Hàng & Khảo Sát Lắp Đặt Tận Nơi</span>
+                <span>Hotline/Zalo: <strong>0987.654.321</strong></span>
+                <span>Bảo Hành 24 Tháng Chính Hãng KBVISION USA</span>
             </div>
             <div class="top-links">
-                <a href="admin.html"><i class="fa-solid fa-user-gear"></i> Trang Quản Trị Admin</a>
+                <a href="admin.html">Trang Quản Trị Admin</a>
             </div>
         </div>
     </div>
 
-    <!-- Header Navbar -->
+    <!-- Site Header & Main Corporate Navigation Menu (Matching kabevision.vn) -->
     <header class="site-header">
         <div class="container navbar-inner">
-            <a href="index.html" class="brand-logo">
-                <i class="fa-solid fa-shield-virus" style="color:var(--primary)"></i>
-                <span>KBVISION<span style="color:var(--primary)">.vn</span></span>
-                <span class="brand-tag">USA Brand</span>
+            
+            <!-- Brand Logo -->
+            <a href="index.html" class="brand-logo-text">
+                <span>Kabe<span style="color:#0056b3">vision</span></span>
+                <span class="sub-logo-tag">CÔNG NGHỆ BẢO MẬT SECUDEEP USA</span>
             </a>
 
-            <div class="search-form">
-                <input type="text" id="searchInput" placeholder="Nhập mã sản phẩm KBVISION, mã camera KX-A2111N2, đầu ghi, bộ trọn gói...">
-                <button id="searchBtn" title="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button>
-            </div>
+            <!-- Corporate Navigation Menu -->
+            <nav>
+                <ul class="main-nav-menu">
+                    <li class="main-nav-item active">
+                        <a href="index.html" class="main-nav-link">TRANG CHỦ</a>
+                    </li>
+                    <li class="main-nav-item">
+                        <a href="javascript:void(0)" class="main-nav-link">GIỚI THIỆU</a>
+                    </li>
+                    <li class="main-nav-item">
+                        <a href="javascript:void(0)" class="main-nav-link">SẢN PHẨM <i class="fa-solid fa-chevron-down nav-arrow"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="javascript:void(0)" onclick="selectCategory('camera-ip')" class="dropdown-item">Camera IP KBVISION 4K</a>
+                            <a href="javascript:void(0)" onclick="selectCategory('camera-analog')" class="dropdown-item">Camera HD-CVI Analog</a>
+                            <a href="javascript:void(0)" onclick="selectCategory('dau-ghi')" class="dropdown-item">Đầu Ghi Hình KBVISION</a>
+                            <a href="javascript:void(0)" onclick="selectCategory('bo-tron-goi')" class="dropdown-item">Bộ Kit Camera Trọn Gói</a>
+                        </div>
+                    </li>
+                    <li class="main-nav-item">
+                        <a href="javascript:void(0)" class="main-nav-link">HỖ TRỢ KHÁCH HÀNG <i class="fa-solid fa-chevron-down nav-arrow"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="baohanh.html" class="dropdown-item">Chính Sách Bảo Hành 24 Tháng</a>
+                            <a href="giaohang.html" class="dropdown-item">Chính Sách Giao Hàng COD</a>
+                            <a href="baomat.html" class="dropdown-item">Cam Kết Bảo Mật Thông Tin</a>
+                        </div>
+                    </li>
+                    <li class="main-nav-item">
+                        <a href="javascript:void(0)" class="main-nav-link">TIN TỨC <i class="fa-solid fa-chevron-down nav-arrow"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="javascript:void(0)" class="dropdown-item">Tin Khuyến Mãi KBVISION</a>
+                            <a href="javascript:void(0)" class="dropdown-item">Giải Pháp An Ninh Công Nghệ</a>
+                        </div>
+                    </li>
+                    <li class="main-nav-item">
+                        <a href="#custom-section" class="main-nav-link">LIÊN HỆ</a>
+                    </li>
+                    <li class="main-nav-item">
+                        <a href="javascript:void(0)" class="main-nav-link">TIẾNG VIỆT 🇻🇳 <i class="fa-solid fa-chevron-down nav-arrow"></i></a>
+                        <div class="dropdown-menu" style="min-width:140px;">
+                            <a href="javascript:void(0)" class="dropdown-item">🇲🇾 English</a>
+                            <a href="javascript:void(0)" class="dropdown-item">🇻🇳 Tiếng Việt</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
 
-            <div class="header-actions">
-                <div class="header-hotline">
-                    <i class="fa-solid fa-headset"></i>
-                    <div class="header-hotline-text">
-                        <span>Tư Vấn Báo Giá Zalo</span>
-                        <strong>0987.654.321</strong>
-                    </div>
+            <!-- Search Pill & Cart Header Right -->
+            <div class="header-right-wrap">
+                <div class="kabevision-search-pill">
+                    <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm...">
+                    <button id="searchBtn" title="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
 
-                <button class="btn-icon-badge" id="openCartBtn">
+                <button class="btn-header-cart" id="openCartBtn">
                     <i class="fa-solid fa-cart-shopping"></i>
-                    <span>Giỏ Hàng</span>
-                    <span class="badge-count" id="cartBadgeCount">0</span>
+                    <span class="cart-count-badge" id="cartBadgeCount">0</span>
                 </button>
             </div>
+
         </div>
     </header>
 
-    <!-- Category Ribbon Navigation Bar -->
-    <div class="category-nav-ribbon">
-        <div class="container">
-            <nav class="category-nav" id="categoryNav">
-                <button class="category-pill active" data-category="all"><i class="fa-solid fa-border-all"></i> Tất Cả Sản Phẩm</button>
-                <button class="category-pill" data-category="camera-ip"><i class="fa-solid fa-video"></i> Camera IP KBVISION 4K</button>
-                <button class="category-pill" data-category="camera-analog"><i class="fa-solid fa-camera-retro"></i> Camera HD-CVI Analog</button>
-                <button class="category-pill" data-category="dau-ghi"><i class="fa-solid fa-hard-drive"></i> Đầu Ghi Hình KBVISION</button>
-                <button class="category-pill" data-category="bo-tron-goi"><i class="fa-solid fa-box-archive"></i> Bộ Camera Trọn Gói</button>
-            </nav>
-        </div>
-    </div>
+    <!-- Hero Banner (Blue Atmospheric Style matching kabevision.vn) -->
+    <section class="hero-banner-kb">
+        <div class="container hero-kb-grid">
+            <div class="hero-kb-text">
+                <h1>GIẢI PHÁP <span>An Ninh Tổng Thể</span></h1>
+                <p>Hệ thống giám sát an ninh KBVISION chuẩn thương hiệu Mỹ. Độ nét Ultra HD 4K, công nghệ Full-Color xem đêm có màu sắc nét, bảo hành 24 tháng 1 đổi 1 tận nơi.</p>
 
-    <!-- Hero Banner -->
-    <section class="hero-banner">
-        <div class="container hero-grid">
-            <div class="hero-text">
-                <h1>Thiết Bị An Ninh & Camera KBVISION Thương Hiệu Mỹ</h1>
-                <p>Giải pháp giám sát an ninh hàng đầu thế giới. Công nghệ hình ảnh Ultra HD 4K, Full-Color ban đêm có màu 24/7, chuẩn nén H.265+ tiết kiệm ổ cứng, bảo hành 24 tháng chính hãng KBVISION USA.</p>
-
-                <div class="hero-cta">
-                    <a href="#section-camera-ip" class="btn-primary"><i class="fa-solid fa-bag-shopping"></i> Khám Phá Sản Phẩm KBVISION</a>
-                    <a href="#custom-section" class="btn-secondary"><i class="fa-solid fa-comments"></i> Đăng Ký Lắp Đặt Tận Nơi</a>
+                <div class="hero-kb-actions">
+                    <a href="#section-camera-ip" class="btn-kb-primary">Khám Phá Sản Phẩm</a>
+                    <a href="#custom-section" class="btn-kb-secondary">Đăng Ký Lắp Đặt</a>
                 </div>
             </div>
 
-            <div class="hero-image-wrap">
-                <img src="https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=800&q=80" alt="Camera KBVISION 4K">
+            <div class="hero-kb-img">
+                <img src="https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=800&q=80" alt="KBVision Security Solution">
             </div>
         </div>
     </section>
@@ -92,42 +118,64 @@
     <!-- Main Content Container -->
     <main class="container">
 
-        <!-- Trust Commitments Grid -->
-        <div class="trust-grid">
-            <div class="trust-card">
-                <i class="fa-solid fa-shield-halved"></i>
-                <div>
-                    <h4>BẢO HÀNH 24 THÁNG USA</h4>
-                    <p>Cam kết hàng chính hãng KBVISION 1 đổi 1 tận nơi</p>
-                </div>
-            </div>
-            <div class="trust-card">
-                <i class="fa-solid fa-box-open"></i>
-                <div>
-                    <h4>KIỂM TRA HÀNG MỚI TRẢ TIỀN</h4>
-                    <p>Thử bóc hộp kiểm tra camera ok mới thanh toán COD</p>
-                </div>
-            </div>
-            <div class="trust-card">
-                <i class="fa-solid fa-certificate"></i>
-                <div>
-                    <h4>THƯƠNG HIỆU HÀNG ĐẦU MỸ</h4>
-                    <p>Đầy đủ chứng nhận CO/CQ xuất xứ chính hãng</p>
-                </div>
-            </div>
-            <div class="trust-card">
-                <i class="fa-solid fa-eye"></i>
-                <div>
-                    <h4>CÔNG NGHỆ 4K FULL-COLOR</h4>
-                    <p>Hình ảnh ban đêm có màu sắc nét 24/7</p>
-                </div>
-            </div>
+        <!-- Clean Tab Navigation (SẢN PHẨM | CÔNG NGHỆ matching screenshot 2) -->
+        <div class="kabevision-tab-header">
+            <button class="tab-btn active" id="tabBtnProducts">SẢN PHẨM</button>
+            <button class="tab-btn" id="tabBtnTech">CÔNG NGHỆ</button>
         </div>
+
+        <!-- Featured Showcase Layout (Matching Screenshot 2) -->
+        <section style="margin-bottom:50px;">
+            <div class="middle-showcase-grid">
+                <!-- Left 2 Cards -->
+                <div class="side-showcase-column">
+                    <div class="product-card" onclick="openProductDetail('kb-001')" style="cursor:pointer;">
+                        <div class="product-thumb">
+                            <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80" alt="KX-CAiF4001N-DL-A">
+                        </div>
+                        <h3 class="product-title">Camera IP thân cố định ngoài trời KX-CAiF4001N-DL-A</h3>
+                    </div>
+                    <div class="product-card" onclick="openProductDetail('kb-003')" style="cursor:pointer;">
+                        <div class="product-thumb">
+                            <img src="https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=600&q=80" alt="KX-C32L">
+                        </div>
+                        <h3 class="product-title">Camera IP Wifi ánh sáng kép thông minh KX-C32L</h3>
+                    </div>
+                </div>
+
+                <!-- Middle Feature Card -->
+                <div class="featured-center-card">
+                    <div>
+                        <p>Trang Bị Siêu Chức Năng</p>
+                        <h3>CAMERA WIFI</h3>
+                        <p style="font-weight:700; margin-top:5px;">KX-S8L-PRO</p>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80" alt="KX-S8L-PRO">
+                    <a href="javascript:void(0)" onclick="openProductDetail('kb-005')" class="btn-kb-secondary" style="background:#ffffff; color:#0056b3; border:none; margin:0 auto; padding:8px 20px;">Xem Chi Tiết</a>
+                </div>
+
+                <!-- Right 2 Cards -->
+                <div class="side-showcase-column">
+                    <div class="product-card" onclick="openProductDetail('kb-007')" style="cursor:pointer;">
+                        <div class="product-thumb">
+                            <img src="https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&w=600&q=80" alt="KX-SM4P-PRO">
+                        </div>
+                        <h3 class="product-title">Camera PoE PT Mắt Đêm 2 ống kính KX-SM4P-PRO</h3>
+                    </div>
+                    <div class="product-card" onclick="openProductDetail('kb-009')" style="cursor:pointer;">
+                        <div class="product-thumb">
+                            <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80" alt="KX-FR04AC-FW">
+                        </div>
+                        <h3 class="product-title">Thiết bị kiểm soát ra vào KX-FR04AC-FW</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Filtered / Search View Container -->
         <section id="filtered-view-section" style="display:none; margin-bottom:40px;">
-            <div class="section-title">
-                <h2 id="filteredTitle"><i class="fa-solid fa-filter" style="color:var(--primary)"></i> Kết Quả Lọc Sản Phẩm KBVISION</h2>
+            <div class="section-clean-heading">
+                <h2 id="filteredTitle">Kết Quả Lọc Sản Phẩm KBVISION</h2>
                 <span style="font-size:0.85rem; color:var(--text-muted); font-weight:600;" id="filteredCountLabel">0 sản phẩm</span>
             </div>
             <div class="products-grid" id="filteredProductsGrid">
@@ -135,50 +183,41 @@
             </div>
         </section>
 
-        <!-- CATEGORIZED SECTIONS CONTAINER (KBVISION Homepage Layout) -->
+        <!-- CATEGORIZED SECTIONS CONTAINER (Clean Non-AI Titles) -->
         <div id="categorized-sections-container">
 
-            <!-- Section 1: Top Sản Phẩm Bán Chạy -->
-            <section style="margin-bottom:45px;" id="section-featured">
-                <div class="section-title">
-                    <h2><i class="fa-solid fa-fire" style="color:var(--primary)"></i> 🔥 Top Sản Phẩm KBVISION Bán Chạy Nhất</h2>
-                    <a href="javascript:void(0)" onclick="selectCategory('all')" style="color:var(--primary); font-weight:700; font-size:0.9rem;">Xem Tất Cả (100) <i class="fa-solid fa-chevron-right"></i></a>
-                </div>
-                <div class="products-grid" id="grid-featured"></div>
-            </section>
-
-            <!-- Section 2: Camera IP KBVISION 4K -->
+            <!-- Section 1: Camera IP KBVISION 4K -->
             <section style="margin-bottom:45px;" id="section-camera-ip">
-                <div class="section-title">
-                    <h2><i class="fa-solid fa-video" style="color:var(--primary)"></i> 👁️ Camera IP KBVISION 4K & Wi-Fi</h2>
-                    <a href="javascript:void(0)" onclick="selectCategory('camera-ip')" style="color:var(--primary); font-weight:700; font-size:0.9rem;">Xem Tất Cả Camera IP KBVISION (25) <i class="fa-solid fa-chevron-right"></i></a>
+                <div class="section-clean-heading">
+                    <h2>CAMERA IP KBVISION 4K & WI-FI</h2>
+                    <a href="javascript:void(0)" onclick="selectCategory('camera-ip')">Xem tất cả (25)</a>
                 </div>
                 <div class="products-grid" id="grid-camera-ip"></div>
             </section>
 
-            <!-- Section 3: Camera HD-CVI KBVISION Analog -->
+            <!-- Section 2: Camera HD-CVI KBVISION Analog -->
             <section style="margin-bottom:45px;" id="section-camera-analog">
-                <div class="section-title">
-                    <h2><i class="fa-solid fa-camera-retro" style="color:var(--primary)"></i> 📹 Camera HD-CVI KBVISION (Analog 2MP - 8MP)</h2>
-                    <a href="javascript:void(0)" onclick="selectCategory('camera-analog')" style="color:var(--primary); font-weight:700; font-size:0.9rem;">Xem Tất Cả Camera HD-CVI (25) <i class="fa-solid fa-chevron-right"></i></a>
+                <div class="section-clean-heading">
+                    <h2>CAMERA HD-CVI ANALOG KBVISION</h2>
+                    <a href="javascript:void(0)" onclick="selectCategory('camera-analog')">Xem tất cả (25)</a>
                 </div>
                 <div class="products-grid" id="grid-camera-analog"></div>
             </section>
 
-            <!-- Section 4: Đầu Ghi Hình KBVISION -->
+            <!-- Section 3: Đầu Ghi Hình KBVISION -->
             <section style="margin-bottom:45px;" id="section-dau-ghi">
-                <div class="section-title">
-                    <h2><i class="fa-solid fa-hard-drive" style="color:var(--primary)"></i> 📼 Đầu Ghi Hình KBVISION (DVR / NVR 4K H.265+)</h2>
-                    <a href="javascript:void(0)" onclick="selectCategory('dau-ghi')" style="color:var(--primary); font-weight:700; font-size:0.9rem;">Xem Tất Cả Đầu Ghi KBVISION (25) <i class="fa-solid fa-chevron-right"></i></a>
+                <div class="section-clean-heading">
+                    <h2>ĐẦU GHI HÌNH KBVISION (DVR / NVR 4K)</h2>
+                    <a href="javascript:void(0)" onclick="selectCategory('dau-ghi')">Xem tất cả (25)</a>
                 </div>
                 <div class="products-grid" id="grid-dau-ghi"></div>
             </section>
 
-            <!-- Section 5: Bộ Kit Camera KBVISION Trọn Gói -->
+            <!-- Section 4: Bộ Kit Camera KBVISION Trọn Gói -->
             <section style="margin-bottom:45px;" id="section-bo-tron-goi">
-                <div class="section-title">
-                    <h2><i class="fa-solid fa-box-archive" style="color:var(--primary)"></i> 📦 Bộ Kit Camera KBVISION Trọn Gói (Bộ 2 / 4 / 8 Cam)</h2>
-                    <a href="javascript:void(0)" onclick="selectCategory('bo-tron-goi')" style="color:var(--primary); font-weight:700; font-size:0.9rem;">Xem Tất Cả Bộ Trọn Gói (25) <i class="fa-solid fa-chevron-right"></i></a>
+                <div class="section-clean-heading">
+                    <h2>BỘ KIT CAMERA TRỌN GÓI KBVISION</h2>
+                    <a href="javascript:void(0)" onclick="selectCategory('bo-tron-goi')">Xem tất cả (25)</a>
                 </div>
                 <div class="products-grid" id="grid-bo-tron-goi"></div>
             </section>
@@ -186,22 +225,22 @@
         </div>
 
         <!-- Interactive Quote / Installation Request Form -->
-        <section id="custom-section">
-            <div class="custom-builder-box">
-                <div class="builder-header">
-                    <h2><i class="fa-solid fa-screwdriver-wrench" style="color:var(--primary)"></i> Đăng Ký Tư Vấn & Khảo Sát Lắp Đặt Camera KBVISION Tận Nơi</h2>
-                    <p>Quý khách cần tư vấn chọn giải pháp camera cho Gia đình, Cửa hàng, Văn phòng, Nhà xưởng? Điền thông tin dưới đây để nhận báo giá chi tiết & phương án khảo sát tận nơi hoàn toàn miễn phí.</p>
+        <section id="custom-section" style="margin-top:50px;">
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:35px; border-radius:20px;">
+                <div style="text-align:center; margin-bottom:30px;">
+                    <h2 style="font-size:1.5rem; font-weight:900; color:#0f172a; margin-bottom:8px;">ĐĂNG KÝ TƯ VẤN & KHẢO SÁT LẮP ĐẶT KBVISION</h2>
+                    <p style="color:#64748b; font-size:0.9rem;">Quý khách cần tư vấn lắp đặt camera cho Gia đình, Cửa hàng, Văn phòng, Nhà xưởng? Điền thông tin dưới đây để nhận báo giá chi tiết.</p>
                 </div>
 
-                <form id="customBuildForm" class="builder-grid">
+                <form id="customBuildForm" style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
                     <div>
                         <div class="form-group">
                             <label>Họ và Tên Khách Hàng *</label>
-                            <input type="text" id="customName" class="form-control" placeholder="Ví dụ: Nguyễn Văn A" required>
+                            <input type="text" id="customName" class="form-control" placeholder="Nguyễn Văn A" required>
                         </div>
                         <div class="form-group">
-                            <label>Số Điện Thoại (Zalo) Liên Hệ *</label>
-                            <input type="tel" id="customPhone" class="form-control" placeholder="Ví dụ: 0987654321" required>
+                            <label>Số Điện Thoại (Zalo) *</label>
+                            <input type="tel" id="customPhone" class="form-control" placeholder="0987654321" required>
                         </div>
                         <div class="form-group">
                             <label>Địa Điểm Cần Lắp Đặt *</label>
@@ -210,7 +249,6 @@
                                 <option value="Cửa Hàng / Shop Thời Trang">Cửa Hàng / Shop Thời Trang / Quán Cà Phê</option>
                                 <option value="Văn Phòng Doanh Nghiệp">Văn Phòng Doanh Nghiệp / Tòa Nhà</option>
                                 <option value="Nhà Xưởng / Kho Bãi">Nhà Xưởng / Kho Bãi / Trang Trại</option>
-                                <option value="Trường Học / Khách Sạn">Trường Học / Bệnh Viện / Khách Sạn</option>
                             </select>
                         </div>
                     </div>
@@ -220,28 +258,28 @@
                             <label>Số Lượng Camera Mong Muốn</label>
                             <select id="customResSelect" class="form-control">
                                 <option value="Bộ 2 Camera KBVISION">Bộ 2 Camera KBVISION</option>
-                                <option value="Bộ 4 Camera KBVISION">Bộ 4 Camera KBVISION (Phổ Biến nhất)</option>
+                                <option value="Bộ 4 Camera KBVISION">Bộ 4 Camera KBVISION</option>
                                 <option value="Bộ 8 Camera KBVISION">Bộ 8 Camera KBVISION</option>
-                                <option value="Trên 8 Camera (Khảo sát dự án)">Dự Án Trên 8 Camera (Khảo sát tư vấn)</option>
+                                <option value="Dự Án Trên 8 Camera">Dự Án Trên 8 Camera (Khảo sát tư vấn)</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Loại Camera Ưu Tiên</label>
                             <select id="customBatterySelect" class="form-control">
-                                <option value="Camera IP KBVISION 4K">Camera IP KBVISION 4K (Sắc nét cao)</option>
+                                <option value="Camera IP KBVISION 4K">Camera IP KBVISION 4K</option>
                                 <option value="Camera Full-Color Ban Đêm Có Màu">Camera Full-Color Ban Đêm Có Màu 24/7</option>
-                                <option value="Camera Analog Tiết Kiệm">Camera Analog HD-CVI (Tiết kiệm chi phí)</option>
+                                <option value="Camera Analog HD-CVI">Camera Analog HD-CVI (Tiết kiệm)</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Ghi Chú Yêu Cầu Riêng (Nếu có)</label>
-                            <input type="text" id="customNote" class="form-control" placeholder="Ví dụ: Lắp đặt tại Quận 1 TP.HCM, gọi ngoài giờ hành chính">
+                            <label>Ghi Chú Yêu Cầu</label>
+                            <input type="text" id="customNote" class="form-control" placeholder="Lắp đặt tại Hà Nội / TP.HCM...">
                         </div>
                     </div>
 
-                    <div style="grid-column: 1/-1;">
-                        <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:14px;">
-                            <i class="fa-solid fa-paper-plane"></i> Nhận Báo Giá Trọn Gói & Tư Vấn Khảo Sát Zalo
+                    <div style="grid-column:1/-1;">
+                        <button type="submit" class="btn-kb-primary" style="width:100%; border:none; padding:14px; font-size:0.95rem; cursor:pointer;">
+                            GỬI YÊU CẦU TƯ VẤN & BÁO GIÁ ZALO
                         </button>
                     </div>
                 </form>
@@ -254,18 +292,16 @@
     <div class="modal" id="cartModal">
         <div class="modal-content">
             <button class="modal-close" id="closeCartBtn"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="font-size:1.3rem; font-weight:800; margin-bottom:20px; color:var(--secondary-navy);">
-                <i class="fa-solid fa-cart-shopping" style="color:var(--primary)"></i> Giỏ Hàng Của Bạn
-            </h2>
+            <h2 style="font-size:1.2rem; font-weight:800; margin-bottom:20px; color:#0f172a;">Giỏ Hàng Của Bạn</h2>
             <div id="cartItemsList">
-                <!-- Cart item rows -->
+                <!-- Cart items -->
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; padding-top:15px; border-top:2px solid var(--border-color);">
-                <span style="font-weight:700; font-size:1.1rem;">Tổng Tiền:</span>
-                <span style="font-size:1.4rem; font-weight:900; color:var(--primary);" id="cartTotalAmount">0 đ</span>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; padding-top:15px; border-top:1px solid #e2e8f0;">
+                <span style="font-weight:700;">Tổng Tiền:</span>
+                <span style="font-size:1.3rem; font-weight:900; color:#0056b3;" id="cartTotalAmount">0 đ</span>
             </div>
-            <button class="btn-primary" id="proceedCheckoutBtn" style="width:100%; justify-content:center; margin-top:20px; padding:12px;">
-                <i class="fa-solid fa-credit-card"></i> Tiến Hành Đặt Hàng Ngay
+            <button class="btn-kb-primary" id="proceedCheckoutBtn" style="width:100%; border:none; margin-top:20px; padding:12px; cursor:pointer;">
+                Tiến Hành Đặt Hàng COD
             </button>
         </div>
     </div>
@@ -274,9 +310,7 @@
     <div class="modal" id="checkoutModal">
         <div class="modal-content">
             <button class="modal-close" id="closeCheckoutBtn"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="font-size:1.3rem; font-weight:800; margin-bottom:20px; color:var(--secondary-navy);">
-                <i class="fa-solid fa-truck-ramp-box" style="color:var(--primary)"></i> Thông Tin Giao Hàng & Đặt Hàng KBVISION
-            </h2>
+            <h2 style="font-size:1.2rem; font-weight:800; margin-bottom:20px; color:#0f172a;">Thông Tin Đặt Hàng COD KBVISION</h2>
             <form id="checkoutForm">
                 <div class="form-group">
                     <label>Họ và Tên Người Nhận *</label>
@@ -287,18 +321,15 @@
                     <input type="tel" id="orderPhone" class="form-control" placeholder="0987654321" required>
                 </div>
                 <div class="form-group">
-                    <label>Địa Chỉ Nhận Hàng / Lắp Đặt *</label>
+                    <label>Địa Chỉ Nhận Hàng *</label>
                     <input type="text" id="orderAddress" class="form-control" placeholder="Số 123 Đường ABC, Phường X, Quận Y, Hà Nội / TP.HCM" required>
                 </div>
                 <div class="form-group">
-                    <label>Ghi Chú Giao Hàng / Yêu Cầu Khảo Sát</label>
-                    <textarea id="orderNote" class="form-control" rows="2" placeholder="Giao giờ hành chính, lắp tận nơi..."></textarea>
+                    <label>Ghi Chú Giao Hàng</label>
+                    <textarea id="orderNote" class="form-control" rows="2" placeholder="Giao giờ hành chính..."></textarea>
                 </div>
-                <p style="font-size:0.8rem; color:var(--accent-green); margin-bottom:15px;">
-                    <i class="fa-solid fa-shield-halved"></i> Sản phẩm KBVISION chính hãng bảo hành 24 tháng 1 đổi 1.
-                </p>
-                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:12px;">
-                    <i class="fa-solid fa-check"></i> Xác Nhận Đặt Hàng COD (Thanh Toán Khi Nhận Hàng)
+                <button type="submit" class="btn-kb-primary" style="width:100%; border:none; padding:12px; cursor:pointer;">
+                    Xác Nhận Đặt Hàng COD
                 </button>
             </form>
         </div>
@@ -321,27 +352,27 @@
     <footer class="site-footer">
         <div class="container footer-grid">
             <div class="footer-col">
-                <h3>KBVISION.vn - Nhà Phân Phối Camera KBVISION Mỹ</h3>
-                <p style="margin-bottom:12px;">Hệ thống cung cấp camera an ninh & thiết bị giám sát KBVISION thương hiệu Mỹ hàng đầu Việt Nam. Cam kết hàng chính hãng 100%, bảo hành 24 tháng 1 đổi 1 tận nơi.</p>
-                <p><strong>Hotline/Zalo:</strong> 0987.654.321 (Tư vấn 24/7)</p>
-                <p><strong>Showroom:</strong> Hà Nội & TP. Hồ Chí Minh</p>
+                <h3>KBVISION.vn - Thương Hiệu Camera Mỹ</h3>
+                <p style="margin-bottom:12px;">Hệ thống phân phối thiết bị an ninh & camera giám sát KBVISION thương hiệu Mỹ hàng đầu Việt Nam. Cam kết hàng chính hãng 100%, bảo hành 24 tháng 1 đổi 1 tận nơi.</p>
+                <p>Hotline/Zalo: 0987.654.321</p>
+                <p>Showroom: Hà Nội & TP. Hồ Chí Minh</p>
             </div>
             <div class="footer-col">
-                <h3>Danh Mục Sản Phẩm KBVISION</h3>
+                <h3>Danh Mục Sản Phẩm</h3>
                 <ul>
-                    <li><a href="#section-camera-ip">Camera IP KBVISION 4K</a></li>
-                    <li><a href="#section-camera-analog">Camera HD-CVI Analog</a></li>
-                    <li><a href="#section-dau-ghi">Đầu Ghi Hình KBVISION</a></li>
-                    <li><a href="#section-bo-tron-goi">Bộ Kit Trọn Gói KBVISION</a></li>
+                    <li><a href="javascript:void(0)" onclick="selectCategory('camera-ip')">Camera IP KBVISION 4K</a></li>
+                    <li><a href="javascript:void(0)" onclick="selectCategory('camera-analog')">Camera HD-CVI Analog</a></li>
+                    <li><a href="javascript:void(0)" onclick="selectCategory('dau-ghi')">Đầu Ghi Hình KBVISION</a></li>
+                    <li><a href="javascript:void(0)" onclick="selectCategory('bo-tron-goi')">Bộ Kit Trọn Gói KBVISION</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h3>Chính Sách Bán Hàng</h3>
                 <ul>
-                    <li><a href="baohanh.html"><i class="fa-solid fa-award" style="color:var(--primary); margin-right:6px;"></i> Chính Sách Bảo Hành 24 Tháng</a></li>
-                    <li><a href="giaohang.html"><i class="fa-solid fa-truck-fast" style="color:var(--primary); margin-right:6px;"></i> Chính Sách Giao Hàng & Lắp Đặt COD</a></li>
-                    <li><a href="baomat.html"><i class="fa-solid fa-lock" style="color:var(--primary); margin-right:6px;"></i> Cam Kết Bảo Mật Thông Tin Khách</a></li>
-                    <li><a href="admin.html"><i class="fa-solid fa-user-gear" style="color:var(--primary); margin-right:6px;"></i> Trang Quản Trị Hệ Thống</a></li>
+                    <li><a href="baohanh.html">Chính Sách Bảo Hành 24 Tháng</a></li>
+                    <li><a href="giaohang.html">Chính Sách Giao Hàng COD</a></li>
+                    <li><a href="baomat.html">Cam Kết Bảo Mật Thông Tin</a></li>
+                    <li><a href="admin.html">Trang Quản Trị Hệ Thống</a></li>
                 </ul>
             </div>
         </div>

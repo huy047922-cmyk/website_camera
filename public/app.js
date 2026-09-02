@@ -7,10 +7,10 @@ let cart = JSON.parse(localStorage.getItem('kbvision_cart') || '[]');
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchProducts();
-    setupCategoryFilters();
     setupSearch();
     setupCartControls();
     setupCustomBuildForm();
+    setupTabs();
     updateCartUI();
 });
 
@@ -47,13 +47,11 @@ async function fetchProducts(category = 'all', search = '') {
 
 // Render Categorized Homepage Sections
 function renderCategorizedHomepage(products) {
-    const featured = products.filter(p => p.featured === 1 || p.badge === 'BEST SELLER' || p.badge === 'CHÍNH HÃNG USA' || p.badge === 'BÁN CHẠY #1').slice(0, 8);
     const cameraIp = products.filter(p => p.category_id === 'camera-ip').slice(0, 8);
     const cameraAnalog = products.filter(p => p.category_id === 'camera-analog').slice(0, 8);
     const dauGhi = products.filter(p => p.category_id === 'dau-ghi').slice(0, 8);
     const boTronGoi = products.filter(p => p.category_id === 'bo-tron-goi').slice(0, 8);
 
-    renderProductCardsToGrid('grid-featured', featured.length > 0 ? featured : products.slice(0, 8));
     renderProductCardsToGrid('grid-camera-ip', cameraIp);
     renderProductCardsToGrid('grid-camera-analog', cameraAnalog);
     renderProductCardsToGrid('grid-dau-ghi', dauGhi);
@@ -66,16 +64,16 @@ function renderFilteredGrid(products, category, search) {
     const label = document.getElementById('filteredCountLabel');
     const gridId = 'filteredProductsGrid';
 
-    let catName = 'Tất Cả Sản Phẩm KBVISION';
-    if (category === 'camera-ip') catName = 'Camera IP KBVISION 4K';
-    if (category === 'camera-analog') catName = 'Camera HD-CVI Analog KBVISION';
-    if (category === 'dau-ghi') catName = 'Đầu Ghi Hình KBVISION (NVR/DVR)';
-    if (category === 'bo-tron-goi') catName = 'Bộ Kit Camera Trọn Gói KBVISION';
+    let catName = 'TẤT CẢ SẢN PHẨM KBVISION';
+    if (category === 'camera-ip') catName = 'CAMERA IP KBVISION 4K';
+    if (category === 'camera-analog') catName = 'CAMERA HD-CVI ANALOG';
+    if (category === 'dau-ghi') catName = 'ĐẦU GHI HÌNH KBVISION';
+    if (category === 'bo-tron-goi') catName = 'BỘ KIT CAMERA TRỌN GÓI';
 
     if (search) {
-        if (title) title.innerHTML = `<i class="fa-solid fa-magnifying-glass" style="color:var(--primary)"></i> Kết Quả Tìm Kiếm KBVISION: "${search}"`;
+        if (title) title.textContent = `KẾT QUẢ TÌM KIẾM KBVISION: "${search}"`;
     } else {
-        if (title) title.innerHTML = `<i class="fa-solid fa-list-check" style="color:var(--primary)"></i> Danh Mục: ${catName}`;
+        if (title) title.textContent = `DANH MỤC: ${catName}`;
     }
 
     if (label) label.textContent = `${products.length} sản phẩm phù hợp`;
@@ -83,7 +81,7 @@ function renderFilteredGrid(products, category, search) {
     renderProductCardsToGrid(gridId, products);
 }
 
-// Generic Helper: Render Product Cards to target container ID
+// Render Product Cards to target container ID (Clean Corporate Design)
 function renderProductCardsToGrid(gridId, productsList) {
     const grid = document.getElementById(gridId);
     if (!grid) return;
@@ -91,7 +89,6 @@ function renderProductCardsToGrid(gridId, productsList) {
     if (!productsList || productsList.length === 0) {
         grid.innerHTML = `
             <div style="grid-column: 1/-1; text-align:center; padding: 30px; color: var(--text-muted);">
-                <i class="fa-solid fa-box-open" style="font-size:2.5rem; margin-bottom:10px; display:block;"></i>
                 <p>Chưa có sản phẩm nào trong mục này.</p>
             </div>
         `;
@@ -106,63 +103,45 @@ function renderProductCardsToGrid(gridId, productsList) {
             <div class="product-card">
                 <div class="product-thumb" onclick="openProductDetail('${p.id}')" style="cursor:pointer;">
                     <img src="${p.image}" alt="${p.name}" loading="lazy">
-                    ${p.badge ? `<span class="product-badge ${p.badge_type || 'hot'}">${p.badge}</span>` : ''}
                 </div>
-                <div class="product-body">
-                    <div class="product-rating">
-                        ${'<i class="fa-solid fa-star"></i>'.repeat(Math.floor(p.rating || 5))}
-                        <span>${p.rating || 5.0} (${p.reviews_count || 0})</span>
-                    </div>
-                    <h3 class="product-title" onclick="openProductDetail('${p.id}')" style="cursor:pointer;" title="Xem chi tiết sản phẩm">${p.name}</h3>
-                    <div class="product-price">
+                <div>
+                    <h3 class="product-title" onclick="openProductDetail('${p.id}')" style="cursor:pointer;" title="${p.name}">${p.name}</h3>
+                    <div class="product-price-row">
                         <span class="price-current">${formattedPrice}</span>
                         ${formattedOldPrice ? `<span class="price-old">${formattedOldPrice}</span>` : ''}
                     </div>
-                    <div class="product-actions">
-                        <button class="btn-add-cart" onclick="addToCart('${p.id}')">
-                            <i class="fa-solid fa-cart-plus"></i> Mua Ngay
-                        </button>
-                        <a href="https://zalo.me/0987654321" target="_blank" class="btn-zalo-consult">
-                            <i class="fa-solid fa-comment-dots"></i> Zalo
-                        </a>
-                    </div>
+                </div>
+                <div class="product-btn-group">
+                    <button class="btn-card-buy" onclick="addToCart('${p.id}')">Mua Ngay</button>
+                    <a href="https://zalo.me/0987654321" target="_blank" class="btn-card-zalo">Zalo</a>
                 </div>
             </div>
         `;
     }).join('');
 }
 
-// Category Navigation Select
-function selectCategory(cat) {
-    const nav = document.getElementById('categoryNav');
-    if (nav) {
-        nav.querySelectorAll('.category-pill').forEach(b => {
-            if (b.dataset.category === cat) {
-                b.classList.add('active');
-            } else {
-                b.classList.remove('active');
-            }
-        });
-    }
-    fetchProducts(cat);
-    window.scrollTo({ top: 400, behavior: 'smooth' });
+// Clean Tab Navigation (SẢN PHẨM | CÔNG NGHỆ)
+function setupTabs() {
+    const tabProducts = document.getElementById('tabBtnProducts');
+    const tabTech = document.getElementById('tabBtnTech');
+
+    tabProducts?.addEventListener('click', () => {
+        tabProducts.classList.add('active');
+        tabTech.classList.remove('active');
+        fetchProducts('all');
+    });
+
+    tabTech?.addEventListener('click', () => {
+        tabTech.classList.add('active');
+        tabProducts.classList.remove('active');
+        fetchProducts('camera-ip');
+    });
 }
 
-// Category Filter Tabs Event Setup
-function setupCategoryFilters() {
-    const nav = document.getElementById('categoryNav');
-    if (!nav) return;
-
-    nav.addEventListener('click', (e) => {
-        const btn = e.target.closest('.category-pill');
-        if (!btn) return;
-
-        nav.querySelectorAll('.category-pill').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        const cat = btn.dataset.category;
-        fetchProducts(cat);
-    });
+// Category Navigation Select
+function selectCategory(cat) {
+    fetchProducts(cat);
+    window.scrollTo({ top: 500, behavior: 'smooth' });
 }
 
 // Live Search Setup
@@ -175,16 +154,14 @@ function setupSearch() {
         input.addEventListener('input', () => {
             clearTimeout(timeout);
             timeout = setTimeout(() => {
-                const activeCat = document.querySelector('.category-pill.active')?.dataset.category || 'all';
-                fetchProducts(activeCat, input.value.trim());
+                fetchProducts('all', input.value.trim());
             }, 300);
         });
     }
 
     if (btn) {
         btn.addEventListener('click', () => {
-            const activeCat = document.querySelector('.category-pill.active')?.dataset.category || 'all';
-            fetchProducts(activeCat, input.value.trim());
+            fetchProducts('all', input ? input.value.trim() : '');
         });
     }
 }
@@ -246,7 +223,6 @@ function updateCartUI() {
     if (cart.length === 0) {
         cartList.innerHTML = `
             <div style="text-align:center; padding: 30px; color: var(--text-muted);">
-                <i class="fa-solid fa-cart-arrow-down" style="font-size:2.5rem; margin-bottom:10px;"></i>
                 <p>Chưa có sản phẩm nào trong giỏ hàng KBVISION.</p>
             </div>
         `;
@@ -259,20 +235,20 @@ function updateCartUI() {
         const itemTotal = item.price * item.quantity;
         total += itemTotal;
         return `
-            <div class="cart-item">
-                <div class="cart-item-info">
-                    <img src="${item.image}" alt="${item.name}">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #e2e8f0;">
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <img src="${item.image}" alt="${item.name}" style="width:40px; height:40px; border-radius:6px; object-fit:contain;">
                     <div>
-                        <h4 style="font-size:0.9rem; font-weight:700;">${item.name}</h4>
-                        <span style="color:var(--primary); font-size:0.85rem; font-weight:800;">
+                        <h4 style="font-size:0.85rem; font-weight:700;">${item.name}</h4>
+                        <span style="color:#0056b3; font-size:0.8rem; font-weight:800;">
                             ${new Intl.NumberFormat('vi-VN').format(item.price)} đ
                         </span>
                     </div>
                 </div>
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <button class="qty-btn" onclick="updateCartQuantity('${item.id}', -1)">-</button>
-                    <span style="font-weight:700; font-size:0.9rem;">${item.quantity}</span>
-                    <button class="qty-btn" onclick="updateCartQuantity('${item.id}', 1)">+</button>
+                    <button onclick="updateCartQuantity('${item.id}', -1)" style="padding:2px 8px; cursor:pointer;">-</button>
+                    <span style="font-weight:700; font-size:0.85rem;">${item.quantity}</span>
+                    <button onclick="updateCartQuantity('${item.id}', 1)" style="padding:2px 8px; cursor:pointer;">+</button>
                 </div>
             </div>
         `;
@@ -345,7 +321,7 @@ function setupCartControls() {
     });
 }
 
-// Custom Camera Installation Quote Form Submit
+// Custom Request Form Submit
 function setupCustomBuildForm() {
     const form = document.getElementById('customBuildForm');
     if (!form) return;
@@ -372,7 +348,7 @@ function setupCustomBuildForm() {
             const result = await res.json();
             if (result.success) {
                 form.reset();
-                showToast('Đã gửi yêu cầu tư vấn khảo sát KBVISION thành công! Nhân viên sẽ gọi Zalo báo giá cụ thể.', 'success');
+                showToast('Đã gửi yêu cầu tư vấn khảo sát thành công! Nhân viên sẽ gọi lại tư vấn.', 'success');
             } else {
                 throw new Error(result.error || 'Gửi thất bại');
             }
@@ -389,11 +365,8 @@ function showToast(message, type = 'info') {
 
     const toast = document.createElement('div');
     toast.className = 'toast';
-    let icon = 'fa-circle-check';
-    if (type === 'error') icon = 'fa-circle-xmark';
-    if (type === 'warning') icon = 'fa-triangle-exclamation';
 
-    toast.innerHTML = `<i class="fa-solid ${icon}" style="color:var(--primary)"></i> <span>${message}</span>`;
+    toast.textContent = message;
     container.appendChild(toast);
 
     setTimeout(() => {
