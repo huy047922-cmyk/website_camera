@@ -572,14 +572,12 @@ function updateCartUI() {
     }
 }
 
-// Cart & Checkout Modals
+// Redirect to Standalone Checkout Page
 function setupCartControls() {
-    const cartModal = document.getElementById('cartModal');
-    const checkoutModal = document.getElementById('checkoutModal');
-    
     document.getElementById('openCartBtn')?.addEventListener('click', () => {
-        cartModal?.classList.add('active');
+        window.location.href = 'thanhtoan.html';
     });
+}
 
     document.getElementById('closeCartBtn')?.addEventListener('click', () => {
         cartModal?.classList.remove('active');

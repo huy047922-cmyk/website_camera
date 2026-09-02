@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ Hàng & Thanh Toán COD | Tuấn Camera</title>
+    <meta name="description" content="Trang thanh toán đơn hàng camera an ninh chính hãng tại Tuấn Camera. Giao hàng COD tận nơi toàn quốc.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .checkout-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 30px;
+            margin: 35px 0 60px;
+        }
+        @media (max-width: 900px) {
+            .checkout-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        .checkout-box {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        .checkout-box h2 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #0056b3;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cart-table-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .cart-table-item:last-child {
+            border-bottom: none;
+        }
+        .cart-item-img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 4px;
+        }
+        .qty-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qty-btn:hover {
+            background: #0056b3;
+            color: #ffffff;
+            border-color: #0056b3;
+        }
+        .order-summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: #334155;
+        }
+        .payment-option-card {
+            background: #f0f9ff;
+            border: 2px solid #0056b3;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Announcement Bar -->
+    <div class="top-announcement">
+        <div class="container">
+            <div class="top-contact-info">
+                <span>Hotline/Zalo Hỗ Trợ: <strong>0797.777.071</strong></span>
+                <span>Tuấn Camera - Bảo Hành 24 Tháng 1 Đổi 1 Tận Nơi</span>
+            </div>
+            <div class="top-links">
+                <a href="index.html">Trang Chủ</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Navbar -->
+    <header class="site-header">
+        <div class="container navbar-inner">
+            <a href="index.html" class="brand-logo-text">
+                <span>Tuấn <span style="color:#0056b3">Camera</span></span>
+                <span class="sub-logo-tag">GIẢI PHÁP AN NINH UY TÍN TẬN TÂM</span>
+            </a>
+
+            <nav>
+                <ul class="main-nav-menu">
+                    <li class="main-nav-item"><a href="index.html" class="main-nav-link">TRANG CHỦ</a></li>
+                    <li class="main-nav-item"><a href="gioithieu.html" class="main-nav-link">GIỚI THIỆU</a></li>
+                    <li class="main-nav-item"><a href="index.html#section-camera-ip" class="main-nav-link">SẢN PHẨM</a></li>
+                    <li class="main-nav-item"><a href="huongdan.html" class="main-nav-link">HƯỚNG DẪN</a></li>
+                    <li class="main-nav-item"><a href="tintuc.html" class="main-nav-link">TIN TỨC</a></li>
+                    <li class="main-nav-item"><a href="index.html#custom-section" class="main-nav-link">LIÊN HỆ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Breadcrumbs -->
+        <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; color:#64748b; margin:20px 0;">
+            <a href="index.html">Trang Chủ</a>
+            <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
+            <span style="color:#0f172a; font-weight:600;">Giỏ Hàng & Thanh Toán</span>
+        </div>
+
+        <div id="checkoutMainContainer" class="checkout-layout">
+            <!-- Left Column: Cart Items -->
+            <div class="checkout-box">
+                <h2><i class="fa-solid fa-cart-shopping" style="color:#0056b3;"></i> GIỎ HÀNG SẢN PHẨM (<span id="cartTotalItemsCount">0</span>)</h2>
+                
+                <div id="checkoutCartItemsList">
+                    <p style="text-align:center; color:#64748b; padding:30px;">Đang tải sản phẩm giỏ hàng...</p>
+                </div>
+
+                <div style="margin-top:30px; pt-20px; border-top:2px dashed #cbd5e1; padding-top:20px;">
+                    <div class="order-summary-row">
+                        <span>Tạm Tính:</span>
+                        <strong id="cartSubtotalText">0 đ</strong>
+                    </div>
+                    <div class="order-summary-row">
+                        <span>Phí Vận Chuyển:</span>
+                        <strong style="color:#16a34a;"><i class="fa-solid fa-truck"></i> Miễn Phí COD Toàn Quốc</strong>
+                    </div>
+                    <div class="order-summary-row" style="font-size:1.2rem; color:#0056b3; font-weight:900; margin-top:15px; border-top:1px solid #e2e8f0; padding-top:12px;">
+                        <span>Tổng Thanh Toán:</span>
+                        <span id="cartFinalTotalText">0 đ</span>
+                    </div>
+                </div>
+
+                <div style="margin-top:20px;">
+                    <a href="index.html#section-camera-ip" style="color:#0056b3; font-weight:700; text-decoration:none; font-size:0.9rem;">
+                        <i class="fa-solid fa-arrow-left"></i> Tiếp tục chọn thêm sản phẩm khác
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Column: Shipping & Payment Form -->
+            <div class="checkout-box">
+                <h2><i class="fa-solid fa-truck-ramp-box" style="color:#0056b3;"></i> THÔNG TIN NHẬN HÀNG COD</h2>
+                
+                <div class="payment-option-card">
+                    <i class="fa-solid fa-money-bill-transfer" style="font-size:1.8rem; color:#0056b3;"></i>
+                    <div>
+                        <div style="font-weight:800; color:#0f172a; font-size:0.95rem;">Thanh Toán Khi Nhận Hàng (COD)</div>
+                        <div style="font-size:0.8rem; color:#475569;">Kiểm tra sản phẩm đầy đủ tem mác mới thanh toán tiền.</div>
+                    </div>
+                </div>
+
+                <form id="checkoutSubmitForm">
+                    <div class="form-group">
+                        <label>Họ và Tên Người Nhận *</label>
+                        <input type="text" id="custName" class="form-control" placeholder="Ví dụ: Nguyễn Văn A" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Số Điện Thoại *</label>
+                        <input type="tel" id="custPhone" class="form-control" placeholder="Ví dụ: 0797777071" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Địa Chỉ Giao Hàng Chi Tiết *</label>
+                        <textarea id="custAddress" class="form-control" rows="3" placeholder="Số nhà, Tên đường, Phường/Xã, Quận/Huyện, Tỉnh/Thành phố..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ghi Chú Đơn Hàng (Không bắt buộc)</label>
+                        <textarea id="custNote" class="form-control" rows="2" placeholder="Giao giờ hành chính, gọi trước khi giao..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-kb-primary" style="width:100%; padding:15px; border:none; cursor:pointer; font-size:1.05rem; justify-content:center; margin-top:10px;">
+                        <i class="fa-solid fa-check-circle"></i> XÁC NHẬN ĐẶT HÀNG TUẤN CAMERA
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+        <div class="container footer-bottom" style="border:none;">
+            <p>© 2026 Tuấn Camera - Trang Thanh Toán An Toàn Chính Hãng.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('tuancamera_cart') || '[]');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCheckoutCart();
+            prefillUserInfo();
+            setupCheckoutForm();
+        });
+
+        function prefillUserInfo() {
+            const userStr = localStorage.getItem('tuancamera_user');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    const nameEl = document.getElementById('custName');
+                    const phoneEl = document.getElementById('custPhone');
+                    if (nameEl && !nameEl.value) nameEl.value = user.full_name || '';
+                    if (phoneEl && !phoneEl.value) phoneEl.value = user.phone || '';
+                } catch (e) {}
+            }
+        }
+
+        function renderCheckoutCart() {
+            const container = document.getElementById('checkoutCartItemsList');
+            const countLabel = document.getElementById('cartTotalItemsCount');
+            const subtotalLabel = document.getElementById('cartSubtotalText');
+            const finalTotalLabel = document.getElementById('cartFinalTotalText');
+
+            const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
+            if (countLabel) countLabel.textContent = totalItems;
+
+            if (!cart || cart.length === 0) {
+                if (container) {
+                    container.innerHTML = `
+                        <div style="text-align:center; padding:40px 20px; color:#64748b;">
+                            <i class="fa-solid fa-basket-shopping" style="font-size:3rem; color:#cbd5e1; margin-bottom:12px;"></i>
+                            <p style="font-weight:700; font-size:1.05rem;">Giỏ hàng của bạn đang trống!</p>
+                            <a href="index.html" class="btn-kb-primary" style="margin-top:15px; display:inline-block; text-decoration:none;">Quay Về Chọn Sản Phẩm Tuấn Camera</a>
+                        </div>
+                    `;
+                }
+                if (subtotalLabel) subtotalLabel.textContent = '0 đ';
+                if (finalTotalLabel) finalTotalLabel.textContent = '0 đ';
+                return;
+            }
+
+            let total = 0;
+            container.innerHTML = cart.map(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+
+                return `
+                    <div class="cart-table-item">
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+                        <div style="flex:1;">
+                            <h4 style="font-size:0.92rem; font-weight:800; color:#0f172a; margin-bottom:4px;">${item.name}</h4>
+                            <div style="color:#0056b3; font-size:0.85rem; font-weight:700;">
+                                ${new Intl.NumberFormat('vi-VN').format(item.price)} đ
+                            </div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <button class="qty-btn" onclick="updateQty('${item.id}', -1)">-</button>
+                            <span style="font-weight:800; font-size:0.9rem; width:20px; text-align:center;">${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateQty('${item.id}', 1)">+</button>
+                        </div>
+                        <div style="font-weight:900; color:#0f172a; font-size:0.95rem; min-width:85px; text-align:right;">
+                            ${new Intl.NumberFormat('vi-VN').format(itemTotal)} đ
+                        </div>
+                        <button onclick="removeItem('${item.id}')" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:1.1rem; margin-left:8px;" title="Xoá khỏi giỏ">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            const formattedTotal = new Intl.NumberFormat('vi-VN').format(total) + ' đ';
+            if (subtotalLabel) subtotalLabel.textContent = formattedTotal;
+            if (finalTotalLabel) finalTotalLabel.textContent = formattedTotal;
+        }
+
+        function updateQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (!item) return;
+
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.id !== id);
+            }
+            saveCart();
+            renderCheckoutCart();
+        }
+
+        function removeItem(id) {
+            cart = cart.filter(i => i.id !== id);
+            saveCart();
+            renderCheckoutCart();
+        }
+
+        function saveCart() {
+            localStorage.setItem('tuancamera_cart', JSON.stringify(cart));
+        }
+
+        function setupCheckoutForm() {
+            const form = document.getElementById('checkoutSubmitForm');
+            if (!form) return;
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                if (!cart || cart.length === 0) {
+                    showToast('Giỏ hàng đang trống! Vui lòng chọn sản phẩm trước khi thanh toán.', 'error');
+                    return;
+                }
+
+                let loggedInUsername = '';
+                const userStr = localStorage.getItem('tuancamera_user');
+                if (userStr) {
+                    try { loggedInUsername = JSON.parse(userStr).username || ''; } catch (err) {}
+                }
+
+                const orderData = {
+                    customer_username: loggedInUsername,
+                    customer_name: document.getElementById('custName').value.trim(),
+                    customer_phone: document.getElementById('custPhone').value.trim(),
+                    customer_address: document.getElementById('custAddress').value.trim(),
+                    note: document.getElementById('custNote').value.trim(),
+                    items: cart,
+                    total_amount: cart.reduce((sum, i) => sum + (i.price * i.quantity), 0),
+                    payment_method: 'COD'
+                };
+
+                try {
+                    const res = await fetch('/api/orders', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(orderData)
+                    });
+
+                    const result = await res.json();
+                    if (result.success) {
+                        cart = [];
+                        saveCart();
+                        
+                        // Show Success Container
+                        const mainContainer = document.getElementById('checkoutMainContainer');
+                        mainContainer.innerHTML = `
+                            <div style="grid-column:1/-1; background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; padding:50px 30px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.05);">
+                                <i class="fa-solid fa-circle-check" style="font-size:4rem; color:#16a34a; margin-bottom:20px;"></i>
+                                <h1 style="font-size:1.8rem; font-weight:900; color:#0f172a; margin-bottom:10px;">ĐẶT HÀNG THÀNH CÔNG!</h1>
+                                <p style="font-size:1.05rem; color:#475569; margin-bottom:25px;">Cảm ơn quý khách đã mua sắm tại <strong>Tuấn Camera</strong>.</p>
+                                
+                                <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:12px; padding:20px; max-width:480px; margin:0 auto 30px; text-align:left;">
+                                    <div style="margin-bottom:8px;">Mã Đơn Hàng: <strong style="color:#0056b3;">${result.orderId}</strong></div>
+                                    <div style="margin-bottom:8px;">Người Nhận: <strong>${orderData.customer_name} (${orderData.customer_phone})</strong></div>
+                                    <div style="margin-bottom:8px;">Địa Chỉ Giao: <strong>${orderData.customer_address}</strong></div>
+                                    <div style="margin-bottom:8px;">Phương Thức: <strong>Thanh toán COD khi nhận hàng</strong></div>
+                                    <div>Thời Gian Giao Dự Kiến: <strong>2 - 3 ngày làm việc</strong></div>
+                                </div>
+
+                                <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
+                                    <a href="index.html" class="btn-kb-primary" style="text-decoration:none; padding:12px 25px;">Quay Về Trang Chủ</a>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        throw new Error(result.error || 'Đặt hàng thất bại');
+                    }
+                } catch (err) {
+                    showToast('Lỗi đặt hàng: ' + err.message, 'error');
+                }
+            });
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

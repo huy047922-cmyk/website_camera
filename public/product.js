@@ -150,36 +150,12 @@ function addToCart(productId) {
     }
 
     saveCart();
-    updateCartUI();
-    showToast(`Đã thêm "${currentProduct.name}" vào giỏ hàng!`);
-}
-
-function updateCartQuantity(productId, delta) {
-    const item = cart.find(i => i.id === productId);
-    if (!item) return;
-
-    item.quantity += delta;
-    if (item.quantity <= 0) {
-        cart = cart.filter(i => i.id !== productId);
-    }
-    saveCart();
-    updateCartUI();
-}
-
-function saveCart() {
-    localStorage.setItem('tuancamera_cart', JSON.stringify(cart));
-}
-
-function updateCartUI() {
-    const badge = document.getElementById('cartBadgeCount');
-    const totalCount = cart.reduce((sum, i) => sum + i.quantity, 0);
-    if (badge) badge.textContent = totalCount;
+    window.location.href = 'thanhtoan.html';
 }
 
 function setupCartControls() {
-    const cartModal = document.getElementById('cartModal');
     document.getElementById('openCartBtn')?.addEventListener('click', () => {
-        cartModal?.classList.add('active');
+        window.location.href = 'thanhtoan.html';
     });
 }
 
