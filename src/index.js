@@ -119,11 +119,18 @@ function jsonResponse(data, status = 200) {
     });
 }
 
-// Security: HMAC SHA-256 Admin Token Generator & Verifier (Uses dynamic runtime secret if env.ADMIN_SECRET is not configured)
-const defaultRuntimeSecret = crypto.randomUUID();
+// Security: HMAC SHA-256 Admin Token Generator & Verifier
+let cachedRuntimeSecret = null;
+function getSecret(envSecret) {
+    if (envSecret) return envSecret;
+    if (!cachedRuntimeSecret) {
+        cachedRuntimeSecret = crypto.randomUUID();
+    }
+    return cachedRuntimeSecret;
+}
 
 async function generateToken(username, envSecret) {
-    const secret = envSecret || defaultRuntimeSecret;
+    const secret = getSecret(envSecret);
     const payloadStr = JSON.stringify({ u: username, exp: Date.now() + 24 * 3600 * 1000 });
     const b64Payload = btoa(payloadStr);
     const encoder = new TextEncoder();
@@ -141,7 +148,7 @@ async function generateToken(username, envSecret) {
 
 async function verifyToken(token, envSecret) {
     if (!token || typeof token !== "string" || !token.includes(".")) return null;
-    const secret = envSecret || defaultRuntimeSecret;
+    const secret = getSecret(envSecret);
     try {
         const [b64Payload, sigHex] = token.split(".");
         const payloadStr = atob(b64Payload);
