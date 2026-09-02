@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tin Tức & Công Nghệ An Ninh | KBVISION.vn</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .page-container {
+            max-width: 1050px;
+            margin: 40px auto;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        .page-header {
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .page-header h1 {
+            font-size: 1.8rem;
+            color: #0f172a;
+            font-weight: 900;
+        }
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .news-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .news-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+        .news-thumb {
+            height: 180px;
+            overflow: hidden;
+        }
+        .news-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .news-body {
+            padding: 20px;
+        }
+        .news-date {
+            font-size: 0.78rem;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .news-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+        .news-excerpt {
+            font-size: 0.88rem;
+            color: #475569;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Announcement Bar -->
+    <div class="top-announcement">
+        <div class="container">
+            <div class="top-contact-info">
+                <span>Hotline: <strong>0987.654.321</strong></span>
+                <span>Tin Tức & Giải Pháp Công Nghệ KBVISION</span>
+            </div>
+            <div class="top-links">
+                <a href="index.html">Trang Chủ</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Navbar -->
+    <header class="site-header">
+        <div class="container navbar-inner">
+            <a href="index.html" class="brand-logo-text">
+                <span>Kabe<span style="color:#0056b3">vision</span></span>
+                <span class="sub-logo-tag">CÔNG NGHỆ BẢO MẬT SECUDEEP USA</span>
+            </a>
+
+            <nav>
+                <ul class="main-nav-menu">
+                    <li class="main-nav-item"><a href="index.html" class="main-nav-link">TRANG CHỦ</a></li>
+                    <li class="main-nav-item"><a href="gioithieu.html" class="main-nav-link">GIỚI THIỆU</a></li>
+                    <li class="main-nav-item"><a href="index.html#section-camera-ip" class="main-nav-link">SẢN PHẨM</a></li>
+                    <li class="main-nav-item"><a href="huongdan.html" class="main-nav-link">HƯỚNG DẪN</a></li>
+                    <li class="main-nav-item active"><a href="tintuc.html" class="main-nav-link">TIN TỨC</a></li>
+                    <li class="main-nav-item"><a href="index.html#custom-section" class="main-nav-link">LIÊN HỆ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-container">
+            <div class="page-header">
+                <h1>TIN TỨC & GIẢI PHÁP AN NINH CÔNG NGHỆ KBVISION</h1>
+                <p style="color:#64748b; font-size:0.9rem;">Cập nhật bài viết tư vấn, kiến thức công nghệ an ninh mới nhất 2026</p>
+            </div>
+
+            <div class="news-grid">
+                <div class="news-card">
+                    <div class="news-thumb">
+                        <img src="https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=600&q=80" alt="News 1">
+                    </div>
+                    <div class="news-body">
+                        <div class="news-date">02/09/2026 - Tin Khuyến Mãi</div>
+                        <h3 class="news-title">KBVISION Ra Mắt Dòng Camera AI Full-Color Ban Đêm Có Màu Siêu Nét</h3>
+                        <p class="news-excerpt">Công nghệ thấu kính khẩu độ lớn F1.0 kết hợp trí tuệ nhân tạo AI phân biệt chính xác người và vật, hạn chế 99% báo động giả.</p>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-thumb">
+                        <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80" alt="News 2">
+                    </div>
+                    <div class="news-body">
+                        <div class="news-date">01/09/2026 - Tư Vấn Chọn Mua</div>
+                        <h3 class="news-title">Hướng Dẫn Chọn Camera Giám Sát Phù Hợp Cho Gia Đình & Nhà Xưởng</h3>
+                        <p class="news-excerpt">Các tiêu chí quan trọng khi lắp đặt hệ thống camera: Độ phân giải 4K, tiêu chuẩn vỏ chống nước IP67 và thời gian lưu trữ ổ cứng.</p>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-thumb">
+                        <img src="https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80" alt="News 3">
+                    </div>
+                    <div class="news-body">
+                        <div class="news-date">28/08/2026 - Công Nghệ AI</div>
+                        <h3 class="news-title">Top 5 Mẫu Camera Wi-Fi KBVISION Xoay 360 Độ Đáng Mua Nhất</h3>
+                        <p class="news-excerpt">Đánh giá chi tiết các dòng camera Wi-Fi không dây đàm thoại 2 chiều, báo động âm thanh còi hú khi phát hiện xâm nhập trái phép.</p>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-thumb">
+                        <img src="https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&w=600&q=80" alt="News 4">
+                    </div>
+                    <div class="news-body">
+                        <div class="news-date">25/08/2026 - Ưu Đãi Lắp Đặt</div>
+                        <h3 class="news-title">Chương Trình Ưu Đãi Giảm 30% Bộ Kit Camera Trọn Gói Tận Nơi</h3>
+                        <p class="news-excerpt">Áp dụng trọn gói bộ 2, 4, 8 camera KBVISION chính hãng bảo hành 24 tháng 1 đổi 1 tận nơi toàn quốc.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:40px; text-align:center;">
+                <a href="index.html" class="btn-kb-primary">Xem Danh Sách Sản Phẩm KBVISION</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+        <div class="container footer-bottom" style="border:none;">
+            <p>© 2026 KBVISION.vn - Cập Nhật Tin Tức Công Nghệ An Ninh Chính Hãng.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

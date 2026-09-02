@@ -14,6 +14,18 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartUI();
 });
 
+// Switch Language Selector
+function switchLanguage(lang) {
+    const label = document.getElementById('currentLangLabel');
+    if (lang === 'en') {
+        if (label) label.innerHTML = 'ENGLISH 🇲🇾 <i class="fa-solid fa-chevron-down nav-arrow"></i>';
+        showToast('Switched to English language mode');
+    } else {
+        if (label) label.innerHTML = 'TIẾNG VIỆT 🇻🇳 <i class="fa-solid fa-chevron-down nav-arrow"></i>';
+        showToast('Đã chuyển sang chế độ Tiếng Việt');
+    }
+}
+
 // Fetch products from Cloudflare Workers API
 async function fetchProducts(category = 'all', search = '') {
     try {
