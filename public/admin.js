@@ -686,3 +686,10 @@ function showAdminToast(message, type = 'info') {
         toast.remove();
     }, 4000);
 }
+
+function quickFillAdmin() {
+    const userEl = document.getElementById('adminUser');
+    const passEl = document.getElementById('adminPass');
+    if (userEl) userEl.value = 'admin';
+    if (passEl) passEl.value = '123';
+}
