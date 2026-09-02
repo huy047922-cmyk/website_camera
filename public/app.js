@@ -651,7 +651,10 @@ function showToast(message, type = 'info') {
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('Tuấn Camera PWA Service Worker Registered!'))
+            .then(reg => {
+                console.log('Tuấn Camera PWA Service Worker Registered!');
+                reg.update();
+            })
             .catch(err => console.log('SW Registration Error:', err));
     });
 }
