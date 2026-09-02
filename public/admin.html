@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <style>
+        /* Base Admin Layout */
+        #loginSection {
+            display: block;
+        }
+        #adminDashboard {
+            display: none;
+        }
         .admin-layout {
             display: grid;
             grid-template-columns: 260px 1fr;
@@ -18,6 +25,10 @@
             padding: 25px 15px;
             display: flex;
             flex-direction: column;
+        }
+        .admin-sidebar > div:last-child {
+            margin-top: auto;
+            padding-top: 20px;
         }
         .admin-menu-item {
             padding: 12px 18px;
@@ -76,64 +87,19 @@
         }
         .login-box {
             max-width: 420px;
-            margin: 80px auto;
+            margin: 60px auto;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             padding: 35px;
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-card);
         }
-    
-        /* Mobile Responsive Admin Styles */
-        @media (max-width: 768px) {
-            .admin-layout {
-                grid-template-columns: 1fr !important;
-            }
-            .admin-sidebar {
-                padding: 12px 10px !important;
-                flex-direction: row !important;
-                overflow-x: auto !important;
-                white-space: nowrap !important;
-                gap: 8px !important;
-                background: #0f172a !important;
-                border-bottom: 1px solid #1e293b;
-            }
-            .admin-sidebar .brand-logo {
-                display: none !important;
-            }
-            .admin-menu-item {
-                display: inline-flex !important;
-                margin-bottom: 0 !important;
-                padding: 8px 12px !important;
-                font-size: 0.8rem !important;
-            }
-            .admin-main {
-                padding: 15px 10px !important;
-            }
-            .stats-cards {
-                grid-template-columns: 1fr 1fr !important;
-                gap: 10px !important;
-            }
-            .stat-card {
-                padding: 12px !important;
-            }
-            .login-box {
-                margin: 25px auto !important;
-                padding: 22px 16px !important;
-                width: 92% !important;
-            }
-            .table-responsive {
-                overflow-x: auto !important;
-                -webkit-overflow-scrolling: touch;
-                margin-top: 10px;
-            }
-        }
 
-    
-        /* Mobile Responsive Admin Styles */
+        /* Mobile Responsive Overrides */
         @media (max-width: 768px) {
             .admin-layout {
-                display: block !important;
+                display: flex !important;
+                flex-direction: column !important;
             }
             .admin-sidebar {
                 padding: 10px 8px !important;
@@ -149,6 +115,12 @@
             .admin-sidebar .brand-logo {
                 display: none !important;
             }
+            .admin-sidebar > div:last-child {
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+                display: flex !important;
+                gap: 6px !important;
+            }
             .admin-menu-item {
                 display: inline-flex !important;
                 margin-bottom: 0 !important;
@@ -156,12 +128,6 @@
                 font-size: 0.78rem !important;
                 border-radius: 6px;
                 flex-shrink: 0;
-            }
-            .admin-sidebar > div {
-                margin-top: 0 !important;
-                padding-top: 0 !important;
-                display: flex !important;
-                gap: 6px !important;
             }
             .admin-main {
                 padding: 14px 10px !important;
@@ -173,9 +139,6 @@
             }
             .stat-card {
                 padding: 10px !important;
-            }
-            .stat-card div:last-child {
-                font-size: 1.4rem !important;
             }
             .login-box {
                 margin: 20px auto !important;
@@ -195,7 +158,6 @@
                 white-space: nowrap;
             }
         }
-
     </style>
 
     <!-- PWA Application Tags -->
@@ -229,7 +191,7 @@
                     <input type="password" id="adminPass" class="form-control" placeholder="Mật khẩu (VD: 123)" required>
                 </div>
 
-                <div style="background:#f0f9ff; border:1px dashed #0284c7; padding:10px 12px; border-radius:8px; margin-bottom:12px; font-size:0.8rem; color:#0369a1; display:flex; justify-content:space-between; align-align:center;">
+                <div style="background:#f0f9ff; border:1px dashed #0284c7; padding:10px 12px; border-radius:8px; margin-bottom:12px; font-size:0.8rem; color:#0369a1; display:flex; justify-content:space-between; align-items:center;">
                     <span>Tk Admin: <strong>admin</strong> | Mk: <strong>123</strong></span>
                     <button type="button" onclick="quickFillAdmin()" style="background:#0284c7; color:#fff; border:none; padding:3px 8px; border-radius:4px; font-size:0.75rem; font-weight:700; cursor:pointer;">Điền Nhanh</button>
                 </div>
@@ -262,14 +224,14 @@
                 <i class="fa-solid fa-newspaper"></i> Quản Lý Tin Tức & Bài Viết
             </div>
             <div class="admin-menu-item" data-tab="customTab">
-                <i class="fa-solid fa-screwdriver-wrench"></i> Yêu Cầu Lắp Đặt / Khảo Sát
+                <i class="fa-solid fa-screwdriver-wrench"></i> Yêu Cầu Khảo Sát
             </div>
-            <div style="margin-top:auto; padding-top:40px;">
+            <div>
                 <a href="index.html" class="admin-menu-item" style="color:#60a5fa">
-                    <i class="fa-solid fa-globe"></i> Xem Trang Chủ Tuấn Camera
+                    <i class="fa-solid fa-globe"></i> Trang Chủ
                 </a>
                 <div class="admin-menu-item" id="adminLogoutBtn" style="color:#f87171">
-                    <i class="fa-solid fa-power-off"></i> Đăng Xuất
+                    <i class="fa-solid fa-power-off"></i> Thoát
                 </div>
             </div>
         </aside>
@@ -321,310 +283,284 @@
                     </div>
                 </div>
 
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Ảnh</th>
-                            <th>Tên Sản Phẩm Tuấn Camera</th>
-                            <th>Danh Mục</th>
-                            <th>Giá Bán</th>
-                            <th>Hành Động</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adminProductsTable">
-                        <!-- Products list rows -->
-                    </tbody>
-                </table></div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Ảnh</th>
+                                <th>Mã ID</th>
+                                <th>Tên Sản Phẩm</th>
+                                <th>Giá Bán</th>
+                                <th>Danh Mục</th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminProductsTable">
+                            <!-- JS Dynamic Render -->
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
             <!-- Orders Tab -->
             <section id="ordersTab" class="tab-content" style="display:none;">
                 <h2 style="font-size:1.3rem; font-weight:800; color:var(--secondary-navy); margin-bottom:20px;"><i class="fa-solid fa-receipt" style="color:var(--primary)"></i> Danh Sách Đơn Hàng Đặt Mua Tuấn Camera</h2>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Mã Đơn</th>
-                            <th>Khách Hàng</th>
-                            <th>Số Điện Thoại</th>
-                            <th>Địa Chỉ Nhận</th>
-                            <th>Tổng Tiền</th>
-                            <th>Trạng Thái</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adminOrdersTable">
-                        <!-- Orders rows -->
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Mã Đơn</th>
+                                <th>Khách Hàng</th>
+                                <th>Số Điện Thoại</th>
+                                <th>Địa Chỉ Nhận</th>
+                                <th>Tổng Tiền</th>
+                                <th>Trạng Thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminOrdersTable">
+                            <!-- JS Dynamic Render -->
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
-            <!-- Users Management Tab -->
+            <!-- Users Tab -->
             <section id="usersTab" class="tab-content" style="display:none;">
-                <h2 style="font-size:1.3rem; font-weight:800; color:var(--secondary-navy); margin-bottom:20px;"><i class="fa-solid fa-users" style="color:var(--primary)"></i> Danh Sách Tài Khoản User Khách Hàng</h2>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Mã ID</th>
-                            <th>Họ và Tên</th>
-                            <th>Tên Đăng Nhập</th>
-                            <th>Email</th>
-                            <th>Số Điện Thoại</th>
-                            <th>Vai Trò</th>
-                            <th>Hành Động</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adminUsersTable">
-                        <!-- Users list rows -->
-                    </tbody>
-                </table>
+                <h2 style="font-size:1.3rem; font-weight:800; color:var(--secondary-navy); margin-bottom:20px;"><i class="fa-solid fa-users" style="color:var(--primary)"></i> Danh Sách Tài Khoản Khách Hàng Registered</h2>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Họ Và Tên</th>
+                                <th>Số Điện Thoại</th>
+                                <th>Email</th>
+                                <th>Ngày Đăng Ký</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminUsersTable">
+                            <!-- JS Dynamic Render -->
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
-            <!-- News Management Tab -->
+            <!-- News Tab -->
             <section id="newsTab" class="tab-content" style="display:none;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                    <h2 style="font-size:1.3rem; font-weight:800; color:var(--secondary-navy);"><i class="fa-solid fa-newspaper" style="color:var(--primary)"></i> Quản Lý Tin Tức & Bài Viết Tuấn Camera</h2>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:15px;">
+                    <h2 style="font-size:1.3rem; font-weight:800; color:var(--secondary-navy);"><i class="fa-solid fa-newspaper" style="color:var(--primary)"></i> Quản Lý Bài Viết & Tin Tức Tuấn Camera</h2>
                     <button class="btn-primary" id="openAddNewsBtn"><i class="fa-solid fa-plus"></i> Thêm Bài Viết Mới</button>
                 </div>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Ảnh</th>
-                            <th>Tiêu Đề Bài Viết</th>
-                            <th>Danh Mục</th>
-                            <th>Video YouTube</th>
-                            <th>Hành Động</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adminNewsTable">
-                        <!-- News rows -->
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Ảnh</th>
+                                <th>Tiêu Đề Bài Viết</th>
+                                <th>Danh Mục</th>
+                                <th>Tác Giả</th>
+                                <th>Ngày Đăng</th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminNewsTable">
+                            <!-- JS Dynamic Render -->
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
-            <!-- Custom Build Requests Tab -->
+            <!-- Custom Survey Tab -->
             <section id="customTab" class="tab-content" style="display:none;">
-                <h2 style="font-size:1.3rem; font-weight:800; color:var(--secondary-navy); margin-bottom:20px;"><i class="fa-solid fa-screwdriver-wrench" style="color:var(--primary)"></i> Yêu Cầu Tư Vấn & Khảo Sát Lắp Đặt Tận Nơi</h2>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Mã Yêu Cầu</th>
-                            <th>Họ Tên Khách</th>
-                            <th>SĐT (Zalo)</th>
-                            <th>Địa Điểm Cần Lắp</th>
-                            <th>Số Lượng Cam / Ưu Tiên</th>
-                            <th>Trạng Thái</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adminCustomTable">
-                        <!-- Custom requests rows -->
-                    </tbody>
-                </table>
+                <h2 style="font-size:1.3rem; font-weight:800; color:var(--secondary-navy); margin-bottom:20px;"><i class="fa-solid fa-screwdriver-wrench" style="color:var(--primary)"></i> Yêu Cầu Khảo Sát & Lắp Đặt Tận Nơi</h2>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Họ Và Tên</th>
+                                <th>Số Điện Thoại</th>
+                                <th>Địa Chỉ Khảo Sát</th>
+                                <th>Nhu Cầu Lắp Đặt</th>
+                                <th>Thời Gian Gửi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminCustomTable">
+                            <!-- JS Dynamic Render -->
+                        </tbody>
+                    </table>
+                </div>
             </section>
         </main>
     </div>
 
-    <!-- Modal Thêm Sản Phẩm Mới -->
+    <!-- Modals -->
+    <!-- Modal Add Product -->
     <div class="modal" id="addProductModal">
-        <div class="modal-content" style="max-width:600px;">
-            <button class="modal-close" id="closeAddProductBtn"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="font-size:1.2rem; font-weight:800; margin-bottom:20px; color:var(--secondary-navy);">Thêm Sản Phẩm Camera Mới</h2>
+        <div class="modal-content" style="max-width:650px;">
+            <button class="modal-close" id="closeAddProductModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="margin-bottom:20px; font-size:1.4rem; color:var(--secondary-navy);"><i class="fa-solid fa-plus-circle" style="color:var(--primary)"></i> Thêm Sản Phẩm Mới</h2>
             <form id="addProductForm">
-                <div class="form-group">
-                    <label>Tên Sản Phẩm Tuấn Camera *</label>
-                    <input type="text" id="prodName" class="form-control" placeholder="Ví dụ: Camera IP 4K Tuấn Camera TC-4001N" required>
-                </div>
-                <div class="form-group">
-                    <label>Danh Mục *</label>
-                    <select id="prodCategory" class="form-control">
-                        <option value="camera-ip">Camera IP Tuấn Camera 4K</option>
-                        <option value="camera-analog">Camera HD-CVI Analog</option>
-                        <option value="dau-ghi">Đầu Ghi Hình Tuấn Camera</option>
-                        <option value="bo-tron-goi">Bộ Camera Trọn Gói</option>
-                    </select>
-                </div>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
                     <div class="form-group">
-                        <label>Giá Bán (VNĐ) *</label>
-                        <input type="number" id="prodPrice" class="form-control" placeholder="1850000" required>
+                        <label>Tên Sản Phẩm (*)</label>
+                        <input type="text" id="addName" class="form-control" required placeholder="VD: Camera IP Kbvision 2MP">
+                    </div>
+                    <div class="form-group">
+                        <label>Danh Mục (*)</label>
+                        <select id="addCategory" class="form-control">
+                            <option value="camera-ip">Camera IP Tuấn Camera 4K</option>
+                            <option value="camera-analog">Camera HD-CVI Analog</option>
+                            <option value="dau-ghi">Đầu Ghi Hình Tuấn Camera</option>
+                            <option value="bo-tron-goi">Bộ Camera Trọn Gói</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                    <div class="form-group">
+                        <label>Giá Bán (VNĐ) (*)</label>
+                        <input type="number" id="addPrice" class="form-control" required placeholder="VD: 950000">
                     </div>
                     <div class="form-group">
                         <label>Giá Gốc Niêm Yết (VNĐ)</label>
-                        <input type="number" id="prodOriginalPrice" class="form-control" placeholder="2450000">
+                        <input type="number" id="addOrigPrice" class="form-control" placeholder="VD: 1450000">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Link Ảnh Sản Phẩm (URL Image) *</label>
-                    <input type="url" id="prodImage" class="form-control" placeholder="https://images.unsplash.com/..." required>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                    <div class="form-group">
+                        <label>Đánh Giá (Sao)</label>
+                        <input type="number" step="0.1" id="addRating" class="form-control" value="5.0">
+                    </div>
+                    <div class="form-group">
+                        <label>Số Lượt Đánh Giá</label>
+                        <input type="number" id="addReviews" class="form-control" value="12">
+                    </div>
                 </div>
+
+                <div class="form-group">
+                    <label>Link Ảnh Sản Phẩm (*)</label>
+                    <input type="url" id="addImage" class="form-control" required placeholder="https://example.com/image.jpg">
+                </div>
+
                 <div class="form-group">
                     <label>Mô Tả Sản Phẩm</label>
-                    <textarea id="prodDescription" class="form-control" rows="3" placeholder="Mô tả các tính năng chính..."></textarea>
+                    <textarea id="addDesc" class="form-control" rows="3" placeholder="Mô tả các tính năng nổi bật..."></textarea>
                 </div>
+
                 <div class="form-group">
-                    <label>Thông Số Kỹ Thuật (Nhập Mỗi Dòng Một Cặp 'Tên: Giá Trị')</label>
-                    <textarea id="prodSpecsLines" class="form-control" rows="4" placeholder="Độ Phân Giải: 4K 8.0 Megapixel&#10;Góc Quay: 110 Độ&#10;Hồng Ngoại: Full-Color 30m&#10;Bảo Hành: 24 Tháng"></textarea>
+                    <label>Thông Số Kỹ Thuật (Mỗi dòng 1 thông số, dạng key: value)</label>
+                    <textarea id="addSpecs" class="form-control" rows="4" placeholder="Độ phân giải: 2.0 Megapixel&#10;Tầm xa hồng ngoại: 30m&#10;Chuẩn chống nước: IP67"></textarea>
                 </div>
-                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:12px;">Lưu Sản Phẩm Vào D1 Database</button>
+
+                <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:12px;">
+                    <button type="button" class="btn-secondary" id="cancelAddProductBtn">Hủy</button>
+                    <button type="submit" class="btn-primary">Lưu Sản Phẩm</button>
+                </div>
             </form>
         </div>
     </div>
 
-    <!-- Modal Chỉnh Sửa Sản Phẩm -->
+    <!-- Modal Edit Product -->
     <div class="modal" id="editProductModal">
-        <div class="modal-content" style="max-width:600px;">
-            <button class="modal-close" id="closeEditProductBtn"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="font-size:1.2rem; font-weight:800; margin-bottom:20px; color:var(--secondary-navy);">Chỉnh Sửa Sản Phẩm Tuấn Camera</h2>
+        <div class="modal-content" style="max-width:650px;">
+            <button class="modal-close" id="closeEditProductModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="margin-bottom:20px; font-size:1.4rem; color:var(--secondary-navy);"><i class="fa-solid fa-pen-to-square" style="color:var(--primary)"></i> Cập Nhật Sản Phẩm</h2>
             <form id="editProductForm">
-                <input type="hidden" id="editProdId">
-                <div class="form-group">
-                    <label>Tên Sản Phẩm Tuấn Camera *</label>
-                    <input type="text" id="editProdName" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Danh Mục *</label>
-                    <select id="editProdCategory" class="form-control">
-                        <option value="camera-ip">Camera IP Tuấn Camera 4K</option>
-                        <option value="camera-analog">Camera HD-CVI Analog</option>
-                        <option value="dau-ghi">Đầu Ghi Hình Tuấn Camera</option>
-                        <option value="bo-tron-goi">Bộ Camera Trọn Gói</option>
-                    </select>
-                </div>
+                <input type="hidden" id="editId">
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
                     <div class="form-group">
-                        <label>Giá Bán (VNĐ) *</label>
-                        <input type="number" id="editProdPrice" class="form-control" required>
+                        <label>Tên Sản Phẩm (*)</label>
+                        <input type="text" id="editName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Danh Mục (*)</label>
+                        <select id="editCategory" class="form-control">
+                            <option value="camera-ip">Camera IP Tuấn Camera 4K</option>
+                            <option value="camera-analog">Camera HD-CVI Analog</option>
+                            <option value="dau-ghi">Đầu Ghi Hình Tuấn Camera</option>
+                            <option value="bo-tron-goi">Bộ Camera Trọn Gói</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                    <div class="form-group">
+                        <label>Giá Bán (VNĐ) (*)</label>
+                        <input type="number" id="editPrice" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Giá Gốc Niêm Yết (VNĐ)</label>
-                        <input type="number" id="editProdOriginalPrice" class="form-control">
+                        <input type="number" id="editOrigPrice" class="form-control">
                     </div>
                 </div>
+
                 <div class="form-group">
-                    <label>Link Ảnh Sản Phẩm (URL Image) *</label>
-                    <input type="url" id="editProdImage" class="form-control" required>
+                    <label>Link Ảnh Sản Phẩm (*)</label>
+                    <input type="url" id="editImage" class="form-control" required>
                 </div>
+
                 <div class="form-group">
                     <label>Mô Tả Sản Phẩm</label>
-                    <textarea id="editProdDescription" class="form-control" rows="3"></textarea>
+                    <textarea id="editDesc" class="form-control" rows="3"></textarea>
                 </div>
+
                 <div class="form-group">
-                    <label>Thông Số Kỹ Thuật (Cập Nhật Mỗi Dòng Một Cặp 'Tên: Giá Trị')</label>
-                    <textarea id="editProdSpecsLines" class="form-control" rows="4"></textarea>
+                    <label>Thông Số Kỹ Thuật (Key: Value từng dòng)</label>
+                    <textarea id="editSpecs" class="form-control" rows="4"></textarea>
                 </div>
-                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:12px;">Cập Nhật Thông Tin Vào D1</button>
+
+                <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:12px;">
+                    <button type="button" class="btn-secondary" id="cancelEditProductBtn">Hủy</button>
+                    <button type="submit" class="btn-primary">Cập Nhật Thông Tin</button>
+                </div>
             </form>
         </div>
     </div>
 
-    <!-- Modal Thêm Bài Viết Tin Tức -->
+    <!-- Modal Add News -->
     <div class="modal" id="addNewsModal">
-        <div class="modal-content" style="max-width:600px;">
-            <button class="modal-close" id="closeAddNewsBtn"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="font-size:1.2rem; font-weight:800; margin-bottom:20px; color:var(--secondary-navy);">Thêm Bài Viết Tin Tức Mới</h2>
+        <div class="modal-content" style="max-width:650px;">
+            <button class="modal-close" id="closeAddNewsModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="margin-bottom:20px; font-size:1.4rem; color:var(--secondary-navy);"><i class="fa-solid fa-newspaper" style="color:var(--primary)"></i> Thêm Bài Viết Mới</h2>
             <form id="addNewsForm">
                 <div class="form-group">
-                    <label>Tiêu Đề Bài Viết *</label>
-                    <input type="text" id="newsTitle" class="form-control" placeholder="Ví dụ: Tuấn Camera Ra Mắt Dòng Camera AI Mới..." required>
+                    <label>Tiêu Đề Bài Viết (*)</label>
+                    <input type="text" id="addNewsTitle" class="form-control" required placeholder="VD: Hướng dẫn chọn camera gia đình">
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                    <div class="form-group">
+                        <label>Danh Mục Bài Viết</label>
+                        <input type="text" id="addNewsCategory" class="form-control" value="Khuyến Mãi">
+                    </div>
+                    <div class="form-group">
+                        <label>Tác Giả</label>
+                        <input type="text" id="addNewsAuthor" class="form-control" value="Kỹ Thuật Tuấn Camera">
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label>Danh Mục Tin Tức</label>
-                    <select id="newsCategory" class="form-control">
-                        <option value="Tin Khuyến Mãi">Tin Khuyến Mãi</option>
-                        <option value="Tư Vấn Chọn Mua">Tư Vấn Chọn Mua</option>
-                        <option value="Công Nghệ AI">Công Nghệ AI</option>
-                        <option value="Ưu Đãi Lắp Đặt">Ưu Đãi Lắp Đặt</option>
-                    </select>
+                    <label>Link Ảnh Phủ Bài Viết</label>
+                    <input type="url" id="addNewsImage" class="form-control" placeholder="https://example.com/thumb.jpg">
                 </div>
                 <div class="form-group">
-                    <label>Link Ảnh Minh Họa (URL Image) *</label>
-                    <input type="url" id="newsImage" class="form-control" placeholder="https://images.unsplash.com/..." required>
+                    <label>Tóm Tắt Ngắn</label>
+                    <textarea id="addNewsExcerpt" class="form-control" rows="2" placeholder="Tóm tắt nội dung 1-2 câu..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Link Video YouTube (Ví dụ: https://www.youtube.com/watch?v=...)</label>
-                    <input type="url" id="newsYoutubeUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=...">
+                    <label>Nội Dung Bài Viết Chi Tiết (*)</label>
+                    <textarea id="addNewsContent" class="form-control" rows="6" required placeholder="Nhập nội dung đầy đủ bài viết..."></textarea>
                 </div>
-                <div class="form-group">
-                    <label>Mô Tả Tóm Tắt (Summary) *</label>
-                    <textarea id="newsSummary" class="form-control" rows="2" placeholder="Nội dung tóm tắt..." required></textarea>
+                <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:12px;">
+                    <button type="button" class="btn-secondary" id="cancelAddNewsBtn">Hủy</button>
+                    <button type="submit" class="btn-primary">Đăng Bài Viết</button>
                 </div>
-                <div class="form-group">
-                    <label>Nội Dung Bài Viết Chi Tiết</label>
-                    <textarea id="newsContent" class="form-control" rows="5" placeholder="Nội dung bài viết đầy đủ..."></textarea>
-                </div>
-                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:12px;">Đăng Bài Viết Mới</button>
             </form>
         </div>
     </div>
 
-    <!-- Modal Chỉnh Sửa Bài Viết Tin Tức -->
-    <div class="modal" id="editNewsModal">
-        <div class="modal-content" style="max-width:600px;">
-            <button class="modal-close" id="closeEditNewsBtn"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="font-size:1.2rem; font-weight:800; margin-bottom:20px; color:var(--secondary-navy);">Chỉnh Sửa Bài Viết Tin Tức</h2>
-            <form id="editNewsForm">
-                <input type="hidden" id="editNewsId">
-                <div class="form-group">
-                    <label>Tiêu Đề Bài Viết *</label>
-                    <input type="text" id="editNewsTitle" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Danh Mục Tin Tức</label>
-                    <select id="editNewsCategory" class="form-control">
-                        <option value="Tin Khuyến Mãi">Tin Khuyến Mãi</option>
-                        <option value="Tư Vấn Chọn Mua">Tư Vấn Chọn Mua</option>
-                        <option value="Công Nghệ AI">Công Nghệ AI</option>
-                        <option value="Ưu Đãi Lắp Đặt">Ưu Đãi Lắp Đặt</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Link Ảnh Minh Họa (URL Image) *</label>
-                    <input type="url" id="editNewsImage" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Link Video YouTube (Ví dụ: https://www.youtube.com/watch?v=...)</label>
-                    <input type="url" id="editNewsYoutubeUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=...">
-                </div>
-                <div class="form-group">
-                    <label>Mô Tả Tóm Tắt (Summary) *</label>
-                    <textarea id="editNewsSummary" class="form-control" rows="2" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Nội Dung Bài Viết Chi Tiết</label>
-                    <textarea id="editNewsContent" class="form-control" rows="5"></textarea>
-                </div>
-                <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:12px;">Cập Nhật Bài Viết Về D1</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Toast Notifications Container -->
-    <div class="toast-container" id="toastContainer"></div>
+    <!-- Toast Notification Container -->
+    <div id="adminToastContainer" style="position:fixed; bottom:25px; right:25px; z-index:9999;"></div>
 
     <script src="admin.js"></script>
-
-    <!-- Mobile Bottom Navigation Bar -->
-    <nav class="mobile-bottom-nav">
-        <a href="index.html" class="mobile-nav-item active">
-            <i class="fa-solid fa-house"></i>
-            <span>Trang Chủ</span>
-        </a>
-        <a href="index.html#section-camera-ip" class="mobile-nav-item">
-            <i class="fa-solid fa-camera"></i>
-            <span>Sản Phẩm</span>
-        </a>
-        <a href="javascript:void(0)" onclick="openUserOrdersModal()" class="mobile-nav-item">
-            <i class="fa-solid fa-receipt"></i>
-            <span>Đơn Hàng</span>
-        </a>
-        <a href="https://zalo.me/0797777071" target="_blank" class="mobile-nav-item">
-            <i class="fa-solid fa-comments"></i>
-            <span>Zalo</span>
-        </a>
-        <a href="thanhtoan.html" class="mobile-nav-item">
-            <i class="fa-solid fa-cart-shopping"></i>
-            <span>Giỏ Hàng</span>
-            <span class="mobile-cart-badge" id="mobileCartBadgeCount">0</span>
-        </a>
-    </nav>
-
 </body>
 </html>

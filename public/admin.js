@@ -102,13 +102,18 @@ async function checkAdminAuth() {
         const res = await fetchAdmin('/api/admin/verify');
         const data = await res.json();
         if (data.success) {
-            loginSec.style.display = 'none';
-            dashSec.style.display = (window.innerWidth <= 768) ? 'block' : 'grid';
-            loadDashboardData();
+            if (loginSec) loginSec.style.display = 'none';
+            if (dashSec) dashSec.style.display = (window.innerWidth <= 768) ? 'flex' : 'grid';
+            try {
+                await loadDashboardData();
+            } catch (e) {
+                console.error("Error loading dashboard data:", e);
+            }
         } else {
             handleUnauthorized();
         }
     } catch (err) {
+        console.error("Verify token error:", err);
         handleUnauthorized();
     }
 }
