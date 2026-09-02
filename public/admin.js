@@ -661,7 +661,7 @@ async function loadAdminCustomRequests() {
         const res = await fetchAdmin('/api/admin/custom-requests');
         const customRequests = await res.json();
 
-        const pendingRequests = customRequests.filter(c => !c.status || c.status === 'CHO_TU_VAN' || c.status === 'pending');
+        const pendingRequests = customRequests.filter(c => !c.status || c.status === 'CHO_TU_VAN' || c.status === 'CHO_TIEP_NHAN' || c.status === 'pending');
         document.getElementById('statCustomCount').textContent = pendingRequests.length;
 
         if (customRequests.length === 0) {
@@ -670,7 +670,9 @@ async function loadAdminCustomRequests() {
         }
 
         tbody.innerHTML = customRequests.map(c => {
-            const st = c.status || 'CHO_TU_VAN';
+            const isPending = !c.status || c.status === 'CHO_TU_VAN' || c.status === 'CHO_TIEP_NHAN' || c.status === 'pending';
+            const isDone = c.status === 'DA_TU_VAN';
+
             return `
                 <tr>
                     <td style="font-weight:700; font-size:0.82rem;">${c.id}</td>
@@ -679,9 +681,9 @@ async function loadAdminCustomRequests() {
                     <td style="font-size:0.85rem;">${c.target_item || 'Khảo sát camera'}</td>
                     <td style="font-size:0.85rem;">${c.resolution || 'Gói tư vấn'}</td>
                     <td>
-                        <select onchange="updateCustomRequestStatus('${c.id}', this.value)" style="padding:6px 10px; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; border:1px solid #cbd5e1; background:#ffffff;">
-                            <option value="CHO_TU_VAN" ${st === 'CHO_TU_VAN' ? 'selected' : ''}>🟡 Chờ Tư Vấn</option>
-                            <option value="DA_TU_VAN" ${st === 'DA_TU_VAN' ? 'selected' : ''}>🟢 Đã Tư Vấn Xong</option>
+                        <select onchange="updateCustomRequestStatus('${c.id}', this.value)" style="padding:6px 10px; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; border:1px solid #cbd5e1; background:${isDone ? '#f0fdf4' : '#fffbeb'}; color:${isDone ? '#166534' : '#b45309'};">
+                            <option value="CHO_TU_VAN" ${isPending ? 'selected' : ''}>🟡 Chờ Tư Vấn</option>
+                            <option value="DA_TU_VAN" ${isDone ? 'selected' : ''}>🟢 Đã Tư Vấn Xong</option>
                         </select>
                     </td>
                 </tr>

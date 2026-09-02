@@ -1940,7 +1940,7 @@ export default {
                     battery_type: sanitize(body.battery_type) || "Standard",
                     note: note,
                     estimated_price: parseInt(body.estimated_price) || 2000000,
-                    status: "CHO_TIEP_NHAN",
+                    status: "CHO_TU_VAN",
                     created_at: new Date().toISOString()
                 };
 
