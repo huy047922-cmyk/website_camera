@@ -652,7 +652,7 @@ function setupEditNewsModal() {
     });
 }
 
-// Load Custom Installation Requests Table with Status Selector
+// Load Custom Installation Requests Table with Status Selector (Supports 2-way flexible toggle)
 async function loadAdminCustomRequests() {
     const tbody = document.getElementById('adminCustomTable');
     if (!tbody) return;
@@ -661,7 +661,7 @@ async function loadAdminCustomRequests() {
         const res = await fetchAdmin('/api/admin/custom-requests');
         const customRequests = await res.json();
 
-        const pendingRequests = customRequests.filter(c => !c.status || c.status === 'CHO_TU_VAN' || c.status === 'CHO_TIEP_NHAN' || c.status === 'pending');
+        const pendingRequests = customRequests.filter(c => c.status !== 'DA_TU_VAN');
         document.getElementById('statCustomCount').textContent = pendingRequests.length;
 
         if (customRequests.length === 0) {
@@ -670,8 +670,8 @@ async function loadAdminCustomRequests() {
         }
 
         tbody.innerHTML = customRequests.map(c => {
-            const isPending = !c.status || c.status === 'CHO_TU_VAN' || c.status === 'CHO_TIEP_NHAN' || c.status === 'pending';
-            const isDone = c.status === 'DA_TU_VAN';
+            const isDone = (c.status === 'DA_TU_VAN');
+            const isPending = !isDone;
 
             return `
                 <tr>
@@ -703,13 +703,15 @@ async function updateCustomRequestStatus(requestId, newStatus) {
         });
         const result = await res.json();
         if (result.success) {
-            showAdminToast('Đã cập nhật trạng thái tư vấn thành công!', 'success');
-            loadAdminCustomRequests();
+            showAdminToast('Đã cập nhật trạng thái tư vấn!', 'success');
+            await loadAdminCustomRequests();
         } else {
-            throw new Error(result.error || 'Cập nhật thất bại');
+            showAdminToast('Cập nhật thất bại: ' + (result.error || ''), 'error');
+            await loadAdminCustomRequests();
         }
     } catch (err) {
         showAdminToast('Lỗi: ' + err.message, 'error');
+        await loadAdminCustomRequests();
     }
 }
 
