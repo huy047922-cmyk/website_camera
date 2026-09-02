@@ -142,6 +142,12 @@ function setupAdminLogin() {
                 localStorage.setItem('cf_admin_token', adminToken);
                 localStorage.setItem('tuancamera_token', adminToken);
                 showAdminToast('Đăng nhập thành công!', 'success');
+                
+                const loginSec = document.getElementById('loginSection');
+                const dashSec = document.getElementById('adminDashboard');
+                if (loginSec) loginSec.classList.add('hidden');
+                if (dashSec) dashSec.classList.add('active');
+                
                 checkAdminAuth();
             } else {
                 showAdminToast(result.error || 'Đăng nhập thất bại', 'error');
