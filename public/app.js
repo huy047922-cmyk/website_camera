@@ -64,7 +64,7 @@ function renderProducts(products) {
 
         return `
             <div class="product-card">
-                <div class="product-thumb">
+                <div class="product-thumb" onclick="openProductDetail('${p.id}')" style="cursor:pointer;">
                     <img src="${p.image}" alt="${p.name}" loading="lazy">
                     ${p.badge ? `<span class="product-badge ${p.badge_type || 'hot'}">${p.badge}</span>` : ''}
                 </div>
@@ -73,7 +73,7 @@ function renderProducts(products) {
                         ${'<i class="fa-solid fa-star"></i>'.repeat(Math.floor(p.rating || 5))}
                         <span>${p.rating || 5.0} (${p.reviews_count || 0})</span>
                     </div>
-                    <h3 class="product-title">${p.name}</h3>
+                    <h3 class="product-title" onclick="openProductDetail('${p.id}')" style="cursor:pointer;" title="Xem chi tiết sản phẩm">${p.name}</h3>
                     <div class="product-price">
                         <span class="price-current">${formattedPrice}</span>
                         ${formattedOldPrice ? `<span class="price-old">${formattedOldPrice}</span>` : ''}
@@ -321,7 +321,7 @@ function setupCustomBuildForm() {
     });
 }
 
-// Product Quick View Detail Modal
+// Product Quick View Detail Modal + Recommended Related Products
 function openProductDetail(productId) {
     const product = allProducts.find(p => p.id === productId);
     if (!product) return;
@@ -332,28 +332,58 @@ function openProductDetail(productId) {
 
     const specs = typeof product.specs_json === 'string' ? JSON.parse(product.specs_json || '{}') : (product.specs_json || {});
     const formattedPrice = new Intl.NumberFormat('vi-VN').format(product.price) + ' đ';
+    const formattedOldPrice = product.original_price ? new Intl.NumberFormat('vi-VN').format(product.original_price) + ' đ' : '';
+
+    // Recommended Related Products (Other products)
+    const relatedProducts = allProducts.filter(p => p.id !== productId).slice(0, 3);
 
     content.innerHTML = `
         <button class="modal-close" onclick="document.getElementById('productDetailModal').classList.remove('active')"><i class="fa-solid fa-xmark"></i></button>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:25px; align-items:center;">
+        <div style="display:grid; grid-template-columns: 1fr 1.1fr; gap:25px; align-items:start; margin-bottom:30px;">
             <div>
-                <img src="${product.image}" alt="${product.name}" style="width:100%; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+                <img src="${product.image}" alt="${product.name}" style="width:100%; border-radius:var(--radius-md); border:1px solid var(--border-color); box-shadow:var(--shadow-subtle);">
             </div>
             <div>
-                <h2 style="font-size:1.4rem; font-weight:800; margin-bottom:10px;">${product.name}</h2>
-                <div style="font-size:1.4rem; font-weight:800; color:var(--primary); margin-bottom:15px;">${formattedPrice}</div>
-                <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:20px;">${product.description}</p>
+                <h2 style="font-size:1.4rem; font-weight:800; color:var(--secondary-navy); margin-bottom:10px; line-height:1.3;">${product.name}</h2>
+                <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:15px;">
+                    <span style="font-size:1.5rem; font-weight:900; color:var(--primary);">${formattedPrice}</span>
+                    ${formattedOldPrice ? `<span style="font-size:0.9rem; color:var(--text-muted); text-decoration:line-through;">${formattedOldPrice}</span>` : ''}
+                </div>
+                <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:20px; line-height:1.5;">${product.description}</p>
                 
-                <h4 style="font-size:0.95rem; font-weight:700; margin-bottom:10px;">Thông số kỹ thuật:</h4>
-                <ul style="list-style:none; font-size:0.85rem; color:var(--text-secondary); margin-bottom:25px;">
-                    ${Object.entries(specs).map(([k, v]) => `<li style="margin-bottom:6px;"><i class="fa-solid fa-check" style="color:var(--primary); margin-right:6px;"></i> <strong>${k}:</strong> ${v}</li>`).join('')}
+                <h4 style="font-size:0.95rem; font-weight:800; color:var(--secondary-navy); margin-bottom:10px;">Thông số kỹ thuật sản phẩm:</h4>
+                <ul style="list-style:none; font-size:0.85rem; color:var(--text-secondary); margin-bottom:25px; background:#f8fafc; padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+                    ${Object.entries(specs).map(([k, v]) => `<li style="margin-bottom:6px;"><i class="fa-solid fa-circle-check" style="color:var(--primary); margin-right:6px;"></i> <strong>${k}:</strong> ${v}</li>`).join('')}
                 </ul>
 
-                <button class="btn-primary" onclick="addToCart('${product.id}'); document.getElementById('productDetailModal').classList.remove('active');" style="width:100%; justify-content:center;">
-                    <i class="fa-solid fa-cart-plus"></i> Thêm Vào Giỏ Hàng
-                </button>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <button class="btn-primary" onclick="addToCart('${product.id}'); document.getElementById('productDetailModal').classList.remove('active');" style="justify-content:center; padding:12px;">
+                        <i class="fa-solid fa-cart-plus"></i> Đặt Mua Ngay
+                    </button>
+                    <a href="https://zalo.me/0987654321" target="_blank" class="btn-secondary" style="justify-content:center; padding:12px;">
+                        <i class="fa-solid fa-comment-dots"></i> Tư Vấn Zalo 24/7
+                    </a>
+                </div>
             </div>
         </div>
+
+        <!-- Recommended Related Products Grid -->
+        ${relatedProducts.length > 0 ? `
+            <div style="border-top:2px solid var(--border-color); padding-top:20px;">
+                <h3 style="font-size:1.1rem; font-weight:800; color:var(--secondary-navy); margin-bottom:15px;">
+                    🔥 Gợi Ý Sản Phẩm Khác Dành Cho Bạn
+                </h3>
+                <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px;">
+                    ${relatedProducts.map(rp => `
+                        <div onclick="openProductDetail('${rp.id}')" style="background:#f8fafc; border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:10px; cursor:pointer; text-align:center; transition:border 0.2s;">
+                            <img src="${rp.image}" alt="" style="width:100%; height:90px; object-fit:cover; border-radius:4px; margin-bottom:8px;">
+                            <h4 style="font-size:0.78rem; font-weight:700; color:var(--secondary-navy); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; height:2.5em;">${rp.name}</h4>
+                            <div style="color:var(--primary); font-size:0.85rem; font-weight:900; margin-top:4px;">${new Intl.NumberFormat('vi-VN').format(rp.price)} đ</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        ` : ''}
     `;
 
     modal.classList.add('active');
