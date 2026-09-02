@@ -48,6 +48,27 @@ CREATE TABLE IF NOT EXISTS custom_requests (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS users (
+    id TEXT PRIMARY KEY,
+    full_name TEXT NOT NULL,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    email TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    role TEXT DEFAULT 'user',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS news (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    summary TEXT NOT NULL,
+    content TEXT,
+    image TEXT NOT NULL,
+    category TEXT DEFAULT 'Tin Khuyến Mãi',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
 DELETE FROM products;
 DELETE FROM categories;
 
@@ -157,3 +178,7 @@ INSERT INTO products (id, name, category_id, price, original_price, badge, badge
 INSERT INTO products (id, name, category_id, price, original_price, badge, badge_type, rating, reviews_count, image, description, specs_json, featured, created_at) VALUES ('kb-098', 'Trọn Gói Bộ 2 Camera KBVISION 4.0MP Siêu Nét + Ổ 500GB', 'bo-tron-goi', 3450000, 4400000, 'BỘ 2 CAM 4MP', 'sale', 4.9, 292, 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=600&q=80', 'Thiết bị Trọn Gói Bộ 2 Camera KBVISION 4.0MP Siêu Nét + Ổ 500GB chính hãng KBVISION thương hiệu Mỹ. Công nghệ ghi hình sắc nét 4K/Full HD, chuẩn nén H.265+ tiết kiệm dung lượng, vỏ kim loại chống nước IP67 bền bỉ. Đầy đủ tem bảo hành chính hãng KBVISION 24 tháng.', '{"Thương Hiệu":"Trọn Gói KBVISION USA Bán Chạy","Bộ Sản Phẩm Bao Gồm":"Camera KBVISION + Đầu Ghi Hình + Ổ Cứng Chuyên Dụng + Nguồn 12V + Jack BNC","Miễn Phí Đóng Gói":"Tặng Kèm Dây Cáp Tín Hiệu & Nhân Viên Lắp Đặt Tận Nơi","Xem Từ Xa":"Tài Khoản Tên Miền KBVISION Tốc Độ Cao Miễn Phí Trọn Đời","Bảo Hành Trọn Bộ":"24 Tháng Tận Nơi 1 Đổi 1"}', 0, '2026-08-29T07:46:36.919Z');
 INSERT INTO products (id, name, category_id, price, original_price, badge, badge_type, rating, reviews_count, image, description, specs_json, featured, created_at) VALUES ('kb-099', 'Trọn Gói Bộ 4 Camera IP KBVISION Ban Đêm Có Màu Full-Color 4MP', 'bo-tron-goi', 7250000, 9100000, 'IP FULL-COLOR 4MP', 'new', 5.0, 303, 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=600&q=80', 'Thiết bị Trọn Gói Bộ 4 Camera IP KBVISION Ban Đêm Có Màu Full-Color 4MP chính hãng KBVISION thương hiệu Mỹ. Công nghệ ghi hình sắc nét 4K/Full HD, chuẩn nén H.265+ tiết kiệm dung lượng, vỏ kim loại chống nước IP67 bền bỉ. Đầy đủ tem bảo hành chính hãng KBVISION 24 tháng.', '{"Thương Hiệu":"Trọn Gói KBVISION USA Bán Chạy","Bộ Sản Phẩm Bao Gồm":"Camera KBVISION + Đầu Ghi Hình + Ổ Cứng Chuyên Dụng + Nguồn 12V + Jack BNC","Miễn Phí Đóng Gói":"Tặng Kèm Dây Cáp Tín Hiệu & Nhân Viên Lắp Đặt Tận Nơi","Xem Từ Xa":"Tài Khoản Tên Miền KBVISION Tốc Độ Cao Miễn Phí Trọn Đời","Bảo Hành Trọn Bộ":"24 Tháng Tận Nơi 1 Đổi 1"}', 0, '2026-08-29T06:46:36.919Z');
 INSERT INTO products (id, name, category_id, price, original_price, badge, badge_type, rating, reviews_count, image, description, specs_json, featured, created_at) VALUES ('kb-100', 'Trọn Gói Bộ 8 Camera KBVISION 5.0MP Super HD + Ổ 4TB', 'bo-tron-goi', 13850000, 17500000, '8 CAM 5MP VIP', 'hot', 4.8, 314, 'https://images.unsplash.com/photo-1517420704952-d9f39e95b43e?auto=format&fit=crop&w=600&q=80', 'Thiết bị Trọn Gói Bộ 8 Camera KBVISION 5.0MP Super HD + Ổ 4TB chính hãng KBVISION thương hiệu Mỹ. Công nghệ ghi hình sắc nét 4K/Full HD, chuẩn nén H.265+ tiết kiệm dung lượng, vỏ kim loại chống nước IP67 bền bỉ. Đầy đủ tem bảo hành chính hãng KBVISION 24 tháng.', '{"Thương Hiệu":"Trọn Gói KBVISION USA Bán Chạy","Bộ Sản Phẩm Bao Gồm":"Camera KBVISION + Đầu Ghi Hình + Ổ Cứng Chuyên Dụng + Nguồn 12V + Jack BNC","Miễn Phí Đóng Gói":"Tặng Kèm Dây Cáp Tín Hiệu & Nhân Viên Lắp Đặt Tận Nơi","Xem Từ Xa":"Tài Khoản Tên Miền KBVISION Tốc Độ Cao Miễn Phí Trọn Đời","Bảo Hành Trọn Bộ":"24 Tháng Tận Nơi 1 Đổi 1"}', 0, '2026-08-29T05:46:36.919Z');
+INSERT INTO users (id, full_name, username, password, email, phone, role) VALUES ('usr-admin', 'Quản Trị Viên KBVISION', 'admin', '123', 'admin@kbvision.vn', '0987654321', 'admin');
+INSERT INTO users (id, full_name, username, password, email, phone, role) VALUES ('usr-demo1', 'Nguyễn Văn Hùng', 'hungnv', '123', 'hungnv@gmail.com', '0912345678', 'user');
+INSERT INTO news (id, title, summary, content, image, category) VALUES ('news-001', 'KBVISION Ra Mắt Dòng Camera AI Full-Color Ban Đêm Có Màu Siêu Nét', 'Công nghệ thấu kính khẩu độ lớn F1.0 kết hợp trí tuệ nhân tạo AI phân biệt chính xác người và vật, hạn chế 99% báo động giả.', 'Nội dung chi tiết...', 'https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=600&q=80', 'Tin Khuyến Mãi');
+INSERT INTO news (id, title, summary, content, image, category) VALUES ('news-002', 'Hướng Dẫn Chọn Camera Giám Sát Phù Hợp Cho Gia Đình & Nhà Xưởng', 'Các tiêu chí quan trọng khi lắp đặt hệ thống camera: Độ phân giải 4K, tiêu chuẩn vỏ chống nước IP67 và thời gian lưu trữ ổ cứng.', 'Nội dung chi tiết...', 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80', 'Tư Vấn Chọn Mua');

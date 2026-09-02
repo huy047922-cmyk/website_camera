@@ -4,6 +4,7 @@
 
 let allProducts = [];
 let cart = JSON.parse(localStorage.getItem('kbvision_cart') || '[]');
+let currentLang = localStorage.getItem('kbvision_lang') || 'vi';
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchProducts();
@@ -11,19 +12,243 @@ document.addEventListener('DOMContentLoaded', () => {
     setupCartControls();
     setupCustomBuildForm();
     setupTabs();
+    setupAuthModal();
+    checkLoggedInUser();
+    applyLanguage(currentLang);
     updateCartUI();
 });
 
+// i18n English / Vietnamese Translation Dictionary
+const translations = {
+    vi: {
+        topWarranty: "Bảo Hành 24 Tháng Chính Hãng KBVISION USA",
+        navHome: "TRANG CHỦ",
+        navAbout: "GIỚI THIỆU",
+        navProducts: "SẢN PHẨM ",
+        navSupport: "HỖ TRỢ KHÁCH HÀNG ",
+        navNews: "TIN TỨC ",
+        navContact: "LIÊN HỆ",
+        heroTitle: "GIẢI PHÁP An Ninh Tổng Thể",
+        heroSub: "Hệ thống giám sát an ninh KBVISION chuẩn thương hiệu Mỹ. Độ nét Ultra HD 4K, công nghệ Full-Color xem đêm có màu sắc nét, bảo hành 24 tháng 1 đổi 1 tận nơi.",
+        heroBtnProducts: "Khám Phá Sản Phẩm",
+        heroBtnContact: "Đăng Ký Lắp Đặt",
+        tabProducts: "SẢN PHẨM",
+        tabTech: "CÔNG NGHỆ",
+        secIp: "CAMERA IP KBVISION 4K & WI-FI",
+        secAnalog: "CAMERA HD-CVI ANALOG KBVISION",
+        secDauGhi: "ĐẦU GHI HÌNH KBVISION (DVR / NVR 4K)",
+        secKit: "BỘ KIT CAMERA TRỌN GÓI KBVISION",
+        btnBuyNow: "Mua Ngay",
+        searchPlaceholder: "Tìm kiếm sản phẩm..."
+    },
+    en: {
+        topWarranty: "Official KBVISION USA 24-Month Warranty",
+        navHome: "HOME",
+        navAbout: "ABOUT US",
+        navProducts: "PRODUCTS ",
+        navSupport: "SUPPORT ",
+        navNews: "NEWS ",
+        navContact: "CONTACT",
+        heroTitle: "TOTAL SECURITY SOLUTIONS",
+        heroSub: "KBVISION USA security surveillance system. Ultra HD 4K resolution, Full-Color 24/7 night vision, 24-month warranty.",
+        heroBtnProducts: "Explore Products",
+        heroBtnContact: "Request Installation",
+        tabProducts: "PRODUCTS",
+        tabTech: "TECHNOLOGY",
+        secIp: "KBVISION 4K & WI-FI IP CAMERAS",
+        secAnalog: "KBVISION HD-CVI ANALOG CAMERAS",
+        secDauGhi: "KBVISION DVR / NVR RECORDERS",
+        secKit: "KBVISION COMPLETE CAMERA KITS",
+        btnBuyNow: "Buy Now",
+        searchPlaceholder: "Search products..."
+    }
+};
+
 // Switch Language Selector
 function switchLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('kbvision_lang', lang);
+    applyLanguage(lang);
+}
+
+function applyLanguage(lang) {
+    const t = translations[lang] || translations.vi;
+
+    // Update Header Language Dropdown Label
     const label = document.getElementById('currentLangLabel');
-    if (lang === 'en') {
-        if (label) label.innerHTML = 'ENGLISH 🇲🇾 <i class="fa-solid fa-chevron-down nav-arrow"></i>';
-        showToast('Switched to English language mode');
-    } else {
-        if (label) label.innerHTML = 'TIẾNG VIỆT 🇻🇳 <i class="fa-solid fa-chevron-down nav-arrow"></i>';
-        showToast('Đã chuyển sang chế độ Tiếng Việt');
+    if (label) {
+        label.innerHTML = lang === 'en' 
+            ? 'ENGLISH 🇲🇾 <i class="fa-solid fa-chevron-down nav-arrow"></i>' 
+            : 'TIẾNG VIỆT 🇻🇳 <i class="fa-solid fa-chevron-down nav-arrow"></i>';
     }
+
+    // Update Top Warranty Text
+    const topW = document.getElementById('topWarrantyText');
+    if (topW) topW.textContent = t.topWarranty;
+
+    // Update Nav Menu Links
+    const navHome = document.querySelector('.main-nav-item:nth-child(1) .main-nav-link');
+    const navAbout = document.querySelector('.main-nav-item:nth-child(2) .main-nav-link');
+    const navProducts = document.querySelector('.main-nav-item:nth-child(3) .main-nav-link');
+    const navSupport = document.querySelector('.main-nav-item:nth-child(4) .main-nav-link');
+    const navNews = document.querySelector('.main-nav-item:nth-child(5) .main-nav-link');
+    const navContact = document.querySelector('.main-nav-item:nth-child(6) .main-nav-link');
+
+    if (navHome) navHome.textContent = t.navHome;
+    if (navAbout) navAbout.textContent = t.navAbout;
+    if (navProducts) navProducts.innerHTML = t.navProducts + '<i class="fa-solid fa-chevron-down nav-arrow"></i>';
+    if (navSupport) navSupport.innerHTML = t.navSupport + '<i class="fa-solid fa-chevron-down nav-arrow"></i>';
+    if (navNews) navNews.innerHTML = t.navNews + '<i class="fa-solid fa-chevron-down nav-arrow"></i>';
+    if (navContact) navContact.textContent = t.navContact;
+
+    // Update Hero Banner Text
+    const heroH1 = document.querySelector('.hero-kb-text h1');
+    const heroP = document.querySelector('.hero-kb-text p');
+    if (heroH1) heroH1.innerHTML = lang === 'en' ? 'TOTAL <span>Security Solutions</span>' : 'GIẢI PHÁP <span>An Ninh Tổng Thể</span>';
+    if (heroP) heroP.textContent = t.heroSub;
+
+    // Update Tabs
+    const tabP = document.getElementById('tabBtnProducts');
+    const tabT = document.getElementById('tabBtnTech');
+    if (tabP) tabP.textContent = t.tabProducts;
+    if (tabT) tabT.textContent = t.tabTech;
+
+    // Update Section Headings
+    const secIp = document.querySelector('#section-camera-ip h2');
+    const secAnalog = document.querySelector('#section-camera-analog h2');
+    const secDauGhi = document.querySelector('#section-dau-ghi h2');
+    const secKit = document.querySelector('#section-bo-tron-goi h2');
+
+    if (secIp) secIp.textContent = t.secIp;
+    if (secAnalog) secAnalog.textContent = t.secAnalog;
+    if (secDauGhi) secDauGhi.textContent = t.secDauGhi;
+    if (secKit) secKit.textContent = t.secKit;
+
+    // Update Search Input Placeholder
+    const searchIn = document.getElementById('searchInput');
+    if (searchIn) searchIn.placeholder = t.searchPlaceholder;
+
+    // Re-render product grid buttons
+    renderCategorizedHomepage(allProducts);
+
+    showToast(lang === 'en' ? 'Switched interface to English' : 'Đã chuyển sang tiếng Việt');
+}
+
+// User Auth Modal Controls & State
+function setupAuthModal() {
+    const modal = document.getElementById('authModal');
+    const closeBtn = document.getElementById('closeAuthBtn');
+    const tabLogin = document.getElementById('tabAuthLogin');
+    const tabReg = document.getElementById('tabAuthRegister');
+    const formLogin = document.getElementById('userLoginForm');
+    const formReg = document.getElementById('userRegisterForm');
+
+    closeBtn?.addEventListener('click', () => modal?.classList.remove('active'));
+
+    tabLogin?.addEventListener('click', () => {
+        tabLogin.classList.add('active');
+        tabReg.classList.remove('active');
+        formLogin.style.display = 'block';
+        formReg.style.display = 'none';
+    });
+
+    tabReg?.addEventListener('click', () => {
+        tabReg.classList.add('active');
+        tabLogin.classList.remove('active');
+        formReg.style.display = 'block';
+        formLogin.style.display = 'none';
+    });
+
+    // Login Form Submission
+    formLogin?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('logUsername').value.trim();
+        const password = document.getElementById('logPassword').value.trim();
+
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await res.json();
+            if (result.success) {
+                localStorage.setItem('kbvision_user', JSON.stringify(result.user));
+                checkLoggedInUser();
+                modal?.classList.remove('active');
+                formLogin.reset();
+                showToast(`Xin chào, ${result.user.full_name}! Đăng nhập thành công.`, 'success');
+            } else {
+                throw new Error(result.error || 'Đăng nhập thất bại');
+            }
+        } catch (err) {
+            showToast('Lỗi: ' + err.message, 'error');
+        }
+    });
+
+    // Register Form Submission (Họ tên, Username, Password, Email, Phone)
+    formReg?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const regData = {
+            full_name: document.getElementById('regFullName').value.trim(),
+            username: document.getElementById('regUsername').value.trim(),
+            password: document.getElementById('regPassword').value.trim(),
+            email: document.getElementById('regEmail').value.trim(),
+            phone: document.getElementById('regPhone').value.trim()
+        };
+
+        try {
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(regData)
+            });
+
+            const result = await res.json();
+            if (result.success) {
+                localStorage.setItem('kbvision_user', JSON.stringify(result.user));
+                checkLoggedInUser();
+                modal?.classList.remove('active');
+                formReg.reset();
+                showToast(`Chúc mừng ${result.user.full_name}! Đã tạo tài khoản thành công.`, 'success');
+            } else {
+                throw new Error(result.error || 'Đăng ký thất bại');
+            }
+        } catch (err) {
+            showToast('Lỗi đăng ký: ' + err.message, 'error');
+        }
+    });
+}
+
+function openAuthModal() {
+    document.getElementById('authModal')?.classList.add('active');
+}
+
+function checkLoggedInUser() {
+    const userStr = localStorage.getItem('kbvision_user');
+    const container = document.getElementById('userHeaderAuth');
+    if (!container) return;
+
+    if (userStr) {
+        const user = JSON.parse(userStr);
+        container.innerHTML = `
+            <span style="font-weight:700; color:#ffffff;"><i class="fa-solid fa-circle-user"></i> ${user.full_name}</span>
+            <a href="javascript:void(0)" onclick="userLogout()" style="color:#f87171; margin-left:10px;"><i class="fa-solid fa-right-from-bracket"></i> Đăng Xuất</a>
+            <a href="admin.html" style="color:#94a3b8; margin-left:12px;"><i class="fa-solid fa-user-shield"></i> Admin</a>
+        `;
+    } else {
+        container.innerHTML = `
+            <a href="javascript:void(0)" onclick="openAuthModal()"><i class="fa-solid fa-user"></i> Đăng Nhập / Đăng Ký</a>
+            <a href="admin.html" style="color:#94a3b8; margin-left:12px;"><i class="fa-solid fa-user-shield"></i> Admin</a>
+        `;
+    }
+}
+
+function userLogout() {
+    localStorage.removeItem('kbvision_user');
+    checkLoggedInUser();
+    showToast('Đã đăng xuất tài khoản thành công!');
 }
 
 // Fetch products from Cloudflare Workers API
@@ -41,19 +266,16 @@ async function fetchProducts(category = 'all', search = '') {
         allProducts = await res.json();
 
         if (category === 'all' && !search) {
-            // Show Categorized Homepage Sections
             document.getElementById('categorized-sections-container').style.display = 'block';
             document.getElementById('filtered-view-section').style.display = 'none';
             renderCategorizedHomepage(allProducts);
         } else {
-            // Show Filtered / Search View
             document.getElementById('categorized-sections-container').style.display = 'none';
             document.getElementById('filtered-view-section').style.display = 'block';
             renderFilteredGrid(allProducts, category, search);
         }
     } catch (err) {
         console.error('API Error:', err);
-        showToast('Lỗi tải sản phẩm: ' + err.message, 'error');
     }
 }
 
@@ -93,7 +315,7 @@ function renderFilteredGrid(products, category, search) {
     renderProductCardsToGrid(gridId, products);
 }
 
-// Render Product Cards to target container ID (Clean Corporate Design)
+// Render Product Cards to target container ID
 function renderProductCardsToGrid(gridId, productsList) {
     const grid = document.getElementById(gridId);
     if (!grid) return;
@@ -106,6 +328,8 @@ function renderProductCardsToGrid(gridId, productsList) {
         `;
         return;
     }
+
+    const btnBuyLabel = currentLang === 'en' ? 'Buy Now' : 'Mua Ngay';
 
     grid.innerHTML = productsList.map(p => {
         const formattedPrice = new Intl.NumberFormat('vi-VN').format(p.price) + ' đ';
@@ -124,7 +348,7 @@ function renderProductCardsToGrid(gridId, productsList) {
                     </div>
                 </div>
                 <div class="product-btn-group">
-                    <button class="btn-card-buy" onclick="addToCart('${p.id}')">Mua Ngay</button>
+                    <button class="btn-card-buy" onclick="addToCart('${p.id}')">${btnBuyLabel}</button>
                     <a href="https://zalo.me/0987654321" target="_blank" class="btn-card-zalo">Zalo</a>
                 </div>
             </div>

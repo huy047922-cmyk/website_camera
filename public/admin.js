@@ -4,6 +4,8 @@
 
 let adminToken = localStorage.getItem('cf_admin_token') || null;
 let adminProductsList = [];
+let adminUsersList = [];
+let adminNewsList = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     checkAdminAuth();
@@ -12,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupAddProductModal();
     setupEditProductModal();
     setupAdminProductSearch();
+    setupAddNewsModal();
 });
 
 // Helper: Convert Specs Object or JSON to Line-by-Line Text
@@ -49,7 +52,7 @@ function textToSpecsObj(text) {
     return specsObj;
 }
 
-// Secure API Fetch Wrapper with Token Authorization & 401 handling
+// Secure API Fetch Wrapper
 async function fetchAdmin(url, options = {}) {
     options.headers = options.headers || {};
     if (adminToken) {
@@ -72,13 +75,17 @@ function handleUnauthorized() {
     if (loginSec) loginSec.style.display = 'block';
     if (dashSec) dashSec.style.display = 'none';
 
-    // Clear sensitive table content from DOM
     const prodTable = document.getElementById('adminProductsTable');
     const orderTable = document.getElementById('adminOrdersTable');
     const customTable = document.getElementById('adminCustomTable');
+    const usersTable = document.getElementById('adminUsersTable');
+    const newsTable = document.getElementById('adminNewsTable');
+
     if (prodTable) prodTable.innerHTML = '';
     if (orderTable) orderTable.innerHTML = '';
     if (customTable) customTable.innerHTML = '';
+    if (usersTable) usersTable.innerHTML = '';
+    if (newsTable) newsTable.innerHTML = '';
 }
 
 async function checkAdminAuth() {
@@ -147,8 +154,28 @@ async function loadDashboardData() {
     await Promise.all([
         loadAdminProducts().catch(() => {}),
         loadAdminOrders().catch(() => {}),
+        loadAdminUsers().catch(() => {}),
+        loadAdminNews().catch(() => {}),
         loadAdminCustomRequests().catch(() => {})
     ]);
+}
+
+// Sidebar Navigation Tabs
+function setupAdminNavigation() {
+    const menuItems = document.querySelectorAll('.admin-menu-item[data-tab]');
+    menuItems.forEach(item => {
+        item.addEventListener('click', () => {
+            menuItems.forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+
+            const targetTab = item.getAttribute('data-tab');
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            const section = document.getElementById(targetTab);
+            if (section) section.style.display = 'block';
+        });
+    });
 }
 
 // Load Products Table
@@ -175,15 +202,10 @@ function setupAdminProductSearch() {
     const catSelect = document.getElementById('adminProductCategoryFilter');
 
     if (searchInput) {
-        searchInput.addEventListener('input', () => {
-            filterAndRenderAdminProducts();
-        });
+        searchInput.addEventListener('input', filterAndRenderAdminProducts);
     }
-
     if (catSelect) {
-        catSelect.addEventListener('change', () => {
-            filterAndRenderAdminProducts();
-        });
+        catSelect.addEventListener('change', filterAndRenderAdminProducts);
     }
 }
 
@@ -202,68 +224,33 @@ function filterAndRenderAdminProducts() {
     });
 
     const label = document.getElementById('adminSearchResultLabel');
-    if (label) label.textContent = `Hiển thị ${filtered.length} / ${adminProductsList.length} sản phẩm`;
+    if (label) {
+        label.textContent = `Hiển thị ${filtered.length} / ${adminProductsList.length} sản phẩm`;
+    }
 
-    renderAdminProductsRows(filtered);
-}
-
-// Render Product Table Rows
-function renderAdminProductsRows(products) {
     const tbody = document.getElementById('adminProductsTable');
     if (!tbody) return;
 
-    if (!products || products.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:25px; color:var(--text-muted);">Không tìm thấy sản phẩm nào phù hợp với từ khóa/danh mục đã chọn.</td></tr>';
+    if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:25px;">Không tìm thấy sản phẩm nào phù hợp với từ khóa!</td></tr>';
         return;
     }
 
-    tbody.innerHTML = products.map(p => {
-        const formattedPrice = new Intl.NumberFormat('vi-VN').format(p.price) + ' đ';
-        return `
-            <tr>
-                <td><img src="${p.image}" alt="" style="width:40px; height:40px; border-radius:6px; object-fit:cover;"></td>
-                <td>
-                    <strong>${p.name}</strong>
-                    <div style="font-size:0.75rem; color:var(--text-muted);">Mã: ${p.id}</div>
-                </td>
-                <td><span class="brand-tag">${p.category_id}</span></td>
-                <td style="color:var(--primary); font-weight:700;">${formattedPrice}</td>
-                <td>
-                    <div style="display:flex; gap:6px;">
-                        <button class="btn-primary" onclick="openEditProductModal('${p.id}')" style="padding:5px 12px; font-size:0.78rem; background:var(--secondary-navy);">
-                            <i class="fa-solid fa-pen-to-square"></i> Sửa
-                        </button>
-                        <button class="btn-secondary" onclick="deleteProduct('${p.id}')" style="padding:5px 12px; font-size:0.78rem; color:var(--accent-red); border-color:#fca5a5;">
-                            <i class="fa-solid fa-trash"></i> Xoá
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        `;
-    }).join('');
+    tbody.innerHTML = filtered.map(p => `
+        <tr>
+            <td><img src="${p.image}" alt="${p.name}" style="width:45px; height:45px; object-fit:contain; border-radius:6px;"></td>
+            <td style="font-weight:700;">${p.name}<br><small style="color:var(--text-muted); font-weight:400;">Mã ID: ${p.id}</small></td>
+            <td><span style="background:#e0f2fe; color:#0056b3; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">${p.category_id}</span></td>
+            <td style="font-weight:800; color:var(--primary);">${new Intl.NumberFormat('vi-VN').format(p.price)} đ</td>
+            <td>
+                <button onclick="openEditProductModal('${p.id}')" style="background:#0284c7; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:0.8rem; margin-right:5px;" title="Chỉnh sửa sản phẩm"><i class="fa-solid fa-pen-to-square"></i> Sửa</button>
+                <button onclick="deleteProduct('${p.id}')" style="background:#ef4444; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:0.8rem;" title="Xoá sản phẩm"><i class="fa-solid fa-trash"></i> Xoá</button>
+            </td>
+        </tr>
+    `).join('');
 }
 
-// Delete Product
-async function deleteProduct(id) {
-    if (!confirm('Bạn có chắc chắn muốn xoá sản phẩm này khỏi Cloudflare D1?')) return;
-
-    try {
-        const res = await fetchAdmin(`/api/admin/products/${id}`, {
-            method: 'DELETE'
-        });
-        const result = await res.json();
-        if (result.success) {
-            showAdminToast('Đã xoá sản phẩm thành công!', 'success');
-            loadAdminProducts();
-        } else {
-            showAdminToast(result.error || 'Xoá thất bại', 'error');
-        }
-    } catch (err) {
-        showAdminToast('Lỗi xoá sản phẩm: ' + err.message, 'error');
-    }
-}
-
-// Add Product Modal & Submit
+// Add Product Modal
 function setupAddProductModal() {
     const modal = document.getElementById('addProductModal');
     const openBtn = document.getElementById('openAddProductBtn');
@@ -275,41 +262,41 @@ function setupAddProductModal() {
 
     form?.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const prodData = {
-            name: document.getElementById('newProdName').value.trim(),
-            category_id: document.getElementById('newProdCat').value,
-            price: parseInt(document.getElementById('newProdPrice').value) || 0,
-            original_price: parseInt(document.getElementById('newProdOldPrice').value) || 0,
-            badge: document.getElementById('newProdBadge').value.trim(),
-            badge_type: 'hot',
-            image: document.getElementById('newProdImg').value.trim(),
-            description: document.getElementById('newProdDesc').value.trim(),
-            specs: textToSpecsObj(document.getElementById('newProdSpecsText').value)
+
+        const specsText = document.getElementById('prodSpecsLines').value;
+        const newProd = {
+            name: document.getElementById('prodName').value.trim(),
+            category_id: document.getElementById('prodCategory').value,
+            price: parseInt(document.getElementById('prodPrice').value) || 0,
+            original_price: parseInt(document.getElementById('prodOriginalPrice').value) || 0,
+            image: document.getElementById('prodImage').value.trim(),
+            description: document.getElementById('prodDescription').value.trim(),
+            specs: textToSpecsObj(specsText)
         };
 
         try {
             const res = await fetchAdmin('/api/admin/products', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(prodData)
+                body: JSON.stringify(newProd)
             });
 
             const result = await res.json();
             if (result.success) {
-                form.reset();
+                showAdminToast('Đã thêm sản phẩm thành công vào D1!', 'success');
                 modal?.classList.remove('active');
-                showAdminToast('Đã thêm sản phẩm mới vào Cloudflare D1!', 'success');
+                form.reset();
                 loadAdminProducts();
             } else {
-                showAdminToast(result.error || 'Thêm sản phẩm thất bại', 'error');
+                throw new Error(result.error || 'Thêm thất bại');
             }
         } catch (err) {
-            showAdminToast('Lỗi gửi sản phẩm: ' + err.message, 'error');
+            showAdminToast('Lỗi thêm sản phẩm: ' + err.message, 'error');
         }
     });
 }
 
-// Edit Product Modal & Submit
+// Edit Product Modal
 function setupEditProductModal() {
     const modal = document.getElementById('editProductModal');
     const closeBtn = document.getElementById('closeEditProductBtn');
@@ -319,32 +306,33 @@ function setupEditProductModal() {
 
     form?.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const id = document.getElementById('editProdId').value;
-        const prodData = {
+        const prodId = document.getElementById('editProdId').value;
+        const specsText = document.getElementById('editProdSpecsLines').value;
+
+        const updatedProd = {
             name: document.getElementById('editProdName').value.trim(),
-            category_id: document.getElementById('editProdCat').value,
+            category_id: document.getElementById('editProdCategory').value,
             price: parseInt(document.getElementById('editProdPrice').value) || 0,
-            original_price: parseInt(document.getElementById('editProdOldPrice').value) || 0,
-            badge: document.getElementById('editProdBadge').value.trim(),
-            image: document.getElementById('editProdImg').value.trim(),
-            description: document.getElementById('editProdDesc').value.trim(),
-            specs: textToSpecsObj(document.getElementById('editProdSpecsText').value)
+            original_price: parseInt(document.getElementById('editProdOriginalPrice').value) || 0,
+            image: document.getElementById('editProdImage').value.trim(),
+            description: document.getElementById('editProdDescription').value.trim(),
+            specs: textToSpecsObj(specsText)
         };
 
         try {
-            const res = await fetchAdmin(`/api/admin/products/${id}`, {
+            const res = await fetchAdmin(`/api/admin/products/${prodId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(prodData)
+                body: JSON.stringify(updatedProd)
             });
 
             const result = await res.json();
             if (result.success) {
+                showAdminToast('Đã cập nhật sản phẩm thành công!', 'success');
                 modal?.classList.remove('active');
-                showAdminToast('Đã cập nhật thông tin sản phẩm thành công!', 'success');
                 loadAdminProducts();
             } else {
-                showAdminToast(result.error || 'Cập nhật thất bại', 'error');
+                throw new Error(result.error || 'Cập nhật thất bại');
             }
         } catch (err) {
             showAdminToast('Lỗi cập nhật sản phẩm: ' + err.message, 'error');
@@ -352,23 +340,37 @@ function setupEditProductModal() {
     });
 }
 
-// Open Edit Product Modal with prefilled values
 function openEditProductModal(productId) {
-    const p = adminProductsList.find(item => item.id === productId);
-    if (!p) return;
+    const product = adminProductsList.find(p => p.id === productId);
+    if (!product) return;
 
-    document.getElementById('editProdId').value = p.id;
-    document.getElementById('editProdName').value = p.name;
-    document.getElementById('editProdCat').value = p.category_id;
-    document.getElementById('editProdPrice').value = p.price;
-    document.getElementById('editProdOldPrice').value = p.original_price || '';
-    document.getElementById('editProdBadge').value = p.badge || '';
-    document.getElementById('editProdImg').value = p.image;
-    document.getElementById('editProdDesc').value = p.description;
-    document.getElementById('editProdSpecsText').value = specsToText(p.specs_json);
+    document.getElementById('editProdId').value = product.id;
+    document.getElementById('editProdName').value = product.name;
+    document.getElementById('editProdCategory').value = product.category_id;
+    document.getElementById('editProdPrice').value = product.price;
+    document.getElementById('editProdOriginalPrice').value = product.original_price || '';
+    document.getElementById('editProdImage').value = product.image;
+    document.getElementById('editProdDescription').value = product.description || '';
+    document.getElementById('editProdSpecsLines').value = specsToText(product.specs_json);
 
-    const modal = document.getElementById('editProductModal');
-    modal?.classList.add('active');
+    document.getElementById('editProductModal')?.classList.add('active');
+}
+
+async function deleteProduct(id) {
+    if (!confirm(`Bạn có chắc chắn muốn xoá sản phẩm mã "${id}" khỏi D1 database không?`)) return;
+
+    try {
+        const res = await fetchAdmin(`/api/admin/products/${id}`, { method: 'DELETE' });
+        const result = await res.json();
+        if (result.success) {
+            showAdminToast('Đã xoá sản phẩm khỏi database!', 'success');
+            loadAdminProducts();
+        } else {
+            throw new Error(result.error || 'Xoá thất bại');
+        }
+    } catch (err) {
+        showAdminToast('Lỗi xoá sản phẩm: ' + err.message, 'error');
+    }
 }
 
 // Load Orders Table
@@ -383,94 +385,207 @@ async function loadAdminOrders() {
         document.getElementById('statOrderCount').textContent = orders.length;
 
         if (orders.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">Chưa có đơn hàng nào.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Chưa có đơn hàng nào trong hệ thống.</td></tr>';
             return;
         }
 
-        tbody.innerHTML = orders.map(o => {
-            const formattedTotal = new Intl.NumberFormat('vi-VN').format(o.total_amount) + ' đ';
-            return `
-                <tr>
-                    <td><strong style="color:var(--primary);">${o.id}</strong></td>
-                    <td>${o.customer_name}</td>
-                    <td><a href="tel:${o.customer_phone}">${o.customer_phone}</a></td>
-                    <td>${o.customer_address}</td>
-                    <td style="font-weight:700;">${formattedTotal}</td>
-                    <td><span class="product-badge hot">${o.status}</span></td>
-                </tr>
-            `;
-        }).join('');
+        tbody.innerHTML = orders.map(o => `
+            <tr>
+                <td style="font-weight:700;">${o.id}</td>
+                <td>${o.customer_name}</td>
+                <td>${o.customer_phone}</td>
+                <td>${o.customer_address}</td>
+                <td style="font-weight:800; color:var(--primary);">${new Intl.NumberFormat('vi-VN').format(o.total_amount)} đ</td>
+                <td><span style="background:#dcfce7; color:#15803d; padding:4px 8px; border-radius:12px; font-size:0.8rem; font-weight:700;">ĐÃ ĐẶT</span></td>
+            </tr>
+        `).join('');
     } catch (err) {
-        console.error(err);
-        tbody.innerHTML = '<tr><td colspan="6" style="color:var(--accent-red);">Lỗi tải đơn hàng</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="color:var(--accent-red);">Lỗi tải danh sách đơn hàng</td></tr>';
     }
 }
 
-// Load Custom Requests Table
+// Load Users Table (NEW)
+async function loadAdminUsers() {
+    const tbody = document.getElementById('adminUsersTable');
+    if (!tbody) return;
+
+    try {
+        const res = await fetchAdmin('/api/admin/users');
+        adminUsersList = await res.json();
+
+        const countLabel = document.getElementById('statUserCount');
+        if (countLabel) countLabel.textContent = adminUsersList.length;
+
+        if (adminUsersList.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted); padding:20px;">Chưa có tài khoản user nào registered.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = adminUsersList.map(u => `
+            <tr>
+                <td style="font-weight:700; font-size:0.8rem;">${u.id}</td>
+                <td style="font-weight:800;">${u.full_name}</td>
+                <td style="color:#0056b3; font-weight:700;">${u.username}</td>
+                <td>${u.email}</td>
+                <td>${u.phone}</td>
+                <td><span style="background:#fef3c7; color:#b45309; padding:4px 8px; border-radius:10px; font-size:0.75rem; font-weight:700;">${u.role || 'user'}</span></td>
+                <td>
+                    <button onclick="deleteAdminUser('${u.id}')" style="background:#ef4444; color:#fff; border:none; padding:5px 10px; border-radius:6px; cursor:pointer; font-size:0.78rem;"><i class="fa-solid fa-user-xmark"></i> Xoá User</button>
+                </td>
+            </tr>
+        `).join('');
+    } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="7" style="color:var(--accent-red);">Lỗi tải danh sách User</td></tr>';
+    }
+}
+
+async function deleteAdminUser(id) {
+    if (!confirm('Bạn có chắc chắn muốn xoá tài khoản user này khỏi database?')) return;
+
+    try {
+        const res = await fetchAdmin(`/api/admin/users/${id}`, { method: 'DELETE' });
+        const result = await res.json();
+        if (result.success) {
+            showAdminToast('Đã xoá tài khoản user thành công!', 'success');
+            loadAdminUsers();
+        } else {
+            throw new Error(result.error || 'Xoá user thất bại');
+        }
+    } catch (err) {
+        showAdminToast('Lỗi: ' + err.message, 'error');
+    }
+}
+
+// Load News Table (NEW)
+async function loadAdminNews() {
+    const tbody = document.getElementById('adminNewsTable');
+    if (!tbody) return;
+
+    try {
+        const res = await fetchAdmin('/api/admin/news');
+        adminNewsList = await res.json();
+
+        if (adminNewsList.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:20px;">Chưa có bài viết tin tức nào.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = adminNewsList.map(n => `
+            <tr>
+                <td><img src="${n.image}" alt="${n.title}" style="width:50px; height:35px; object-fit:cover; border-radius:4px;"></td>
+                <td style="font-weight:700; max-width:260px;">${n.title}</td>
+                <td><span style="background:#e0f2fe; color:#0056b3; padding:4px 8px; border-radius:10px; font-size:0.75rem; font-weight:700;">${n.category || 'Tin Tức'}</span></td>
+                <td style="font-size:0.8rem; color:#64748b; max-width:300px;">${n.summary}</td>
+                <td>
+                    <button onclick="deleteAdminNews('${n.id}')" style="background:#ef4444; color:#fff; border:none; padding:5px 10px; border-radius:6px; cursor:pointer; font-size:0.78rem;"><i class="fa-solid fa-trash"></i> Xoá</button>
+                </td>
+            </tr>
+        `).join('');
+    } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="5" style="color:var(--accent-red);">Lỗi tải danh sách tin tức</td></tr>';
+    }
+}
+
+function setupAddNewsModal() {
+    const modal = document.getElementById('addNewsModal');
+    const openBtn = document.getElementById('openAddNewsBtn');
+    const closeBtn = document.getElementById('closeAddNewsBtn');
+    const form = document.getElementById('addNewsForm');
+
+    openBtn?.addEventListener('click', () => modal?.classList.add('active'));
+    closeBtn?.addEventListener('click', () => modal?.classList.remove('active'));
+
+    form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newNews = {
+            title: document.getElementById('newsTitle').value.trim(),
+            category: document.getElementById('newsCategory').value,
+            image: document.getElementById('newsImage').value.trim(),
+            summary: document.getElementById('newsSummary').value.trim(),
+            content: document.getElementById('newsContent').value.trim()
+        };
+
+        try {
+            const res = await fetchAdmin('/api/admin/news', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newNews)
+            });
+
+            const result = await res.json();
+            if (result.success) {
+                showAdminToast('Đã đăng bài viết tin tức thành công!', 'success');
+                modal?.classList.remove('active');
+                form.reset();
+                loadAdminNews();
+            } else {
+                throw new Error(result.error || 'Đăng thất bại');
+            }
+        } catch (err) {
+            showAdminToast('Lỗi đăng tin tức: ' + err.message, 'error');
+        }
+    });
+}
+
+async function deleteAdminNews(id) {
+    if (!confirm('Bạn có chắc chắn muốn xoá bài viết này không?')) return;
+
+    try {
+        const res = await fetchAdmin(`/api/admin/news/${id}`, { method: 'DELETE' });
+        const result = await res.json();
+        if (result.success) {
+            showAdminToast('Đã xoá bài viết tin tức!', 'success');
+            loadAdminNews();
+        } else {
+            throw new Error(result.error || 'Xoá tin tức thất bại');
+        }
+    } catch (err) {
+        showAdminToast('Lỗi xoá tin tức: ' + err.message, 'error');
+    }
+}
+
+// Load Custom Installation Requests Table
 async function loadAdminCustomRequests() {
     const tbody = document.getElementById('adminCustomTable');
     if (!tbody) return;
 
     try {
         const res = await fetchAdmin('/api/admin/custom-requests');
-        const reqs = await res.json();
+        const customRequests = await res.json();
 
-        document.getElementById('statCustomCount').textContent = reqs.length;
+        document.getElementById('statCustomCount').textContent = customRequests.length;
 
-        if (reqs.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">Chưa có yêu cầu độ chế nào.</td></tr>';
+        if (customRequests.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Chưa có yêu cầu khảo sát nào.</td></tr>';
             return;
         }
 
-        tbody.innerHTML = reqs.map(r => `
+        tbody.innerHTML = customRequests.map(c => `
             <tr>
-                <td><strong style="color:var(--accent-green);">${r.id}</strong></td>
-                <td>${r.customer_name}</td>
-                <td><a href="https://zalo.me/${r.customer_phone}" target="_blank" style="color:#0284c7; font-weight:700;"><i class="fa-solid fa-comment-dots"></i> ${r.customer_phone}</a></td>
-                <td><strong>${r.target_item}</strong></td>
-                <td>${r.resolution} / ${r.battery_type}</td>
-                <td><span class="product-badge new">${r.status}</span></td>
+                <td style="font-weight:700;">${c.id}</td>
+                <td>${c.customer_name}</td>
+                <td>${c.customer_phone}</td>
+                <td>${c.target_item}</td>
+                <td>${c.resolution || 'Bộ 4 Cam'} - ${c.battery_type || 'Full-Color'}</td>
+                <td><span style="background:#fef3c7; color:#b45309; padding:4px 8px; border-radius:12px; font-size:0.8rem; font-weight:700;">CHỜ TƯ VẤN</span></td>
             </tr>
         `).join('');
     } catch (err) {
-        console.error(err);
-        tbody.innerHTML = '<tr><td colspan="6" style="color:var(--accent-red);">Lỗi tải yêu cầu độ chế</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="color:var(--accent-red);">Lỗi tải yêu cầu khảo sát</td></tr>';
     }
 }
 
-// Admin Navigation Tabs
-function setupAdminNavigation() {
-    const menuItems = document.querySelectorAll('.admin-menu-item[data-tab]');
-    const tabContents = document.querySelectorAll('.tab-content');
-
-    menuItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const targetTab = item.dataset.tab;
-            menuItems.forEach(m => m.classList.remove('active'));
-            item.classList.add('active');
-
-            tabContents.forEach(tab => {
-                if (tab.id === targetTab) {
-                    tab.style.display = 'block';
-                } else {
-                    tab.style.display = 'none';
-                }
-            });
-        });
-    });
-}
-
-// Admin Toast Notifications
+// Toast System
 function showAdminToast(message, type = 'info') {
-    const container = document.getElementById('adminToastContainer');
+    const container = document.getElementById('toastContainer');
     if (!container) return;
 
     const toast = document.createElement('div');
     toast.className = 'toast';
-    let icon = 'fa-circle-check';
-    if (type === 'error') icon = 'fa-circle-xmark';
+    if (type === 'error') toast.style.borderLeftColor = 'var(--accent-red)';
+    if (type === 'success') toast.style.borderLeftColor = 'var(--accent-green)';
 
-    toast.innerHTML = `<i class="fa-solid ${icon}" style="color:var(--primary)"></i> <span>${message}</span>`;
+    toast.textContent = message;
     container.appendChild(toast);
 
     setTimeout(() => {

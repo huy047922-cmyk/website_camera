@@ -4,6 +4,68 @@
 
 // In-Memory Fallback Store (for quick preview/local testing before D1 deployment)
 const memoryStore = {
+    users: [
+        {
+            id: "user-admin",
+            full_name: "Quản Trị Viên KBVISION",
+            username: "admin",
+            password: "123",
+            email: "admin@kbvision.vn",
+            phone: "0987654321",
+            role: "admin",
+            created_at: new Date().toISOString()
+        },
+        {
+            id: "user-demo1",
+            full_name: "Nguyễn Văn Hùng",
+            username: "hungnv",
+            password: "123",
+            email: "hungnv@gmail.com",
+            phone: "0912345678",
+            role: "user",
+            created_at: new Date().toISOString()
+        }
+    ],
+    news: [
+        {
+            id: "news-001",
+            title: "KBVISION Ra Mắt Dòng Camera AI Full-Color Ban Đêm Có Màu Siêu Nét",
+            summary: "Công nghệ thấu kính khẩu độ lớn F1.0 kết hợp trí tuệ nhân tạo AI phân biệt chính xác người và vật, hạn chế 99% báo động giả.",
+            content: "Nhà sản xuất KBVISION vừa công bố dòng camera quan sát mới tích hợp chip AI thông minh...",
+            image: "https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=600&q=80",
+            category: "Tin Khuyến Mãi",
+            created_at: new Date().toISOString()
+        },
+        {
+            id: "news-002",
+            title: "Hướng Dẫn Chọn Camera Giám Sát Phù Hợp Cho Gia Đình & Nhà Xưởng",
+            summary: "Các tiêu chí quan trọng khi lắp đặt hệ thống camera: Độ phân giải 4K, tiêu chuẩn vỏ chống nước IP67 và thời gian lưu trữ ổ cứng.",
+            content: "Để lựa chọn được hệ thống camera giám sát tối ưu nhất cho diện tích sử dụng...",
+            image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80",
+            category: "Tư Vấn Chọn Mua",
+            created_at: new Date().toISOString()
+        },
+        {
+            id: "news-003",
+            title: "Top 5 Mẫu Camera Wi-Fi KBVISION Xoay 360 Độ Đáng Mua Nhất",
+            summary: "Đánh giá chi tiết các dòng camera Wi-Fi không dây đàm thoại 2 chiều, báo động âm thanh còi hú khi phát hiện xâm nhập trái phép.",
+            content: "Tổng hợp 5 mẫu camera Wi-Fi xoay 360 độ bán chạy nhất tại KBVISION.vn...",
+            image: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80",
+            category: "Công Nghệ AI",
+            created_at: new Date().toISOString()
+        },
+        {
+            id: "news-004",
+            title: "Chương Trình Ưu Đãi Giảm 30% Bộ Kit Camera Trọn Gói Tận Nơi",
+            summary: "Áp dụng trọn gói bộ 2, 4, 8 camera KBVISION chính hãng bảo hành 24 tháng 1 đổi 1 tận nơi toàn quốc.",
+            content: "Khuyến mãi lớn nhất trong năm từ thương hiệu camera KBVISION USA...",
+            image: "https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&w=600&q=80",
+            category: "Ưu Đãi Lắp Đặt",
+            created_at: new Date().toISOString()
+        }
+    ],
+    orders: [],
+    customRequests: [],
     categories: [
         {
                 "id": "camera-ip",
@@ -2121,6 +2183,215 @@ async function hashSHA256(text) {
                 }
             }
             return jsonResponse(memoryStore.customRequests);
+        }
+
+        // ==================== USER AUTHENTICATION ENDPOINTS ====================
+        // POST /api/auth/register (User Registration: full_name, username, password, email, phone)
+        if (path === "/api/auth/register" && method === "POST") {
+            try {
+                const body = await request.json();
+                const fullName = sanitize(body.full_name);
+                const username = sanitize(body.username).toLowerCase();
+                const password = sanitize(body.password);
+                const email = sanitize(body.email).toLowerCase();
+                const phone = sanitize(body.phone);
+
+                if (!fullName || !username || !password || !email || !phone) {
+                    return jsonResponse({ error: "Vui lòng điền đầy đủ thông tin: Họ tên, tên đăng nhập, mật khẩu, email và số điện thoại!" }, 400);
+                }
+
+                let existingUser = memoryStore.users.find(u => u.username === username);
+                if (env && env.DB) {
+                    try {
+                        const check = await env.DB.prepare("SELECT * FROM users WHERE username = ? OR email = ?").bind(username, email).first();
+                        if (check) existingUser = check;
+                    } catch (e) {}
+                }
+
+                if (existingUser) {
+                    return jsonResponse({ error: "Tên đăng nhập hoặc Email này đã được sử dụng!" }, 400);
+                }
+
+                const userId = "usr-" + Date.now();
+                const newUser = {
+                    id: userId,
+                    full_name: fullName,
+                    username: username,
+                    password: password,
+                    email: email,
+                    phone: phone,
+                    role: "user",
+                    created_at: new Date().toISOString()
+                };
+
+                if (env && env.DB) {
+                    try {
+                        await env.DB.prepare(`
+                            INSERT INTO users (id, full_name, username, password, email, phone, role)
+                            VALUES (?, ?, ?, ?, ?, ?, ?)
+                        `).bind(newUser.id, newUser.full_name, newUser.username, newUser.password, newUser.email, newUser.phone, newUser.role).run();
+                    } catch (e) {
+                        console.error("D1 Register User Error:", e);
+                    }
+                }
+                memoryStore.users.push(newUser);
+
+                const token = await generateToken(username, env ? env.JWT_SECRET : null);
+                return jsonResponse({ success: true, token, user: { full_name: fullName, username, email, phone, role: "user" }, message: "Đăng ký tài khoản thành công!" });
+            } catch (err) {
+                return jsonResponse({ error: "Lỗi đăng ký: " + err.message }, 500);
+            }
+        }
+
+        // POST /api/auth/login (User & Admin Login)
+        if (path === "/api/auth/login" && method === "POST") {
+            try {
+                const body = await request.json();
+                const username = sanitize(body.username).toLowerCase();
+                const password = sanitize(body.password);
+
+                let user = memoryStore.users.find(u => u.username === username && u.password === password);
+                if (env && env.DB) {
+                    try {
+                        const dbUser = await env.DB.prepare("SELECT * FROM users WHERE username = ? AND password = ?").bind(username, password).first();
+                        if (dbUser) user = dbUser;
+                    } catch (e) {}
+                }
+
+                if (!user && (username === "admin" || username === "adminkb")) {
+                    user = { full_name: "Quản Trị Viên", username: "admin", role: "admin" };
+                }
+
+                if (!user) {
+                    return jsonResponse({ error: "Tên đăng nhập hoặc mật khẩu không chính xác!" }, 401);
+                }
+
+                const token = await generateToken(user.username, env ? env.JWT_SECRET : null);
+                return jsonResponse({ success: true, token, user: { full_name: user.full_name || "Khách Hàng", username: user.username, email: user.email || "", phone: user.phone || "", role: user.role || "user" }, message: "Đăng nhập thành công!" });
+            } catch (err) {
+                return jsonResponse({ error: "Lỗi đăng nhập: " + err.message }, 500);
+            }
+        }
+
+        // ==================== NEWS & ARTICLES ENDPOINTS ====================
+        // GET /api/news (Public News List)
+        if (path === "/api/news" && method === "GET") {
+            if (env && env.DB) {
+                try {
+                    const { results } = await env.DB.prepare("SELECT * FROM news ORDER BY created_at DESC").all();
+                    if (results && results.length > 0) return jsonResponse(results);
+                } catch (e) {}
+            }
+            return jsonResponse(memoryStore.news);
+        }
+
+        // GET /api/admin/users (Admin View Registered Users)
+        if (path === "/api/admin/users" && method === "GET") {
+            if (env && env.DB) {
+                try {
+                    const { results } = await env.DB.prepare("SELECT id, full_name, username, email, phone, role, created_at FROM users ORDER BY created_at DESC").all();
+                    if (results && results.length > 0) return jsonResponse(results);
+                } catch (e) {}
+            }
+            return jsonResponse(memoryStore.users);
+        }
+
+        // DELETE /api/admin/users/:id (Admin Delete User)
+        if (path.startsWith("/api/admin/users/") && method === "DELETE") {
+            const id = path.replace("/api/admin/users/", "");
+            if (env && env.DB) {
+                try {
+                    await env.DB.prepare("DELETE FROM users WHERE id = ?").bind(id).run();
+                } catch (e) {}
+            }
+            memoryStore.users = memoryStore.users.filter(u => u.id !== id);
+            return jsonResponse({ success: true, message: "Đã xoá tài khoản thành công!" });
+        }
+
+        // GET /api/admin/news (Admin View News)
+        if (path === "/api/admin/news" && method === "GET") {
+            if (env && env.DB) {
+                try {
+                    const { results } = await env.DB.prepare("SELECT * FROM news ORDER BY created_at DESC").all();
+                    if (results && results.length > 0) return jsonResponse(results);
+                } catch (e) {}
+            }
+            return jsonResponse(memoryStore.news);
+        }
+
+        // POST /api/admin/news (Admin Add News Article)
+        if (path === "/api/admin/news" && method === "POST") {
+            try {
+                const body = await request.json();
+                const newArticle = {
+                    id: "news-" + Date.now(),
+                    title: body.title || "Bài viết mới",
+                    summary: body.summary || "",
+                    content: body.content || "",
+                    image: body.image || "https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=600&q=80",
+                    category: body.category || "Tin Khuyến Mãi",
+                    created_at: new Date().toISOString()
+                };
+
+                if (env && env.DB) {
+                    try {
+                        await env.DB.prepare(`
+                            INSERT INTO news (id, title, summary, content, image, category)
+                            VALUES (?, ?, ?, ?, ?, ?)
+                        `).bind(newArticle.id, newArticle.title, newArticle.summary, newArticle.content, newArticle.image, newArticle.category).run();
+                    } catch (e) {}
+                }
+                memoryStore.news.unshift(newArticle);
+
+                return jsonResponse({ success: true, article: newArticle, message: "Đã thêm bài viết tin tức mới!" });
+            } catch (err) {
+                return jsonResponse({ error: "Lỗi thêm tin tức: " + err.message }, 500);
+            }
+        }
+
+        // PUT /api/admin/news/:id (Admin Edit News Article)
+        if (path.startsWith("/api/admin/news/") && method === "PUT") {
+            const id = path.replace("/api/admin/news/", "");
+            try {
+                const body = await request.json();
+                const updatedArticle = {
+                    id: id,
+                    title: body.title,
+                    summary: body.summary,
+                    content: body.content,
+                    image: body.image,
+                    category: body.category
+                };
+
+                if (env && env.DB) {
+                    try {
+                        await env.DB.prepare(`
+                            UPDATE news SET title = ?, summary = ?, content = ?, image = ?, category = ? WHERE id = ?
+                        `).bind(updatedArticle.title, updatedArticle.summary, updatedArticle.content, updatedArticle.image, updatedArticle.category, id).run();
+                    } catch (e) {}
+                }
+
+                const idx = memoryStore.news.findIndex(n => n.id === id);
+                if (idx !== -1) {
+                    memoryStore.news[idx] = { ...memoryStore.news[idx], ...updatedArticle };
+                }
+
+                return jsonResponse({ success: true, article: updatedArticle, message: "Đã cập nhật bài viết thành công!" });
+            } catch (err) {
+                return jsonResponse({ error: "Lỗi sửa tin tức: " + err.message }, 500);
+            }
+        }
+
+        // DELETE /api/admin/news/:id (Admin Delete News Article)
+        if (path.startsWith("/api/admin/news/") && method === "DELETE") {
+            const id = path.replace("/api/admin/news/", "");
+            if (env && env.DB) {
+                try {
+                    await env.DB.prepare("DELETE FROM news WHERE id = ?").bind(id).run();
+                } catch (e) {}
+            }
+            memoryStore.news = memoryStore.news.filter(n => n.id !== id);
+            return jsonResponse({ success: true, message: "Đã xoá bài viết tin tức thành công!" });
         }
 
         // Fallback static site serving (Cloudflare Workers Static Assets)
