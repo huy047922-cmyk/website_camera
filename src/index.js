@@ -2185,6 +2185,31 @@ async function hashSHA256(text) {
             return jsonResponse(memoryStore.customRequests);
         }
 
+        
+        // PUT /api/admin/custom-requests/:id/status
+        if (path.startsWith("/api/admin/custom-requests/") && path.endsWith("/status") && method === "PUT") {
+            const id = path.replace("/api/admin/custom-requests/", "").replace("/status", "");
+            try {
+                const body = await request.json();
+                const newStatus = sanitize(body.status || "DA_TU_VAN");
+
+                if (env && env.DB) {
+                    try {
+                        await env.DB.prepare("UPDATE custom_requests SET status = ? WHERE id = ?").bind(newStatus, id).run();
+                    } catch (e) {
+                        console.error("D1 Update Custom Request Status Error:", e);
+                    }
+                }
+
+                const reqObj = memoryStore.customRequests.find(r => r.id === id);
+                if (reqObj) reqObj.status = newStatus;
+
+                return jsonResponse({ success: true, message: "Đã cập nhật trạng thái tư vấn thành công!" });
+            } catch (err) {
+                return jsonResponse({ error: "Lỗi cập nhật trạng thái: " + err.message }, 500);
+            }
+        }
+
         // GET /api/user/orders (Fetch customer's past orders)
         if (path === "/api/user/orders" && method === "GET") {
             const urlObj = new URL(request.url);

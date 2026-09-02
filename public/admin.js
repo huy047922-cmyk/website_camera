@@ -389,7 +389,8 @@ async function loadAdminOrders() {
         const res = await fetchAdmin('/api/admin/orders');
         const orders = await res.json();
 
-        document.getElementById('statOrderCount').textContent = orders.length;
+        const pendingOrders = orders.filter(o => !o.status || o.status === 'CHO_XAC_NHAN' || o.status === 'pending');
+        document.getElementById('statOrderCount').textContent = pendingOrders.length;
 
         if (orders.length === 0) {
             tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Chưa có đơn hàng nào trong hệ thống.</td></tr>';
@@ -644,7 +645,7 @@ function setupEditNewsModal() {
     });
 }
 
-// Load Custom Installation Requests Table
+// Load Custom Installation Requests Table with Status Selector
 async function loadAdminCustomRequests() {
     const tbody = document.getElementById('adminCustomTable');
     if (!tbody) return;
@@ -653,25 +654,53 @@ async function loadAdminCustomRequests() {
         const res = await fetchAdmin('/api/admin/custom-requests');
         const customRequests = await res.json();
 
-        document.getElementById('statCustomCount').textContent = customRequests.length;
+        const pendingRequests = customRequests.filter(c => !c.status || c.status === 'CHO_TU_VAN' || c.status === 'pending');
+        document.getElementById('statCustomCount').textContent = pendingRequests.length;
 
         if (customRequests.length === 0) {
             tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Chưa có yêu cầu khảo sát nào.</td></tr>';
             return;
         }
 
-        tbody.innerHTML = customRequests.map(c => `
-            <tr>
-                <td style="font-weight:700;">${c.id}</td>
-                <td>${c.customer_name}</td>
-                <td>${c.customer_phone}</td>
-                <td>${c.target_item}</td>
-                <td>${c.resolution || 'Bộ 4 Cam'} - ${c.battery_type || 'Full-Color'}</td>
-                <td><span style="background:#fef3c7; color:#b45309; padding:4px 8px; border-radius:12px; font-size:0.8rem; font-weight:700;">CHỜ TƯ VẤN</span></td>
-            </tr>
-        `).join('');
+        tbody.innerHTML = customRequests.map(c => {
+            const st = c.status || 'CHO_TU_VAN';
+            return `
+                <tr>
+                    <td style="font-weight:700; font-size:0.82rem;">${c.id}</td>
+                    <td style="font-weight:700;">${c.customer_name}</td>
+                    <td style="color:#0056b3; font-weight:700;">${c.customer_phone}</td>
+                    <td style="font-size:0.85rem;">${c.target_item || 'Khảo sát camera'}</td>
+                    <td style="font-size:0.85rem;">${c.resolution || 'Gói tư vấn'}</td>
+                    <td>
+                        <select onchange="updateCustomRequestStatus('${c.id}', this.value)" style="padding:6px 10px; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; border:1px solid #cbd5e1; background:#ffffff;">
+                            <option value="CHO_TU_VAN" ${st === 'CHO_TU_VAN' ? 'selected' : ''}>🟡 Chờ Tư Vấn</option>
+                            <option value="DA_TU_VAN" ${st === 'DA_TU_VAN' ? 'selected' : ''}>🟢 Đã Tư Vấn Xong</option>
+                        </select>
+                    </td>
+                </tr>
+            `;
+        }).join('');
     } catch (err) {
         tbody.innerHTML = '<tr><td colspan="6" style="color:var(--accent-red);">Lỗi tải yêu cầu khảo sát</td></tr>';
+    }
+}
+
+async function updateCustomRequestStatus(requestId, newStatus) {
+    try {
+        const res = await fetchAdmin(`/api/admin/custom-requests/${requestId}/status`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus })
+        });
+        const result = await res.json();
+        if (result.success) {
+            showAdminToast('Đã cập nhật trạng thái tư vấn thành công!', 'success');
+            loadAdminCustomRequests();
+        } else {
+            throw new Error(result.error || 'Cập nhật thất bại');
+        }
+    } catch (err) {
+        showAdminToast('Lỗi: ' + err.message, 'error');
     }
 }
 
