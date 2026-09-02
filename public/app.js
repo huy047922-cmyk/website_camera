@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupCustomBuildForm();
     setupTabs();
     setupAuthModal();
+    setupUserOrdersModal();
     checkLoggedInUser();
     applyLanguage(currentLang);
     updateCartUI();
@@ -222,9 +223,16 @@ function checkLoggedInUser() {
         const user = JSON.parse(userStr);
         container.innerHTML = `
             <span style="font-weight:700; color:#ffffff;"><i class="fa-solid fa-circle-user"></i> ${user.full_name}</span>
+            <a href="javascript:void(0)" onclick="openUserOrdersModal()" style="color:#60a5fa; margin-left:10px;"><i class="fa-solid fa-receipt"></i> Đơn Hàng Của Tôi</a>
             <a href="javascript:void(0)" onclick="userLogout()" style="color:#f87171; margin-left:10px;"><i class="fa-solid fa-right-from-bracket"></i> Đăng Xuất</a>
             <a href="admin.html" style="color:#94a3b8; margin-left:12px;"><i class="fa-solid fa-user-shield"></i> Admin</a>
         `;
+
+        // Pre-fill Checkout form if user is logged in
+        const orderName = document.getElementById('orderName');
+        const orderPhone = document.getElementById('orderPhone');
+        if (orderName && !orderName.value) orderName.value = user.full_name || '';
+        if (orderPhone && !orderPhone.value) orderPhone.value = user.phone || '';
     } else {
         container.innerHTML = `
             <a href="javascript:void(0)" onclick="openAuthModal()"><i class="fa-solid fa-user"></i> Đăng Nhập / Đăng Ký</a>
@@ -237,6 +245,87 @@ function userLogout() {
     localStorage.removeItem('tuancamera_user');
     checkLoggedInUser();
     showToast('Đã đăng xuất tài khoản thành công!');
+}
+
+// User Order History Modal Logic
+function setupUserOrdersModal() {
+    const modal = document.getElementById('userOrdersModal');
+    const closeBtn = document.getElementById('closeUserOrdersBtn');
+    closeBtn?.addEventListener('click', () => modal?.classList.remove('active'));
+}
+
+async function openUserOrdersModal() {
+    const userStr = localStorage.getItem('tuancamera_user');
+    if (!userStr) {
+        openAuthModal();
+        return;
+    }
+
+    const user = JSON.parse(userStr);
+    const modal = document.getElementById('userOrdersModal');
+    const container = document.getElementById('userOrdersList');
+
+    if (modal) modal.classList.add('active');
+    if (container) container.innerHTML = '<p style="text-align:center; color:#64748b; padding:25px;">Đang tải lịch sử đơn hàng...</p>';
+
+    try {
+        const res = await fetch(`/api/user/orders?username=${encodeURIComponent(user.username)}&phone=${encodeURIComponent(user.phone || '')}`);
+        const orders = await res.json();
+
+        if (!orders || orders.length === 0) {
+            container.innerHTML = `
+                <div style="text-align:center; padding:35px 20px; color:#64748b;">
+                    <i class="fa-solid fa-box-open" style="font-size:2.5rem; color:#cbd5e1; margin-bottom:12px;"></i>
+                    <p style="font-weight:700;">Bạn chưa có đơn hàng nào tại Tuấn Camera.</p>
+                    <p style="font-size:0.85rem; margin-top:4px;">Các sản phẩm bạn mua sẽ xuất hiện tại đây!</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = orders.map(o => {
+            let items = [];
+            try {
+                items = typeof o.items_json === 'string' ? JSON.parse(o.items_json) : (o.items_json || []);
+            } catch (e) {}
+
+            const formattedTotal = new Intl.NumberFormat('vi-VN').format(o.total_amount) + ' đ';
+            const orderDate = new Date(o.created_at || Date.now()).toLocaleDateString('vi-VN');
+
+            return `
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin-bottom:15px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:10px; margin-bottom:12px;">
+                        <div>
+                            <span style="font-weight:800; color:#0f172a; font-size:0.95rem;">Mã Đơn: ${o.id}</span>
+                            <span style="font-size:0.8rem; color:#64748b; margin-left:10px;">📅 ${orderDate}</span>
+                        </div>
+                        <span style="background:#dcfce7; color:#15803d; padding:4px 10px; border-radius:12px; font-size:0.78rem; font-weight:700;">
+                            ${o.status === 'CHO_XAC_NHAN' ? 'Đã Tiếp Nhận' : (o.status || 'Đang Xử Lý')}
+                        </span>
+                    </div>
+
+                    <div style="margin-bottom:12px;">
+                        ${items.map(i => `
+                            <div style="display:flex; gap:12px; align-items:center; margin-bottom:8px;">
+                                <img src="${i.image}" alt="${i.name}" style="width:40px; height:40px; border-radius:6px; object-fit:contain; background:#ffffff; border:1px solid #e2e8f0;">
+                                <div style="flex:1;">
+                                    <h4 style="font-size:0.85rem; font-weight:700; color:#0f172a;">${i.name}</h4>
+                                    <span style="font-size:0.8rem; color:#64748b;">x${i.quantity} | ${new Intl.NumberFormat('vi-VN').format(i.price)} đ</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px dashed #cbd5e1; padding-top:10px;">
+                        <span style="font-size:0.85rem; color:#475569;">Giao tới: <strong>${o.customer_address}</strong></span>
+                        <span style="font-size:1.05rem; font-weight:900; color:#0056b3;">${formattedTotal}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    } catch (err) {
+        container.innerHTML = '<p style="color:#ef4444; text-align:center;">Lỗi tải lịch sử đơn hàng.</p>';
+    }
 }
 
 // Fetch products from Cloudflare Workers API
@@ -509,10 +598,20 @@ function setupCartControls() {
         checkoutModal?.classList.remove('active');
     });
 
-    // Checkout Form Submit
+    // Checkout Form Submit (associates order with logged in username)
     document.getElementById('checkoutForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
+        let loggedInUsername = '';
+        const userStr = localStorage.getItem('tuancamera_user');
+        if (userStr) {
+            try {
+                loggedInUsername = JSON.parse(userStr).username || '';
+            } catch (err) {}
+        }
+
         const orderData = {
+            customer_username: loggedInUsername,
             customer_name: document.getElementById('orderName').value.trim(),
             customer_phone: document.getElementById('orderPhone').value.trim(),
             customer_address: document.getElementById('orderAddress').value.trim(),

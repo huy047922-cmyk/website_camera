@@ -2185,6 +2185,44 @@ async function hashSHA256(text) {
             return jsonResponse(memoryStore.customRequests);
         }
 
+        // GET /api/user/orders (Fetch customer's past orders)
+        if (path === "/api/user/orders" && method === "GET") {
+            const urlObj = new URL(request.url);
+            const username = sanitize(urlObj.searchParams.get("username") || "").toLowerCase();
+            const phone = sanitize(urlObj.searchParams.get("phone") || "");
+
+            if (env && env.DB) {
+                try {
+                    let query = "SELECT * FROM orders WHERE 1=1";
+                    const params = [];
+                    if (username && phone) {
+                        query += " AND (customer_username = ? OR customer_phone = ?)";
+                        params.push(username, phone);
+                    } else if (username) {
+                        query += " AND customer_username = ?";
+                        params.push(username);
+                    } else if (phone) {
+                        query += " AND customer_phone = ?";
+                        params.push(phone);
+                    } else {
+                        return jsonResponse([]);
+                    }
+                    query += " ORDER BY created_at DESC";
+
+                    const { results } = await env.DB.prepare(query).bind(...params).all();
+                    if (results) return jsonResponse(results);
+                } catch (e) {
+                    console.error("D1 Fetch User Orders Error:", e);
+                }
+            }
+
+            let userOrders = memoryStore.orders.filter(o => 
+                (username && (o.customer_username === username || o.customer_phone === phone)) ||
+                (phone && o.customer_phone === phone)
+            );
+            return jsonResponse(userOrders);
+        }
+
         // ==================== USER AUTHENTICATION ENDPOINTS ====================
         // POST /api/auth/register (User Registration: full_name, username, password, email, phone)
         if (path === "/api/auth/register" && method === "POST") {
