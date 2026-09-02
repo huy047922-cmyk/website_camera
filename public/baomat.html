@@ -75,7 +75,8 @@
             </a>
 
             <nav>
-                <ul class="main-nav-menu">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" title="Menu Di Động"><i class="fa-solid fa-bars"></i></button>
+                <ul class="main-nav-menu" id="mainNavMenu">
                     <li class="main-nav-item"><a href="index.html" class="main-nav-link">TRANG CHỦ</a></li>
                     <li class="main-nav-item"><a href="gioithieu.html" class="main-nav-link">GIỚI THIỆU</a></li>
                     <li class="main-nav-item"><a href="index.html#section-camera-ip" class="main-nav-link">SẢN PHẨM</a></li>
@@ -117,6 +118,32 @@
             <p>© 2026 Tuấn Camera - Bảo Mật Quyền Riêng Tư Khách Hàng.</p>
         </div>
     </footer>
+
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html" class="mobile-nav-item active">
+            <i class="fa-solid fa-house"></i>
+            <span>Trang Chủ</span>
+        </a>
+        <a href="index.html#section-camera-ip" class="mobile-nav-item">
+            <i class="fa-solid fa-camera"></i>
+            <span>Sản Phẩm</span>
+        </a>
+        <a href="javascript:void(0)" onclick="openUserOrdersModal()" class="mobile-nav-item">
+            <i class="fa-solid fa-receipt"></i>
+            <span>Đơn Hàng</span>
+        </a>
+        <a href="https://zalo.me/0797777071" target="_blank" class="mobile-nav-item">
+            <i class="fa-solid fa-comments"></i>
+            <span>Zalo</span>
+        </a>
+        <a href="thanhtoan.html" class="mobile-nav-item">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span>Giỏ Hàng</span>
+            <span class="mobile-cart-badge" id="mobileCartBadgeCount">0</span>
+        </a>
+    </nav>
 
 </body>
 </html>

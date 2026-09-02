@@ -540,6 +540,8 @@ function updateCartUI() {
     const badge = document.getElementById('cartBadgeCount');
     const totalCount = cart.reduce((sum, i) => sum + i.quantity, 0);
     if (badge) badge.textContent = totalCount;
+    const mobileBadge = document.getElementById('mobileCartBadgeCount');
+    if (mobileBadge) mobileBadge.textContent = totalCount;
 
     const cartList = document.getElementById('cartItemsList');
     const totalLabel = document.getElementById('cartTotalAmount');
@@ -653,3 +655,20 @@ if ('serviceWorker' in navigator) {
             .catch(err => console.log('SW Registration Error:', err));
     });
 }
+
+// Mobile Hamburger Menu Toggle
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('mobileMenuBtn');
+    const menu = document.getElementById('mainNavMenu');
+    if (btn && menu) {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.classList.toggle('mobile-active');
+        });
+        document.addEventListener('click', (e) => {
+            if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                menu.classList.remove('mobile-active');
+            }
+        });
+    }
+});

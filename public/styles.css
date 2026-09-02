@@ -745,3 +745,341 @@ button, input, select, textarea {
     font-size: 2.5rem;
     border: 1px dashed #cbd5e1;
 }
+
+
+/* ==========================================================================
+   MOBILE RESPONSIVE DESIGN SYSTEM (Tối Ưu Giao Diện Di Động & App Mobile)
+   ========================================================================== */
+
+/* Mobile Bottom Fixed Navigation Bar */
+.mobile-bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.06);
+    z-index: 9999;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-decoration: none;
+    gap: 3px;
+    position: relative;
+    width: 20%;
+}
+
+.mobile-nav-item i {
+    font-size: 1.15rem;
+}
+
+.mobile-nav-item.active, .mobile-nav-item:hover {
+    color: #0056b3;
+}
+
+.mobile-cart-badge {
+    position: absolute;
+    top: -2px;
+    right: 18px;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.6rem;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 10px;
+}
+
+/* Mobile Toggle Hamburger Button */
+.mobile-menu-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    font-size: 1.4rem;
+    color: #0f172a;
+    cursor: pointer;
+    padding: 6px;
+}
+
+@media (max-width: 768px) {
+    /* Enable Mobile Bottom Navigation Bar */
+    .mobile-bottom-nav {
+        display: flex;
+    }
+
+    body {
+        padding-bottom: 65px; /* Prevent bottom nav overlap */
+    }
+
+    /* Top Announcement Bar */
+    .top-announcement .container {
+        flex-direction: column;
+        gap: 6px;
+        text-align: center;
+        padding: 6px 10px;
+        font-size: 0.72rem;
+    }
+
+    .top-links {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    /* Navbar Inner Header */
+    .site-header {
+        padding: 10px 0;
+    }
+
+    .navbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .brand-logo-text img {
+        height: 40px !important;
+    }
+
+    .header-right-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .kabevision-search-pill {
+        width: 130px;
+    }
+
+    .kabevision-search-pill input {
+        padding: 5px 8px;
+        font-size: 0.75rem;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    /* Mobile Menu Drawer Dropdown */
+    .main-nav-menu {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        padding: 12px;
+        margin-top: 10px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .main-nav-menu.mobile-active {
+        display: flex !important;
+    }
+
+    .main-nav-item {
+        width: 100%;
+        text-align: left;
+    }
+
+    .main-nav-link {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        font-size: 0.85rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .dropdown-menu {
+        position: static;
+        box-shadow: none;
+        border: none;
+        background: #f8fafc;
+        padding-left: 15px;
+    }
+
+    /* Hero Banner Mobile */
+    .hero-banner-kb {
+        padding: 25px 0;
+        margin-bottom: 25px;
+    }
+
+    .hero-kb-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .hero-kb-text h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero-kb-text h1 span {
+        font-size: 1.3rem;
+    }
+
+    .hero-kb-text p {
+        font-size: 0.88rem;
+        margin-bottom: 18px;
+    }
+
+    .hero-kb-actions {
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .btn-kb-primary, .btn-kb-secondary {
+        padding: 10px 16px;
+        font-size: 0.82rem;
+    }
+
+    .hero-kb-img img {
+        height: 210px !important;
+    }
+
+    /* Middle Showcase Grid Mobile */
+    .middle-showcase-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .side-showcase-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .side-showcase-column .product-card {
+        padding: 10px;
+    }
+
+    .side-showcase-column .product-thumb img {
+        height: 100px !important;
+    }
+
+    .featured-center-card {
+        padding: 20px 15px;
+    }
+
+    /* 2 Columns Products Grid for Shopee/Lazada Mobile Experience */
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .product-card {
+        padding: 12px 8px;
+        border-radius: 14px;
+    }
+
+    .product-thumb {
+        height: 130px;
+        margin-bottom: 8px;
+    }
+
+    .product-thumb img {
+        max-height: 120px;
+    }
+
+    .product-thumb-placeholder {
+        height: 120px;
+        font-size: 1.8rem;
+    }
+
+    .product-title {
+        font-size: 0.78rem;
+        height: 32px;
+        margin-bottom: 6px;
+    }
+
+    .product-price-row {
+        flex-direction: column;
+        gap: 2px;
+        margin-bottom: 8px;
+    }
+
+    .price-current {
+        font-size: 0.92rem;
+    }
+
+    .price-old {
+        font-size: 0.7rem;
+    }
+
+    .product-btn-group {
+        gap: 4px;
+    }
+
+    .btn-card-buy {
+        font-size: 0.7rem;
+        padding: 6px 4px;
+    }
+
+    .btn-card-zalo {
+        font-size: 0.7rem;
+        padding: 6px 6px;
+    }
+
+    /* Showroom Showcase Section Mobile */
+    #showroom-section > div {
+        grid-template-columns: 1fr !important;
+        padding: 25px 18px !important;
+        gap: 20px !important;
+        text-align: center;
+    }
+
+    #showroom-section h2 {
+        font-size: 1.4rem !important;
+    }
+
+    #showroom-section img {
+        height: 220px !important;
+    }
+
+    /* Custom Build Form Mobile */
+    #customBuildForm {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+
+    /* Footer Mobile */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        text-align: center;
+    }
+
+    /* Floating Contact Buttons Mobile Adjust */
+    .floating-contact {
+        bottom: 75px;
+        right: 12px;
+    }
+
+    .float-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.15rem;
+    }
+
+    /* Modal Mobile Tweak */
+    .modal-content {
+        width: 94% !important;
+        padding: 20px 15px !important;
+        max-height: 88vh;
+        overflow-y: auto;
+    }
+}
