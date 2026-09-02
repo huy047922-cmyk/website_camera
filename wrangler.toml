@@ -1,9 +1,13 @@
 name = "cameramini-cf"
 main = "src/index.js"
 compatibility_date = "2026-03-01"
-keep_vars = true
 
 assets = { directory = "./public", binding = "ASSETS" }
+
+[vars]
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "hihi"
+JWT_SECRET_KEY = "tuancamera_admin_jwt_secret_key_2026_fixed_safe"
 
 [[d1_databases]]
 binding = "DB"
