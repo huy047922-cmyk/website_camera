@@ -4,7 +4,12 @@ compatibility_date = "2026-03-01"
 
 assets = { directory = "./public", binding = "ASSETS" }
 
+[vars]
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "123"
+JWT_SECRET_KEY = "tuancamera_admin_jwt_secret_key_2026_fixed_safe"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "cameramini_db"
-database_id = "68ba7ecf-b4ea-4f22-b893-32c0f0f13ef5" # Thay thế bằng D1 Database ID thực tế sau khi chạy 'npx wrangler d1 create cameramini_db'
+database_id = "68ba7ecf-b4ea-4f22-b893-32c0f0f13ef5"
