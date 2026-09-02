@@ -567,6 +567,57 @@
         </a>
     </nav>
 
+
+    <!-- Modal Hướng Dẫn Tải App Mobile -->
+    <div class="modal" id="appInstallModal">
+        <div class="modal-content" style="max-width:550px;">
+            <button class="modal-close" onclick="closeAppInstallModal()"><i class="fa-solid fa-xmark"></i></button>
+            
+            <div style="text-align:center; margin-bottom:20px;">
+                <img src="logo.jpg" alt="Tuấn Camera App Logo" style="height:60px; border-radius:12px; margin-bottom:8px;">
+                <h2 style="font-size:1.3rem; font-weight:900; color:#0f172a;">HƯỚNG DẪN CÀI ĐẶT APP TUẤN CAMERA</h2>
+                <p style="font-size:0.85rem; color:#64748b;">Chọn hệ điều hành thiết bị điện thoại bạn đang sử dụng</p>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px;">
+                <button class="btn-kb-primary" style="background:#0f172a; border-color:#0f172a; padding:10px; font-size:0.85rem; justify-content:center;" onclick="showGuideTab('ios')">
+                    <i class="fa-brands fa-apple"></i> iPhone (iOS)
+                </button>
+                <button class="btn-kb-primary" style="background:#10b981; border-color:#10b981; padding:10px; font-size:0.85rem; justify-content:center;" onclick="showGuideTab('android')">
+                    <i class="fa-brands fa-android"></i> Android
+                </button>
+            </div>
+
+            <!-- iOS Content -->
+            <div id="guideIOS" style="background:#f8fafc; padding:16px; border-radius:12px; border:1px solid #cbd5e1;">
+                <h4 style="font-size:0.95rem; font-weight:800; color:#0056b3; margin-bottom:8px;"><i class="fa-brands fa-apple"></i> Các Bước Cho iPhone / iPad (Safari):</h4>
+                <ol style="padding-left:18px; font-size:0.85rem; color:#334155; line-height:1.6;">
+                    <li>Mở bằng trình duyệt <strong>Safari</strong> trên iPhone.</li>
+                    <li>Ấn nút <strong>Chia sẻ <i class="fa-solid fa-arrow-up-from-bracket"></i></strong> phía dưới cùng Safari.</li>
+                    <li>Cuộn xuống chọn <strong>"Thêm vào Màn hình chính"</strong> <i class="fa-regular fa-square-plus"></i>.</li>
+                    <li>Ấn <strong>"Thêm"</strong> ở góc trên bên phải.</li>
+                </ol>
+            </div>
+
+            <!-- Android Content -->
+            <div id="guideAndroid" style="display:none; background:#ecfdf5; padding:16px; border-radius:12px; border:1px solid #a7f3d0;">
+                <h4 style="font-size:0.95rem; font-weight:800; color:#047857; margin-bottom:8px;"><i class="fa-brands fa-android"></i> Các Bước Cho Android (Chrome):</h4>
+                <ol style="padding-left:18px; font-size:0.85rem; color:#064e3b; line-height:1.6;">
+                    <li>Mở trình duyệt <strong>Google Chrome</strong> trên điện thoại.</li>
+                    <li>Bấm dấu <strong>3 chấm <i class="fa-solid fa-ellipsis-vertical"></i></strong> góc trên cùng bên phải.</li>
+                    <li>Chọn dòng <strong>"Cài đặt ứng dụng" (Install app)</strong>.</li>
+                    <li>Xác nhận bấm <strong>"Cài đặt"</strong>.</li>
+                </ol>
+            </div>
+
+            <div style="margin-top:20px; text-align:center;">
+                <a href="huongdan.html#app-guide" class="btn-kb-secondary" style="font-size:0.82rem; display:inline-block; text-decoration:none;">
+                    Xem Hướng Dẫn Chi Tiết Với Hình Ảnh Khảo Sát
+                </a>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

@@ -672,3 +672,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// App Install Modal Handlers
+function openAppInstallModal() {
+    const modal = document.getElementById('appInstallModal');
+    if (modal) modal.classList.add('active');
+}
+
+function closeAppInstallModal() {
+    const modal = document.getElementById('appInstallModal');
+    if (modal) modal.classList.remove('active');
+}
+
+function showGuideTab(type) {
+    const ios = document.getElementById('guideIOS');
+    const android = document.getElementById('guideAndroid');
+    if (type === 'ios') {
+        if (ios) ios.style.display = 'block';
+        if (android) android.style.display = 'none';
+    } else {
+        if (ios) ios.style.display = 'none';
+        if (android) android.style.display = 'block';
+    }
+}
