@@ -70,11 +70,12 @@ async function fetchAdmin(url, options = {}) {
 function handleUnauthorized() {
     adminToken = null;
     localStorage.removeItem('cf_admin_token');
+    localStorage.removeItem('tuancamera_token');
 
     const loginSec = document.getElementById('loginSection');
     const dashSec = document.getElementById('adminDashboard');
-    if (loginSec) loginSec.style.display = 'block';
-    if (dashSec) dashSec.style.display = 'none';
+    if (loginSec) loginSec.classList.remove('hidden');
+    if (dashSec) dashSec.classList.remove('active');
 
     const prodTable = document.getElementById('adminProductsTable');
     const orderTable = document.getElementById('adminOrdersTable');
@@ -102,8 +103,8 @@ async function checkAdminAuth() {
         const res = await fetchAdmin('/api/admin/verify');
         const data = await res.json();
         if (data.success) {
-            if (loginSec) loginSec.style.display = 'none';
-            if (dashSec) dashSec.style.display = (window.innerWidth <= 768) ? 'flex' : 'grid';
+            if (loginSec) loginSec.classList.add('hidden');
+            if (dashSec) dashSec.classList.add('active');
             try {
                 await loadDashboardData();
             } catch (e) {
